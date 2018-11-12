@@ -7,25 +7,30 @@ import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionServerRunnableNotE
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Server implements Serializable {
     private int port;
     private ServerSocket serverSocket;
+    private ServerRunnable runnable;
 
-    public Server(int port) throws IOException, ExceptionPortInvalid {
+    public Server(int port, ServerRunnable runnable) throws IOException, ExceptionPortInvalid {
         if (port < 65536 && port > 0) {
             this.port = port;
         } else {
             throw new ExceptionPortInvalid();
         }
         serverSocket = new ServerSocket(port);
+        this.runnable = runnable;
     }
 
-    public void start(Runnable runnable) throws IOException, InterruptedException {
+    public void start() throws IOException, InterruptedException, CloneNotSupportedException {
         while (true) {
-            Thread t = new Thread(runnable);
+            Socket client = serverSocket.accept();
+            ServerRunnable r = (ServerRunnable) runnable.clone();
+            r.setClientSocket(client);
+            Thread t = new Thread(r);
             t.start();
-            t.join();
         }
     }
 
