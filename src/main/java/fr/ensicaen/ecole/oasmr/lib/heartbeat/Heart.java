@@ -1,4 +1,4 @@
-package fr.ensicaen.ecole.oasmr.node;
+package fr.ensicaen.ecole.oasmr.lib.heartbeat;
 
 import java.net.InetAddress;
 import java.util.concurrent.Executors;

@@ -1,5 +1,6 @@
 package fr.ensicaen.ecole.oasmr.node;
 
+import fr.ensicaen.ecole.oasmr.lib.heartbeat.Heart;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 

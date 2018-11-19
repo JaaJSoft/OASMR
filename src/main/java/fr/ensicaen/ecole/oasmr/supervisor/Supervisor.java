@@ -8,10 +8,15 @@ import java.util.TreeSet;
 
 public class Supervisor {
     private TreeSet<NodeReal> nodes = new TreeSet<>();
+    private Server server;
 
-    public static void main(String[] args) throws IOException, ExceptionPortInvalid, CloneNotSupportedException, InterruptedException {
-        Server s = new Server(55555, new HeartBeatsHandler());
-        s.start();
+    public Supervisor(int port) throws IOException, ExceptionPortInvalid {
+        server = new Server(port, new HeartBeatsHandler());
     }
+
+    public void start() throws InterruptedException, CloneNotSupportedException, IOException {
+        server.start();
+    }
+
 
 }
