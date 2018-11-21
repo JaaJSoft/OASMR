@@ -13,10 +13,12 @@ public class Server implements Serializable {
     private int port;
     private ServerSocket serverSocket;
     private ServerRunnable runnable;
+    private Boolean run;
 
     public Server(int port, ServerRunnable runnable) throws IOException, ExceptionPortInvalid {
         if (port < 65536 && port > 0) {
             this.port = port;
+            run = true;
         } else {
             throw new ExceptionPortInvalid();
         }
@@ -25,7 +27,7 @@ public class Server implements Serializable {
     }
 
     public void start() throws IOException, InterruptedException, CloneNotSupportedException {
-        while (true) {
+        while (run) {
             Socket client = serverSocket.accept();
             ServerRunnable r = (ServerRunnable) runnable.clone();
             r.setClientSocket(client);
@@ -38,6 +40,7 @@ public class Server implements Serializable {
     public void stop() throws ExceptionServerRunnableNotEnded {
         try {
             serverSocket.close();
+            run = false;
         } catch (IOException e) {
             throw new ExceptionServerRunnableNotEnded();
         }
