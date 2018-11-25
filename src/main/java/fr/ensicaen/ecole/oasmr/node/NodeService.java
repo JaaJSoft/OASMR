@@ -1,6 +1,7 @@
 package fr.ensicaen.ecole.oasmr.node;
 
-import fr.ensicaen.ecole.oasmr.lib.heartbeat.Heart;
+import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
+import fr.ensicaen.ecole.oasmr.lib.command.Heart;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 
@@ -24,7 +25,7 @@ public class NodeService {
 
     private static void initCommandReceiver() {
         try {
-            Server server = new Server(11197, new CommandReceiver());
+            Server server = new Server(11197, new ServerRunnableCommandHandler(null, "command"));
             server.start();
         } catch (IOException | ExceptionPortInvalid | InterruptedException | CloneNotSupportedException e) {
             e.printStackTrace();

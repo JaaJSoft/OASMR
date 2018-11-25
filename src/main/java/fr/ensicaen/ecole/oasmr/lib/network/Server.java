@@ -18,7 +18,7 @@ public class Server implements Serializable {
     public Server(int port, ServerRunnable runnable) throws IOException, ExceptionPortInvalid {
         if (port < 65536 && port > 0) {
             this.port = port;
-            run = true;
+            run = false;
         } else {
             throw new ExceptionPortInvalid();
         }
@@ -27,6 +27,7 @@ public class Server implements Serializable {
     }
 
     public void start() throws IOException, InterruptedException, CloneNotSupportedException {
+        run = true;
         while (run) {
             Socket client = serverSocket.accept();
             ServerRunnable r = (ServerRunnable) runnable.clone();

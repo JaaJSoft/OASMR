@@ -2,20 +2,32 @@ package fr.ensicaen.ecole.oasmr.supervisor;
 
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
 
 import java.io.IOException;
 import java.util.TreeSet;
 
 public class Supervisor {
-    private TreeSet<NodeReal> nodes = new TreeSet<>();
-    private Server server;
+    //private TreeSet<NodeReal> nodes = new TreeSet<>();
+    private Server serverHeartBeatsHandler;
+    private Server serverRequestHandler;
 
-    public Supervisor(int port) throws IOException, ExceptionPortInvalid {
-        server = new Server(port, new HeartBeatsHandler());
+    public Supervisor(int portheartBeats, int portRequests) throws IOException, ExceptionPortInvalid {
+        serverHeartBeatsHandler = new Server(portheartBeats, new ServerRunnableCommandHandler(this, "HeartBeat"));
+        serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler(this, "Request"));
     }
 
     public void start() throws InterruptedException, CloneNotSupportedException, IOException {
-        server.start();
+        Thread t = new Thread(() -> {
+            try {
+                serverHeartBeatsHandler.start();
+            } catch (IOException | InterruptedException | CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        });
+        t.start();
+        serverRequestHandler.start();
+        t.join();
     }
 
 

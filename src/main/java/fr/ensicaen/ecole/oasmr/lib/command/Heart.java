@@ -1,4 +1,6 @@
-package fr.ensicaen.ecole.oasmr.lib.heartbeat;
+package fr.ensicaen.ecole.oasmr.lib.command;
+
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
 import java.net.InetAddress;
 import java.util.concurrent.Executors;
@@ -7,17 +9,20 @@ import java.util.concurrent.ScheduledFuture;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ *  Execute a command at a fixed rate
+ */
 public class Heart {
     private ScheduledFuture<?> scheduleAtFixedRateHeartBeat;
     private int heartBeatPeriodInSeconds = 10;
-    private Runnable heartbeat;
+    private Command heartbeat;
 
-    public Heart(Runnable r, int heartBeatPeriodInSeconds) {
+    public Heart(Command r, int heartBeatPeriodInSeconds) {
         this.heartBeatPeriodInSeconds = heartBeatPeriodInSeconds;
         heartbeat = r;
     }
 
-    public Heart(Runnable heartbeat) {
+    public Heart(Command heartbeat) {
         this.heartbeat = heartbeat;
     }
 
