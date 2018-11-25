@@ -7,10 +7,10 @@ import java.util.concurrent.*;
 
 public abstract class Command implements Serializable, Runnable {
 
-    public Serializable executeInThread(Node n) {
+    public Serializable executeInThread(Object... params) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        Callable<Serializable> callable = () -> execute(n);
+        Callable<Serializable> callable = () -> execute(params);
 
         Future<Serializable> future = executor.submit(callable);
         executor.shutdown();
