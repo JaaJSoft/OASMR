@@ -41,9 +41,10 @@ public class Server implements Serializable {
     public void stop() throws ExceptionServerRunnableNotEnded {
         try {
             serverSocket.close();
-            run = false;
         } catch (IOException e) {
             throw new ExceptionServerRunnableNotEnded();
+        } finally {
+            run = false;
         }
     }
 
