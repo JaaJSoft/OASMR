@@ -14,13 +14,9 @@ public class HeartbeatNodeAlive extends Command {
     private InetAddress supervisorAddress;
     private Client c;
 
-    public HeartbeatNodeAlive(InetAddress supervisorAddress) throws UnknownHostException, ExceptionPortInvalid {
+    public HeartbeatNodeAlive(InetAddress supervisorAddress, int port) throws UnknownHostException, ExceptionPortInvalid {
         this.supervisorAddress = supervisorAddress;
         c = new Client(InetAddress.getByName("127.0.0.1"), 55555);
-    }
-
-    public void run() {
-
     }
 
     @Override

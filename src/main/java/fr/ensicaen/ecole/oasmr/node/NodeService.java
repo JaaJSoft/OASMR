@@ -18,17 +18,8 @@ public class NodeService {
     }
 
     private static void initHeartBeat() throws UnknownHostException, InterruptedException, ExceptionPortInvalid {
-        Heart h = new Heart(new HeartbeatNodeAlive(InetAddress.getByName("127.0.0.1")), 1);
-        h.start();
+
         //h.stop();
     }
 
-    private static void initCommandReceiver() {
-        try {
-            Server server = new Server(11197, new ServerRunnableCommandHandler(null, "command"));
-            server.start();
-        } catch (IOException | ExceptionPortInvalid | InterruptedException | CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-    }
 }

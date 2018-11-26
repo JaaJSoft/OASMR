@@ -26,14 +26,19 @@ public class Server implements Serializable {
         this.runnable = runnable;
     }
 
-    public void start() throws IOException, InterruptedException, CloneNotSupportedException {
+    public void start() throws IOException, InterruptedException {
         run = true;
         while (run) {
-            Socket client = serverSocket.accept();
-            ServerRunnable r = (ServerRunnable) runnable.clone();
-            r.setClientSocket(client);
-            Thread t = new Thread(r);
-            t.start();
+            try {
+                Socket client = serverSocket.accept();
+                ServerRunnable r = null;
+                r = (ServerRunnable) runnable.clone();
+                r.setClientSocket(client);
+                Thread t = new Thread(r);
+                t.start();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
