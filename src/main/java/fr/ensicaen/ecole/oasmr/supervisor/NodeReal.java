@@ -21,7 +21,7 @@ public class NodeReal extends Node {
         super(name, nodeAddress, nodePort);
         this.supervisorAddress = supervisorAddress;
         this.supervisorPort = supervisorPort;
-        server = new Server(nodePort, new ServerRunnableCommandHandler(this, "command"));
+        server = new Server(nodePort, new ServerRunnableCommandHandler("command", this));
         heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort), 1);
     }
 

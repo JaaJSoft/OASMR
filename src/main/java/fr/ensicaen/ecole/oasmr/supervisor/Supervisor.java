@@ -13,15 +13,15 @@ public class Supervisor {
     private Server serverRequestHandler;
 
     public Supervisor(int portheartBeats, int portRequests) throws IOException, ExceptionPortInvalid {
-        serverHeartBeatsHandler = new Server(portheartBeats, new ServerRunnableCommandHandler(this, "HeartBeat"));
-        serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler(this, "Request"));
+        serverHeartBeatsHandler = new Server(portheartBeats, new ServerRunnableCommandHandler("HeartBeat", this));
+        serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler("Request", this));
     }
 
     public void start() throws InterruptedException, CloneNotSupportedException, IOException {
         Thread t = new Thread(() -> {
             try {
                 serverHeartBeatsHandler.start();
-            } catch (IOException | InterruptedException | CloneNotSupportedException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         });

@@ -9,19 +9,22 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ServerRunnableCommandHandler extends ServerRunnable {
-    private Object o;
+    private Object o[];
     private String commandType;
     private List<InetAddress> authorizedAddress;
+    private Set<Command> authorizedCommands;
 
-    public ServerRunnableCommandHandler(Object o, String commandType, List<InetAddress> authorizedAddress) {
+    public ServerRunnableCommandHandler(String commandType, List<InetAddress> authorizedAddress, Set<Command> authorizedCommands, Object... o) {
         this.o = o;
         this.commandType = commandType;
         this.authorizedAddress = authorizedAddress;
+        this.authorizedCommands = authorizedCommands;
     }
 
-    public ServerRunnableCommandHandler(Object o, String commandType) {
+    public ServerRunnableCommandHandler(String commandType, Object... o) {
         this.o = o;
         this.commandType = commandType;
         authorizedAddress = new ArrayList<>();
@@ -33,7 +36,12 @@ public class ServerRunnableCommandHandler extends ServerRunnable {
         try {
             Command command = (Command) util.receiveSerializable(clientSocket);
             System.out.println(command);
-            Serializable response = command.execute(o);
+            Serializable response;
+            if (!authorizedCommands.contains(command)) {
+                response = new ExceptionCommandNotAuthorized(command.toString());
+            } else {
+                response = command.execute(o);
+            }
             util.sendSerializable(clientSocket, response);
             clientSocket.close();
         } catch (IOException | ClassNotFoundException e) {
