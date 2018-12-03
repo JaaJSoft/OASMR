@@ -5,7 +5,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.Node;
 import java.io.Serializable;
 import java.util.concurrent.*;
 
-public abstract class Command implements Serializable, Runnable {
+public abstract class Command implements Serializable {
 
     public Serializable executeInThread(Object... params) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -20,14 +20,6 @@ public abstract class Command implements Serializable, Runnable {
             e.printStackTrace();
             return e;
         }
-    }
-
-    /**
-     * @warning no parameters :(
-     */
-    @Override
-    public void run() {
-        execute();//TODO PARAMETERS
     }
 
     public abstract Serializable execute(Object... params);
