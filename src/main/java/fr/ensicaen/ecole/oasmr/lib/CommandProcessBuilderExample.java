@@ -2,8 +2,7 @@ package fr.ensicaen.ecole.oasmr.lib;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 
 public class CommandProcessBuilderExample extends Command {
 
@@ -13,8 +12,15 @@ public class CommandProcessBuilderExample extends Command {
         try {
             Process p = processBuilder.start();
             p.waitFor();
-            //System.out.println(p.getOutputStream());
-            return p.exitValue();
+            int ret = p.exitValue();
+            switch (ret) {
+                case 0:
+                    return ProcessBuilderUtil.getString(p);
+                case 100:
+                    return new ExceptionJeejException("jeej");
+                default:
+                    return 0;
+            }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return e;
