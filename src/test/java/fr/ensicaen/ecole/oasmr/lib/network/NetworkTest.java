@@ -27,7 +27,7 @@ public class NetworkTest {
             try {
                 Server s = new Server(port, new ServerRunnableEcho());
                 s.start();
-            } catch (IOException | ExceptionPortInvalid | InterruptedException | CloneNotSupportedException e) {
+            } catch (IOException | ExceptionPortInvalid | InterruptedException e) {
                 e.printStackTrace();
             }
         });

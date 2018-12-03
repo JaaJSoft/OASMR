@@ -17,7 +17,7 @@ public class NodeService {
 
         initHeartBeat();
         //initCommandReceiver();
-        NodeReal localNode = new NodeReal("jeej",InetAddress.getLocalHost(),56789,InetAddress.getByName("127.0.0.1"),6969);
+        NodeReal localNode = new NodeReal("CommandProcessBuilderExample",InetAddress.getLocalHost(),56789,InetAddress.getByName("127.0.0.1"),6969);
         localNode.start();
     }
 
