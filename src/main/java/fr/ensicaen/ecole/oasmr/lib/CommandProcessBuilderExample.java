@@ -5,21 +5,24 @@ import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import java.io.*;
 
 public class CommandProcessBuilderExample extends Command {
+    private String message;
+
+    public CommandProcessBuilderExample(String message) {
+        this.message = message;
+    }
 
     @Override
-    public Serializable execute(Object... params) {
-        ProcessBuilder processBuilder = new ProcessBuilder("echo", "jeej");
+    public Serializable execute(Object... params) throws Exception {
+        ProcessBuilder processBuilder = new ProcessBuilder("echo", message);
         try {
             Process p = processBuilder.start();
             p.waitFor();
             int ret = p.exitValue();
             switch (ret) {
                 case 0:
-                    return ProcessBuilderUtil.getString(p);
-                case 100:
-                    return new ExceptionJeejException("jeej");
+                    return ProcessBuilderUtil.getOutput(p);
                 default:
-                    return 0;
+                    throw new ExceptionJeejException(ProcessBuilderUtil.getOutputError(p));
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

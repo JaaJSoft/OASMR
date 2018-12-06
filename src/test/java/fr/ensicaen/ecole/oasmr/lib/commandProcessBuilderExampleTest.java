@@ -8,11 +8,11 @@ public class commandProcessBuilderExampleTest {
 
     @Before
     public void setUp() throws Exception {
-        c = new CommandProcessBuilderExample();
+        c = new CommandProcessBuilderExample("jeej");
     }
 
     @Test
-    public void execute() {
+    public void execute() throws Exception {
         System.out.println(c.execute());
     }
 }

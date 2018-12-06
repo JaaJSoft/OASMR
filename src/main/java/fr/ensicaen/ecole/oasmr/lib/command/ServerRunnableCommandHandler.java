@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ServerRunnableCommandHandler extends ServerRunnable {
-    private Object o[];
+    private Object[] o;
     private String commandType;
     private List<InetAddress> authorizedAddress;
     private Set<Command> authorizedCommands;
@@ -44,8 +44,13 @@ public class ServerRunnableCommandHandler extends ServerRunnable {
             }
             util.sendSerializable(clientSocket, response);
             clientSocket.close();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            try {
+                util.sendSerializable(clientSocket, e);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 }

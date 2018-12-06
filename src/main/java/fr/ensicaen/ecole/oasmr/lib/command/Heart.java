@@ -30,7 +30,13 @@ public class Heart {
 
     public void start(Object... param) {
         final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        scheduleAtFixedRateHeartBeat = executor.scheduleAtFixedRate(() -> heartbeat.execute(param), 10, heartBeatPeriodInSeconds, SECONDS);
+        scheduleAtFixedRateHeartBeat = executor.scheduleAtFixedRate(() -> {
+            try {
+                heartbeat.execute(param);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 10, heartBeatPeriodInSeconds, SECONDS);
         Runtime.getRuntime().addShutdownHook(new Thread(executor::shutdown));
     }
 
