@@ -4,10 +4,10 @@ import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
 import java.io.*;
 
-public class CommandProcessBuilderExample extends Command {
+public class CommandEchoString extends Command {
     private String message;
 
-    public CommandProcessBuilderExample(String message) {
+    public CommandEchoString(String message) {
         this.message = message;
     }
 
