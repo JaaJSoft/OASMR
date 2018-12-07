@@ -13,25 +13,26 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.exception.ExceptionRequestResp
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.ArrayDeque;
+import java.util.Objects;
+import java.util.Queue;
 
-public class RequestManager { //TODO QUEUE
-    private Client client;
+public class RequestManager {
+    private final InetAddress address;
+    private final int port;
+    //private Queue<Command> commandToSendQueue;
 
     public RequestManager(InetAddress address, int port) throws ExceptionPortInvalid {
-        this.client = new Client(address, port);
-    }
-
-    private void connect() throws ExceptionConnectionFailure {
-        client.connect();
-    }
-
-    private void disconnect() throws ExceptionCannotDisconnect {
-        client.disconnect();
+        this.address = address;
+        this.port = port;
+        //commandToSendQueue = new ArrayDeque<>();
     }
 
     public Serializable sendRequest(Command r) throws Exception {
+        //commandToSendQueue.add(r);
         try {
-            connect();
+            Client client = new Client(address, port);
+            client.connect();
             System.out.println("[" + dateUtil.getFormattedDate() + "]-> Command " + r + " to " + client.getSocket().getInetAddress() + ":" + client.getSocket().getPort());
             util.sendSerializable(client.getSocket(), r);
             Serializable response = util.receiveSerializable(client.getSocket());
@@ -39,14 +40,27 @@ public class RequestManager { //TODO QUEUE
                 throw new ExceptionRequestResponseNull();
             }
             if (response instanceof Exception) {
-                disconnect();
+                client.disconnect();
                 throw (Exception) response;
             }
-            disconnect();
+            client.disconnect();
             return response;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         throw new ExceptionRequestError();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestManager that = (RequestManager) o;
+        return port == that.port && address.equals(that.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(address, port);
     }
 }
