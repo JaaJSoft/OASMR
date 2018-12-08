@@ -4,18 +4,16 @@ import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 
 import java.net.InetAddress;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
 
-public class FlyweightRequestManagerFactory {
+public class RequestManagerFlyweightFactory {
     private HashSet<RequestManager> requestManagers;
-    private static FlyweightRequestManagerFactory ourInstance = new FlyweightRequestManagerFactory();
+    private static RequestManagerFlyweightFactory ourInstance = new RequestManagerFlyweightFactory();
 
-    public static FlyweightRequestManagerFactory getInstance() {
+    public static RequestManagerFlyweightFactory getInstance() {
         return ourInstance;
     }
 
-    private FlyweightRequestManagerFactory() {
+    private RequestManagerFlyweightFactory() {
         requestManagers = new HashSet<>();
     }
 
@@ -26,6 +24,11 @@ public class FlyweightRequestManagerFactory {
                 return requestManager;
             }
         }
+        requestManagers.add(r);
         return r;
+    }
+
+    public int getNbRequestManager() {
+        return requestManagers.size();
     }
 }
