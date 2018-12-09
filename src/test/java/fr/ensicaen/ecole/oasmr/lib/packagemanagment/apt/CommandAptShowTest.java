@@ -11,11 +11,12 @@ public class CommandAptShowTest {
     @Test
     public void execute() throws Exception{
         CommandAptShow c = new CommandAptShow("gcc");
-        assertEquals(""/*To complete*/, c.execute());
+        assertEquals("".getClass().getTypeName(), c.execute().getClass().getTypeName());
     }
 
     @Test(expected = ExceptionAptPackageNotFound.class)
-    public void executeFailure() throws ExceptionAptPackageNotFound, Exception{
+    public void executeFailure() throws Exception{
         CommandAptShow c = new CommandAptShow("jaaj");
+        c.execute();
     }
 }

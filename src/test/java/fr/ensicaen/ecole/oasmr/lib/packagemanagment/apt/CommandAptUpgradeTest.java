@@ -8,7 +8,7 @@ public class CommandAptUpgradeTest {
     @Test
     public void execute() throws Exception{
         CommandAptUpdate c = new CommandAptUpdate();
-        assertEquals(""/*To complete*/, c.execute());
+        assertEquals("".getClass().getName(), c.execute().getClass().getName());
     }
     /*How provocate an exception??*/
 }

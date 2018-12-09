@@ -8,6 +8,6 @@ public class CommandAptAutoRemoveTest {
     @Test
     public void execute() throws Exception{
         CommandAptAutoRemove c = new CommandAptAutoRemove();
-        assertEquals(""/*To complete*/, c.execute());
+        assertEquals("".getClass().getTypeName(), c.execute().getClass().getTypeName());
     }
 }

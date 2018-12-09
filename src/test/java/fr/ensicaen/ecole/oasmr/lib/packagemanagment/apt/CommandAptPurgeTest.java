@@ -8,6 +8,6 @@ public class CommandAptPurgeTest {
     @Test
     public void execute() throws Exception{
         CommandAptPurge c = new CommandAptPurge();
-        assertEquals(""/*To complete*/, c.execute());
+        assertEquals("".getClass().getTypeName(), c.execute().getClass().getTypeName());
     }
 }

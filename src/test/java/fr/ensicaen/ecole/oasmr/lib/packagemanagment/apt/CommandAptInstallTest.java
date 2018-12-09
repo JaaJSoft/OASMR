@@ -9,17 +9,18 @@ public class CommandAptInstallTest {
     @Test
     public void execute() throws Exception{
         CommandAptInstall c = new CommandAptInstall("apcalc");
-        assertEquals(""/*To complete*/, c.execute());
+        assertEquals("".getClass().getName(), c.execute().getClass().getName());
     }
 
     @Test
     public void executeAlreadyInstalledPackage() throws Exception{
         CommandAptInstall c = new CommandAptInstall("gcc");
-        assertEquals("", c.execute());
+        assertEquals("".getClass().getName(), c.execute().getClass().getName());
     }
 
     @Test(expected = ExceptionAptInstallFailure.class)
-    public void executeFailure() throws ExceptionAptInstallFailure, Exception{
+    public void executeFailure() throws Exception{
         CommandAptInstall c = new CommandAptInstall("eanfifjeaucbnaoebuifsq");
+        c.execute();
     }
 }

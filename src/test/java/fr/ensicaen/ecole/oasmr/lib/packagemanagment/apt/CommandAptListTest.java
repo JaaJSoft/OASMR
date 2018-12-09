@@ -9,6 +9,6 @@ public class CommandAptListTest {
     @Test
     public void execute() throws Exception{
         CommandAptList c = new CommandAptList();
-        assertEquals(""/*To complete*/, c.execute());
+        assertEquals("".getClass().getTypeName(), c.execute().getClass().getTypeName());
     }
 }
