@@ -20,16 +20,13 @@ import java.util.Queue;
 public class RequestManager {
     private final InetAddress address;
     private final int port;
-    //private Queue<Command> commandToSendQueue;
 
     public RequestManager(InetAddress address, int port) throws ExceptionPortInvalid {
         this.address = address;
         this.port = port;
-        //commandToSendQueue = new ArrayDeque<>();
     }
 
     public Serializable sendRequest(Command r) throws Exception {
-        //commandToSendQueue.add(r);
         try {
             Client client = new Client(address, port);
             client.connect();

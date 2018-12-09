@@ -18,6 +18,7 @@ public abstract class Node implements Comparable {
         this.id = id;
         this.nodeAddress = nodeAddress;
         this.port = port;
+        name = nodeAddress.toString() + ":" + port;
     }
 
     @Override
@@ -61,5 +62,9 @@ public abstract class Node implements Comparable {
 
     public int getPort() {
         return port;
+    }
+
+    public void setLastHeartBeat(LocalDate lastHeartBeat) {
+        this.lastHeartBeat = lastHeartBeat;
     }
 }
