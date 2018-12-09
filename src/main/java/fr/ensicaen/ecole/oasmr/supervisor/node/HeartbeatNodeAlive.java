@@ -1,6 +1,5 @@
 package fr.ensicaen.ecole.oasmr.supervisor.node;
 
-import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.network.Client;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionCannotDisconnect;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
@@ -11,8 +10,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.time.LocalDate;
 
-public class HeartbeatNodeAlive extends Command {
+public class HeartbeatNodeAlive extends CommandNode {
     private Client c;
     private int commandPort;
 
@@ -21,16 +21,18 @@ public class HeartbeatNodeAlive extends Command {
         this.commandPort = commandPort;
     }
 
+
     @Override
-    public Serializable execute(Object... n) {
+    public Serializable execute(Node node) {
         try {
             c.connect();
             util.sendSerializable(c.getSocket(), commandPort);
             c.disconnect();
+            node.setLastHeartBeat(LocalDate.now());
         } catch (ExceptionConnectionFailure | ExceptionCannotDisconnect | IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return 0;
     }
 
     @Override

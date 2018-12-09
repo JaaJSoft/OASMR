@@ -7,6 +7,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.time.LocalDate;
 
 public class ServerRunnableHeartBeatsHandler extends ServerRunnable {
     private Supervisor supervisor;
@@ -21,9 +22,8 @@ public class ServerRunnableHeartBeatsHandler extends ServerRunnable {
         try {
             InetAddress address = clientSocket.getInetAddress();
             int port = (int) util.receiveSerializable(clientSocket);
-            //TODO get command port !
             Node n = supervisor.getNodeFlyweightFactory().getNode(address, port);
-
+            n.setLastHeartBeat(LocalDate.now());
             clientSocket.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
