@@ -5,6 +5,11 @@ import java.util.concurrent.*;
 
 public abstract class Command implements Serializable {
 
+    /**
+     * totally useless shit
+     * @param params
+     * @return
+     */
     public Serializable executeInThread(Object... params) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
 

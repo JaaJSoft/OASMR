@@ -40,12 +40,7 @@ public class ServerRunnableCommandHandler extends ServerRunnable {
             if (!authorizedCommands.contains(command) && !authorizedCommands.isEmpty()) {
                 response = new ExceptionCommandNotAuthorized(command.toString());
             } else {
-                try {
-                    response = command.execute(o);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    response = e;
-                }
+                response = command.execute(o);
             }
             util.sendSerializable(clientSocket, response);
             clientSocket.close();
@@ -53,6 +48,7 @@ public class ServerRunnableCommandHandler extends ServerRunnable {
             e.printStackTrace();
             try {
                 util.sendSerializable(clientSocket, e);
+                clientSocket.close();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
