@@ -32,6 +32,6 @@ public class CommandEchoString extends Command {
 
     @Override
     public String toString() {
-        return null;
+        return "echo message";
     }
 }
