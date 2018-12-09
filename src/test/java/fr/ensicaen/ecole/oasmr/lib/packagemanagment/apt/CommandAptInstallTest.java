@@ -19,7 +19,7 @@ public class CommandAptInstallTest {
     }
 
     @Test(expected = ExceptionAptInstallFailure.class)
-    public void executeFailure() throws Exception{
+    public void executeFailure() throws ExceptionAptInstallFailure, Exception{
         CommandAptInstall c = new CommandAptInstall("eanfifjeaucbnaoebuifsq");
     }
 }

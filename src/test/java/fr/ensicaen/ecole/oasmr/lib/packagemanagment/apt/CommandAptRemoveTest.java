@@ -14,7 +14,7 @@ public class CommandAptRemoveTest {
 
 
     @Test(expected = ExceptionAptRemoveInexistantPackage.class)
-    public void executeFailure() throws Exception{
+    public void executeFailure() throws ExceptionAptRemoveInexistantPackage, Exception{
         CommandAptShow c = new CommandAptShow("fuufeaofjeej");
     }
 

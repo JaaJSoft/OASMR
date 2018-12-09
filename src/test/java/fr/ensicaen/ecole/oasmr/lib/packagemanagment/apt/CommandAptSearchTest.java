@@ -19,7 +19,7 @@ public class CommandAptSearchTest {
     }
 
     @Test(expected = ExceptionAptSearchFailure.class)
-    public void executeFailure() throws Exception{
+    public void executeFailure() throws ExceptionAptSearchFailure, Exception{
         CommandAptShow c = new CommandAptShow("");
     }
 }

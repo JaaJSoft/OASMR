@@ -15,7 +15,7 @@ public class CommandAptShowTest {
     }
 
     @Test(expected = ExceptionAptPackageNotFound.class)
-    public void executeFailure() throws Exception{
+    public void executeFailure() throws ExceptionAptPackageNotFound, Exception{
         CommandAptShow c = new CommandAptShow("jaaj");
     }
 }
