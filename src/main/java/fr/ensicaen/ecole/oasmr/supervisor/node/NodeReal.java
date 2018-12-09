@@ -1,11 +1,12 @@
-package fr.ensicaen.ecole.oasmr.supervisor;
+package fr.ensicaen.ecole.oasmr.supervisor.node;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.command.Heart;
 import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.node.HeartbeatNodeAlive;
+import fr.ensicaen.ecole.oasmr.supervisor.node.HeartbeatNodeAlive;
+import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -17,12 +18,12 @@ public class NodeReal extends Node {
     private InetAddress supervisorAddress;
     private int supervisorPort;
 
-    public NodeReal(String name, InetAddress nodeAddress, int nodePort, InetAddress supervisorAddress, int supervisorPort) throws IOException, ExceptionPortInvalid {
-        super(name, nodeAddress, nodePort);
+    public NodeReal(int id, InetAddress nodeAddress, int nodePort, InetAddress supervisorAddress, int supervisorPort) throws IOException, ExceptionPortInvalid {
+        super(id, nodeAddress, nodePort);
         this.supervisorAddress = supervisorAddress;
         this.supervisorPort = supervisorPort;
         server = new Server(nodePort, new ServerRunnableCommandHandler("command", this));
-        heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort), 1);
+        heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort, nodePort), 1);
     }
 
     public void start() throws InterruptedException, IOException {

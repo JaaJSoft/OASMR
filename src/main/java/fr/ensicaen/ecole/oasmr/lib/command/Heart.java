@@ -14,7 +14,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 /**
  * Execute a command at a fixed rate
  */
-public class Heart {
+public class Heart{
     private ScheduledFuture<?> scheduleAtFixedRateHeartBeat;
     private int heartBeatPeriodInSeconds = 10;
     private Command heartbeat;

@@ -1,11 +1,10 @@
-package fr.ensicaen.ecole.oasmr.supervisor;
+package fr.ensicaen.ecole.oasmr.supervisor.node;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.time.LocalDate;
-import java.util.Objects;
 
 public abstract class Node implements Comparable {
     private Integer id;
@@ -15,8 +14,8 @@ public abstract class Node implements Comparable {
     protected InetAddress nodeAddress;
     protected int port;
 
-    public Node(String name, InetAddress nodeAddress, int port) {
-        this.name = name;
+    public Node(int id, InetAddress nodeAddress, int port) {
+        this.id = id;
         this.nodeAddress = nodeAddress;
         this.port = port;
     }
@@ -50,5 +49,17 @@ public abstract class Node implements Comparable {
 
     public String getName() {
         return name;
+    }
+
+    public LocalDate getLastHeartBeat() {
+        return lastHeartBeat;
+    }
+
+    public InetAddress getNodeAddress() {
+        return nodeAddress;
+    }
+
+    public int getPort() {
+        return port;
     }
 }

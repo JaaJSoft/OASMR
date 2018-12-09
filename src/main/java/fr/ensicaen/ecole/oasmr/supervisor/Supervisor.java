@@ -4,19 +4,20 @@ import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
-import fr.ensicaen.ecole.oasmr.node.ServerRunnableHeartBeatsHandler;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeFlyweightFactory;
+import fr.ensicaen.ecole.oasmr.supervisor.node.ServerRunnableHeartBeatsHandler;
 
 import java.io.IOException;
-import java.util.TreeSet;
 
 public class Supervisor {
-    private TreeSet<Node> nodes = new TreeSet<>();
+    private NodeFlyweightFactory nodeFlyweightFactory;
     private Server serverHeartBeatsHandler;
     private Server serverRequestHandler;
 
     public Supervisor(int portHeartBeats, int portRequests) throws IOException, ExceptionPortInvalid {
         serverHeartBeatsHandler = new Server(portHeartBeats, new ServerRunnableHeartBeatsHandler(this));
         serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler("Request", this));
+        this.nodeFlyweightFactory = new NodeFlyweightFactory();
     }
 
     public void start() throws InterruptedException, CloneNotSupportedException, IOException {
@@ -44,9 +45,7 @@ public class Supervisor {
         ThreadServerRequestHandler.join();
     }
 
-    public TreeSet<Node> getNodes() {
-        return nodes;
+    public NodeFlyweightFactory getNodeFlyweightFactory() {
+        return nodeFlyweightFactory;
     }
-
-
 }

@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 public class Example {
 
     public static void main(String[] args) throws Exception {
-        RequestManager r = new RequestManager(InetAddress.getByName("127.0.0.1"), 40404);
+        RequestManager r = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName("127.0.0.1"), 40404);
         String jeej = (String) r.sendRequest(new RequestHelloWorld());
         System.out.println(jeej);
     }

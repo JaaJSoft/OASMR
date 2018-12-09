@@ -1,4 +1,4 @@
-package fr.ensicaen.ecole.oasmr.supervisor;
+package fr.ensicaen.ecole.oasmr.supervisor.node;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.network.Client;
@@ -12,8 +12,8 @@ import java.io.Serializable;
 import java.net.InetAddress;
 
 public class NodeProxy extends Node {
-    public NodeProxy(String name, InetAddress address, int port) {
-        super(name, address, port);
+    NodeProxy(int id, InetAddress address, int port) {
+        super(id, address, port);
     }
 
     @Override
