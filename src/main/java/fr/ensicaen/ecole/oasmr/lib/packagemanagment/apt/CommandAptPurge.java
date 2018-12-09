@@ -2,30 +2,27 @@ package fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt;
 
 import fr.ensicaen.ecole.oasmr.lib.ProcessBuilderUtil;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
-import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.exceptions.ExceptionAptInstallFailure;
+import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.exceptions.ExceptionPurgeFailure;
 
 import java.io.IOException;
 import java.io.Serializable;
 
-public class CommandAptInstall extends Command {
-
-
+public class CommandAptPurge extends Command {
     private String packageName;
 
-    public CommandAptInstall(String packageName) {
-        this.packageName = packageName;
+    public CommandAptPurge() {
     }
 
     @Override
     public Serializable execute(Object... params) throws Exception {
-        ProcessBuilder processBuilder = new ProcessBuilder("sudo", "apt", "install", packageName);
+        ProcessBuilder processBuilder = new ProcessBuilder("sudo", "apt", "purge");
         try {
             Process p = processBuilder.start();
             p.waitFor();
             int ret = p.exitValue();
             switch (ret) {
                 case 100:
-                    throw new ExceptionAptInstallFailure(ProcessBuilderUtil.getOutputError(p));
+                    throw new ExceptionPurgeFailure(ProcessBuilderUtil.getOutputError(p));
                 default:
                     return ProcessBuilderUtil.getOutput(p);
                 //Il peut ne pas y avoir de résultat à la recherche meme si ça se passe bien
@@ -39,6 +36,6 @@ public class CommandAptInstall extends Command {
 
     @Override
     public String toString() {
-        return "sudo" + " " + "apt" + " " + "install" + " " + packageName;
+        return "sudo" + " " + "apt" + " " + "purge";
     }
 }
