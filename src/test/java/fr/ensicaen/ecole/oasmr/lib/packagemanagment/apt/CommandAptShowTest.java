@@ -1,26 +1,21 @@
 package fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt;
 
-import org.junit.Before;
+import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.exceptions.ExceptionAptPackageNotFound;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /*ToDo: Complete this test: how check efficiently if we can pass the test?? */
 
 public class CommandAptShowTest {
-    private CommandAptShow c;
-
-    @Before
-    public  void setUp(){
-        c = new CommandAptShow("gcc");
-    }
 
     @Test
     public void execute() throws Exception{
+        CommandAptShow c = new CommandAptShow("gcc");
         assertEquals(""/*To complete*/, c.execute());
     }
 
-    @Test
+    @Test(expected = ExceptionAptPackageNotFound.class)
     public void executeFailure() throws Exception{
-        assertNotEquals(""/*To complete*/, c.execute());
+        CommandAptShow c = new CommandAptShow("jaaj");
     }
 }
