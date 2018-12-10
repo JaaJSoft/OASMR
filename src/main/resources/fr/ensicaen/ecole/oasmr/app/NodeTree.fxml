@@ -4,7 +4,6 @@
 <?import com.jfoenix.controls.JFXTreeView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -12,32 +11,28 @@
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="100.0">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="OASMR" textAlignment="CENTER" wrappingWidth="334.2900390625">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Text>
-                  <JFXTextField prefHeight="26.0">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </JFXTextField>
-                  <Separator prefWidth="200.0">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Separator>
-                  <JFXTreeView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
-               </children>
-            </VBox>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="OASMR" textAlignment="CENTER" wrappingWidth="66.2900390625">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Text>
+            <JFXTextField prefHeight="26.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Separator>
+            <JFXTreeView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
          </children>
-      </AnchorPane>
+      </VBox>
    </center>
 </BorderPane>

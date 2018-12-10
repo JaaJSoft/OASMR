@@ -11,8 +11,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         primaryStage.setTitle("OASMR");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/Main.fxml"));
-        final Scene scene = new Scene(loader.load(),1000, 600);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/Login.fxml"));
+        final Scene scene = new Scene(loader.load(),600, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
 
