@@ -7,9 +7,7 @@ import fr.ensicaen.ecole.oasmr.lib.network.util;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ServerRunnableCommandHandler extends ServerRunnable {
     private Object[] o;
@@ -28,6 +26,8 @@ public class ServerRunnableCommandHandler extends ServerRunnable {
         this.o = o;
         this.commandType = commandType;
         authorizedAddress = new ArrayList<>();
+        authorizedCommands = new HashSet<>();
+        System.out.println(Arrays.toString(o));
     }
 
     @Override

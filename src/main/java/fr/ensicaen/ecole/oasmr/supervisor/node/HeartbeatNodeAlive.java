@@ -1,5 +1,6 @@
 package fr.ensicaen.ecole.oasmr.supervisor.node;
 
+import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Client;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionCannotDisconnect;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
@@ -25,11 +26,13 @@ public class HeartbeatNodeAlive extends CommandNode {
     @Override
     public Serializable execute(Node node) {
         try {
+            System.out.println("[" + dateUtil.getFormattedDate() + "]-> New heartbeat to " + c.getIp());
             c.connect();
             util.sendSerializable(c.getSocket(), commandPort);
+            int id = (int) util.receiveSerializable(c.getSocket());
             c.disconnect();
             node.setLastHeartBeat(LocalDate.now());
-        } catch (ExceptionConnectionFailure | ExceptionCannotDisconnect | IOException e) {
+        } catch (ExceptionConnectionFailure | ExceptionCannotDisconnect | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return 0;

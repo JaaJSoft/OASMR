@@ -20,9 +20,10 @@ public class Heart {
     private Command heartbeat;
     private Object[] params;
 
-    public Heart(Command r, int heartBeatPeriodInSeconds) {
+    public Heart(Command r, int heartBeatPeriodInSeconds, Object... params) {
         this.heartBeatPeriodInSeconds = heartBeatPeriodInSeconds;
         heartbeat = r;
+        this.params = params;
     }
 
     public void start() {

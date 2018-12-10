@@ -7,7 +7,7 @@ import java.io.*;
 public class CommandEchoString extends Command {
     private String message;
 
-    public CommandEchoString(String message) {
+    public  CommandEchoString(String message) {
         this.message = message;
     }
 

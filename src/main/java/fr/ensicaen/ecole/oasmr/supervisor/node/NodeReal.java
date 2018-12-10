@@ -23,7 +23,7 @@ public class NodeReal extends Node {
         this.supervisorAddress = supervisorAddress;
         this.supervisorPort = supervisorPort;
         server = new Server(nodePort, new ServerRunnableCommandHandler("command", this));
-        heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort, nodePort), 1);
+        heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort, nodePort), 1, this);
     }
 
     public void start() throws InterruptedException, IOException {

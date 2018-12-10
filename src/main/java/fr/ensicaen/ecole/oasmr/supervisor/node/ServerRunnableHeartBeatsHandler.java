@@ -24,6 +24,7 @@ public class ServerRunnableHeartBeatsHandler extends ServerRunnable {
             int port = (int) util.receiveSerializable(clientSocket);
             Node n = supervisor.getNodeFlyweightFactory().getNode(address, port);
             n.setLastHeartBeat(LocalDate.now());
+            util.sendSerializable(clientSocket, n.getId());
             clientSocket.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
