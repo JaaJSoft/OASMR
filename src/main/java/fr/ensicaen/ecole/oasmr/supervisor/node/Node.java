@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.time.LocalDate;
 
-public abstract class Node implements Comparable {
+public abstract class Node implements Comparable, Serializable {
     private Integer id;
 
     private String name;
@@ -66,5 +66,12 @@ public abstract class Node implements Comparable {
 
     public void setLastHeartBeat(LocalDate lastHeartBeat) {
         this.lastHeartBeat = lastHeartBeat;
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+            "name='" + name + '\'' +
+            '}';
     }
 }
