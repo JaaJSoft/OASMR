@@ -70,8 +70,6 @@ public abstract class Node implements Comparable, Serializable {
 
     @Override
     public String toString() {
-        return "Node{" +
-            "name='" + name + '\'' +
-            '}';
+        return name;
     }
 }

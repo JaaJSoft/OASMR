@@ -30,7 +30,7 @@ public class RequestManager {
         try {
             Client client = new Client(address, port);
             client.connect();
-            System.out.println("[" + dateUtil.getFormattedDate() + "]-> Command " + r + " to " + client.getSocket().getInetAddress() + ":" + client.getSocket().getPort());
+            System.out.println("[" + dateUtil.getFormattedDate() + "]-> Command " + r + " on " + client.getSocket().getInetAddress() + ":" + client.getSocket().getPort());
             util.sendSerializable(client.getSocket(), r);
             Serializable response = util.receiveSerializable(client.getSocket());
             if (response == null) {
