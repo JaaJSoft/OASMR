@@ -3,6 +3,9 @@ package fr.ensicaen.ecole.oasmr.app.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import fr.ensicaen.ecole.oasmr.app.view.SceneManagerFlyweight;
+import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionFXMLNotFound;
+import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +22,8 @@ import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
+    private SceneManagerFlyweight sceneManager;
+
     @FXML
     Text loginError;
 
@@ -33,7 +38,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        sceneManager = SceneManagerFlyweight.getInstance();
     }
 
 
@@ -44,14 +49,10 @@ public class LoginController implements Initializable {
             loginError.setText("No password");
         }else{
             loginError.setText("");
-            Stage stage = new Stage();
             try {
-                Parent root = FXMLLoader.load(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/Main.fxml"));
-                Scene scene = new Scene(root, 1000, 600);
-                stage.setScene(scene);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
+                sceneManager.setScenes("Main");
+            } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
+                exceptionSceneNotFound.printStackTrace();
             }
         }
     }

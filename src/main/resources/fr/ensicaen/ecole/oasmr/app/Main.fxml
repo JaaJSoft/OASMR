@@ -3,11 +3,11 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:controller="fr.ensicaen.ecole.oasmr.app.controller.MainController" fx:id="mainBorderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:controller="fr.ensicaen.ecole.oasmr.app.controller.MainController" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
     <top/>
    <center>
-      <SplitPane fx:id="mainSplitPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-          <items/>
-      </SplitPane>
+       <SplitPane fx:id="mainSplitPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                  prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+       </SplitPane>
    </center>
 </BorderPane>
