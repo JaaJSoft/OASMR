@@ -1,6 +1,5 @@
 package fr.ensicaen.ecole.oasmr.supervisor;
 
-import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 
 import java.io.IOException;

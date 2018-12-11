@@ -1,13 +1,11 @@
 package fr.ensicaen.ecole.oasmr.supervisor.request;
 
-import fr.ensicaen.ecole.oasmr.lib.CommandEchoString;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestExecuteCommand;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
-public class Example {
+class Example {
 
     public static void main(String[] args) throws Exception {
         RequestManager r = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName("127.0.0.1"), 40404);

@@ -6,7 +6,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 import java.io.Serializable;
 
 public class RequestGetNode extends Request {
-    private Integer id;
+    private final Integer id;
 
     public RequestGetNode(Integer id) {
         this.id = id;
@@ -14,7 +14,7 @@ public class RequestGetNode extends Request {
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        return (Serializable) supervisor.getNodeFlyweightFactory().getNode(id);
+        return supervisor.getNodeFlyweightFactory().getNode(id);
     }
 
     @Override

@@ -4,8 +4,6 @@ package fr.ensicaen.ecole.oasmr.supervisor.request;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Client;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionCannotDisconnect;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.network.util;
 import fr.ensicaen.ecole.oasmr.supervisor.request.exception.ExceptionRequestError;
@@ -13,9 +11,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.exception.ExceptionRequestResp
 
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.util.ArrayDeque;
 import java.util.Objects;
-import java.util.Queue;
 
 public class RequestManager {
     private final InetAddress address;
@@ -23,7 +19,11 @@ public class RequestManager {
 
     public RequestManager(InetAddress address, int port) throws ExceptionPortInvalid {
         this.address = address;
-        this.port = port;
+        if (port < 65536 && port > 0) {
+            this.port = port;
+        } else {
+            throw new ExceptionPortInvalid();
+        }
     }
 
     public Serializable sendRequest(Command r) throws Exception {

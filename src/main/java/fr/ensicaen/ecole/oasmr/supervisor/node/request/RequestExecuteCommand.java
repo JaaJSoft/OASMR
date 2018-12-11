@@ -2,15 +2,13 @@ package fr.ensicaen.ecole.oasmr.supervisor.node.request;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
-import fr.ensicaen.ecole.oasmr.supervisor.node.CommandNode;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
 
 public class RequestExecuteCommand extends Request {
-    private Command command;
-    private Integer id;
+    private final Command command;
+    private final Integer id;
 
     public RequestExecuteCommand(Integer id, Command command) {
         this.command = command;

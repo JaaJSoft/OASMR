@@ -1,5 +1,6 @@
 package fr.ensicaen.ecole.oasmr.lib;
 
+import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import org.junit.Before;
 import org.junit.Test;
 

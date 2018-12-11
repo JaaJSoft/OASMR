@@ -1,7 +1,6 @@
 package fr.ensicaen.ecole.oasmr.lib.network;
 
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.net.InetAddress;
@@ -11,9 +10,6 @@ import static org.junit.Assert.*;
 
 public class ClientTest {
 
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @Test(expected = ExceptionPortInvalid.class)
     public void portTestInvalidNegative() throws UnknownHostException, ExceptionPortInvalid {
@@ -43,7 +39,4 @@ public class ClientTest {
         assertEquals(ip.toString(), c1.getIp().toString());
     }
 
-    @Test
-    public void connect() {
-    }
 }

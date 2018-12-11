@@ -1,7 +1,6 @@
 package fr.ensicaen.ecole.oasmr.supervisor.node;
 
 import fr.ensicaen.ecole.oasmr.supervisor.exception.ExceptionNodeNotFound;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +13,7 @@ public class NodeFlyweightFactoryTest {
     private NodeFlyweightFactory factory;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         factory = new NodeFlyweightFactory();
     }
 
@@ -62,7 +61,7 @@ public class NodeFlyweightFactoryTest {
     }
 
     @Test(expected = ExceptionNodeNotFound.class)
-    public void removeNodeNotFound() throws UnknownHostException, ExceptionNodeNotFound {
+    public void removeNodeNotFound() throws ExceptionNodeNotFound {
         factory.removeNode(85);
     }
 

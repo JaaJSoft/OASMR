@@ -10,7 +10,7 @@ import java.util.Set;
 public class NodeFlyweightFactory {
 
     private int nbNode = 0;
-    private Set<Node> nodes;
+    private final Set<Node> nodes;
 
     public NodeFlyweightFactory() {
         nodes = new HashSet<>();

@@ -1,6 +1,5 @@
 package fr.ensicaen.ecole.oasmr.lib.network;
 
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public abstract class ServerRunnable implements Runnable, Cloneable {

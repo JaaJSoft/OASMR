@@ -4,15 +4,12 @@ package fr.ensicaen.ecole.oasmr.lib.network;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionCannotDisconnect;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionServerRunnableNotEnded;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 
 import static org.junit.Assert.*;
 
@@ -27,19 +24,19 @@ public class NetworkTest {
             try {
                 Server s = new Server(port, new ServerRunnableEcho());
                 s.start();
-            } catch (IOException | ExceptionPortInvalid | InterruptedException e) {
+            } catch (IOException | ExceptionPortInvalid e) {
                 e.printStackTrace();
             }
         });
         c = new Client(InetAddress.getByName("127.0.0.1"), port);
         t.start();
         Thread.sleep(1000);
-        System.out.println("COnnexion");
+        System.out.println("Connexion");
         c.connect();
     }
 
     @After
-    public void tearDown() throws ExceptionCannotDisconnect, ExceptionServerRunnableNotEnded {
+    public void tearDown() throws ExceptionCannotDisconnect {
         c.disconnect();
         //s.stop();
     }

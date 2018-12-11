@@ -26,7 +26,7 @@ public class NodeReal extends Node {
         heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort, nodePort), 1, this);
     }
 
-    public void start() throws InterruptedException, IOException {
+    public void start() throws IOException {
         Thread t = new Thread(() -> heart.start());
         t.start();
         server.start();

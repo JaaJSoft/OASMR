@@ -14,10 +14,10 @@ public class ProcessBuilderUtil {
         return new BufferedReader(new InputStreamReader(p.getErrorStream()));
     }
 
-    private static String StreamToString(BufferedReader ouput) throws IOException {
+    private static String StreamToString(BufferedReader output) throws IOException {
         StringBuilder builder = new StringBuilder();
-        String line = null;
-        while ((line = ouput.readLine()) != null) {
+        String line;
+        while ((line = output.readLine()) != null) {
             builder.append(line);
             builder.append(System.getProperty("line.separator"));
         }
@@ -25,13 +25,13 @@ public class ProcessBuilderUtil {
     }
 
     public static String getOutputError(Process p) throws IOException {
-        BufferedReader ouput = getErrorStream(p);
-        return StreamToString(ouput);
+        BufferedReader output = getErrorStream(p);
+        return StreamToString(output);
     }
 
     public static String getOutput(Process p) throws IOException {
-        BufferedReader ouput = getOutputStream(p);
-        return StreamToString(ouput);
+        BufferedReader output = getOutputStream(p);
+        return StreamToString(output);
     }
 
 

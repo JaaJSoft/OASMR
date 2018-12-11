@@ -20,18 +20,18 @@ public class Supervisor {
         this.nodeFlyweightFactory = new NodeFlyweightFactory();
     }
 
-    public void start() throws InterruptedException, CloneNotSupportedException, IOException {
+    public void start() throws InterruptedException {
         Thread ThreadServerHeartBeatsHandler = new Thread(() -> {
             try {
                 serverHeartBeatsHandler.start();
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         Thread ThreadServerRequestHandler = new Thread(() -> {
             try {
                 serverRequestHandler.start();
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });

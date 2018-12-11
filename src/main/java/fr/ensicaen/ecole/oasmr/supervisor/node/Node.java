@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.time.LocalDate;
 
 public abstract class Node implements Comparable, Serializable {
-    private Integer id;
+    private final Integer id;
 
     private String name;
     private LocalDate lastHeartBeat;
@@ -71,5 +71,9 @@ public abstract class Node implements Comparable, Serializable {
     @Override
     public String toString() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

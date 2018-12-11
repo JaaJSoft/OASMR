@@ -10,10 +10,10 @@ import java.net.InetAddress;
 import java.util.*;
 
 public class ServerRunnableCommandHandler extends ServerRunnable {
-    private Object[] o;
-    private String commandType;
-    private List<InetAddress> authorizedAddress;
-    private Set<Command> authorizedCommands;
+    private final Object[] o;
+    private final String commandType;
+    private final List<InetAddress> authorizedAddress;
+    private final Set<Command> authorizedCommands;
 
     public ServerRunnableCommandHandler(String commandType, List<InetAddress> authorizedAddress, Set<Command> authorizedCommands, Object... o) {
         this.o = o;

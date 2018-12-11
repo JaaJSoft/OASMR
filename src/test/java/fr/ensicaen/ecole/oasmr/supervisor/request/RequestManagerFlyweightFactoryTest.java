@@ -13,7 +13,7 @@ public class RequestManagerFlyweightFactoryTest {
     private RequestManagerFlyweightFactory factory;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         factory = RequestManagerFlyweightFactory.getInstance();
         factory.clear();
     }

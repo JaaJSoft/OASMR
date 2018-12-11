@@ -12,8 +12,8 @@ import java.net.Socket;
 import java.util.Objects;
 
 public class Client implements Serializable {
-    private InetAddress ip;
-    private int port;
+    private final InetAddress ip;
+    private final int port;
     private Socket socket;
 
     public Client(InetAddress ip, int port) throws ExceptionPortInvalid {

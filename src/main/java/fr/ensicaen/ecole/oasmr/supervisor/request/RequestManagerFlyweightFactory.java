@@ -6,8 +6,8 @@ import java.net.InetAddress;
 import java.util.HashSet;
 
 public class RequestManagerFlyweightFactory {
-    private HashSet<RequestManager> requestManagers;
-    private static RequestManagerFlyweightFactory ourInstance = new RequestManagerFlyweightFactory();
+    private final HashSet<RequestManager> requestManagers;
+    private final static RequestManagerFlyweightFactory ourInstance = new RequestManagerFlyweightFactory();
 
     public static RequestManagerFlyweightFactory getInstance() {
         return ourInstance;

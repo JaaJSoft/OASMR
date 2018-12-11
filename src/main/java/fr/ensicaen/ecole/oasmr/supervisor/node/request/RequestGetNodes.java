@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class RequestGetNodes extends Request {
 
     @Override
-    public Serializable execute(Supervisor supervisor) throws Exception {
+    public Serializable execute(Supervisor supervisor) {
         return (Serializable) supervisor.getNodeFlyweightFactory().getNodes();
     }
 

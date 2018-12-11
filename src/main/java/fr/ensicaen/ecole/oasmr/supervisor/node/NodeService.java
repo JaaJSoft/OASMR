@@ -21,7 +21,7 @@ public class NodeService {
         localNode.start();
     }
 
-    private static NodeReal initNode(InetAddress supervisorAddress, int port, InetAddress localAddress, int commandPort) throws IOException, InterruptedException, ExceptionPortInvalid, ExceptionConnectionFailure, ExceptionCannotDisconnect, ClassNotFoundException {
+    private static NodeReal initNode(InetAddress supervisorAddress, int port, InetAddress localAddress, int commandPort) throws IOException, ExceptionPortInvalid, ExceptionConnectionFailure, ExceptionCannotDisconnect, ClassNotFoundException {
         Client c = new Client(supervisorAddress, port);
         c.connect();
         util.sendSerializable(c.getSocket(), commandPort);

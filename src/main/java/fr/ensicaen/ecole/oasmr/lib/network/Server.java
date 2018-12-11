@@ -26,12 +26,12 @@ public class Server implements Serializable {
         this.runnable = runnable;
     }
 
-    public void start() throws IOException, InterruptedException {
+    public void start() throws IOException {
         run = true;
         while (run) {
             try {
                 Socket client = serverSocket.accept();
-                ServerRunnable r = null;
+                ServerRunnable r;
                 r = (ServerRunnable) runnable.clone();
                 r.setClientSocket(client);
                 Thread t = new Thread(r);

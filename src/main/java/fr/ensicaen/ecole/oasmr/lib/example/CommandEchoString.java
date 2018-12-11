@@ -1,11 +1,12 @@
-package fr.ensicaen.ecole.oasmr.lib;
+package fr.ensicaen.ecole.oasmr.lib.example;
 
+import fr.ensicaen.ecole.oasmr.lib.ProcessBuilderUtil;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
 import java.io.*;
 
 public class CommandEchoString extends Command {
-    private String message;
+    private final String message;
 
     public CommandEchoString(String message) {
         this.message = message;

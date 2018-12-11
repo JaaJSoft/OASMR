@@ -10,6 +10,6 @@ public abstract class CommandNode extends Command {
         return execute((Node) params[0]);
     }
 
-    public abstract Serializable execute(Node node);
+    public abstract Serializable execute(Node node) throws Exception;
 
 }

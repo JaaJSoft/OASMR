@@ -10,7 +10,7 @@ import java.net.InetAddress;
 import java.time.LocalDate;
 
 public class ServerRunnableHeartBeatsHandler extends ServerRunnable {
-    private Supervisor supervisor;
+    private final Supervisor supervisor;
 
     public ServerRunnableHeartBeatsHandler(Supervisor supervisor) {
         this.supervisor = supervisor;
