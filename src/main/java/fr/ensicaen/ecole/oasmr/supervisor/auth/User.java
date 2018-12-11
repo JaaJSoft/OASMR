@@ -1,7 +1,7 @@
-package fr.ensicaen.ecole.oasmr.supervisor.user;
+package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
 public class User {
-    private Integer id;
     private String login;
     private String password;
+
 }
