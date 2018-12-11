@@ -45,6 +45,7 @@ public class NodeFlyweightFactory {
                 throw new ExceptionNodeNotFound(id.toString());
             } else if (id.equals(n.getId())) {
                 nodes.remove(n);
+                return;
             }
         }
         throw new ExceptionNodeNotFound(id.toString());

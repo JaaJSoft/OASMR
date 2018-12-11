@@ -18,7 +18,7 @@ public class NodeReal extends Node {
     private InetAddress supervisorAddress;
     private int supervisorPort;
 
-    public NodeReal(int id, InetAddress nodeAddress, int nodePort, InetAddress supervisorAddress, int supervisorPort) throws IOException, ExceptionPortInvalid {
+    NodeReal(int id, InetAddress nodeAddress, int nodePort, InetAddress supervisorAddress, int supervisorPort) throws IOException, ExceptionPortInvalid {
         super(id, nodeAddress, nodePort);
         this.supervisorAddress = supervisorAddress;
         this.supervisorPort = supervisorPort;
