@@ -15,7 +15,18 @@ public class RequestManagerFlyweightFactoryTest {
     public void getRequestManager() throws UnknownHostException, ExceptionPortInvalid {
         RequestManagerFlyweightFactory factory = RequestManagerFlyweightFactory.getInstance();
         RequestManager r = factory.getRequestManager(InetAddress.getByName("192.168.1.1"), 55555);
-        RequestManager r2 = factory.getRequestManager(InetAddress.getByName("192.168.1.1"), 55555);
-        assertEquals(1, factory.getNbRequestManager());
+        assertSame(r, factory.getRequestManager(InetAddress.getByName("192.168.1.1"), 55555));
     }
+
+    @Test
+    public void getRequestManagerSize() throws UnknownHostException, ExceptionPortInvalid {
+        RequestManagerFlyweightFactory factory = RequestManagerFlyweightFactory.getInstance();
+        factory.clear();
+        RequestManager r = factory.getRequestManager(InetAddress.getByName("192.168.1.2"), 55555);
+        RequestManager r2 = factory.getRequestManager(InetAddress.getByName("192.168.1.2"), 55555);
+
+        assertEquals(1, factory.getNbRequestManager());
+
+    }
+
 }

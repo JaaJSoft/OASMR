@@ -31,4 +31,8 @@ public class RequestManagerFlyweightFactory {
     public int getNbRequestManager() {
         return requestManagers.size();
     }
+
+    public void clear() {
+        requestManagers.clear();
+    }
 }
