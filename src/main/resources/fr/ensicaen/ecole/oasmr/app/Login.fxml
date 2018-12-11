@@ -31,6 +31,6 @@
          <VBox.margin>
             <Insets bottom="20.0" />
          </VBox.margin></JFXPasswordField>
-      <JFXButton fx:id="loginConnect" onAction="#connect" ripplerFill="#bcafaf" text="Connect" />
+      <JFXButton fx:id="loginConnect" onAction="#connect" ripplerFill="#e8dcdc" text="Connect" />
     </VBox>
 </AnchorPane>
