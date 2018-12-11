@@ -14,7 +14,7 @@ public abstract class Node implements Comparable, Serializable {
     protected InetAddress nodeAddress;
     protected int port;
 
-    public Node(int id, InetAddress nodeAddress, int port) {
+    Node(int id, InetAddress nodeAddress, int port) {
         this.id = id;
         this.nodeAddress = nodeAddress;
         this.port = port;
