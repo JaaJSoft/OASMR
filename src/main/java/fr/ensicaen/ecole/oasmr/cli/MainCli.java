@@ -23,9 +23,14 @@ class MainCli {
         try {
             RequestManager r;
             r = new RequestManager(InetAddress.getByName(ip), port);
-            Set<Node> nodes = (Set<Node>) r.sendRequest(new RequestGetNodes());
-            System.out.println(r.sendRequest(new RequestExecuteCommand(nodes.iterator().next().getId(), new CommandEchoString("jeej"))));
 
+            @SuppressWarnings("unchecked")
+            Set<Node> nodes = (Set<Node>) r.sendRequest(new RequestGetNodes());
+
+            for (Node n : nodes) {
+                System.out.println(n);
+            }
+            System.out.println(r.sendRequest(new RequestExecuteCommand(nodes.iterator().next().getId(), new CommandEchoString("jeej"))));
 
         } catch (ExceptionPortInvalid exceptionPortInvalid) {
             System.out.println("Port invalid : " + port);
