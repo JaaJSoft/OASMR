@@ -24,11 +24,11 @@ public class CommandAptInstall extends Command {
             p.waitFor();
             int ret = p.exitValue();
             switch (ret) {
-                case 100:
-                    throw new ExceptionAptInstallFailure(ProcessBuilderUtil.getOutputError(p));
-                default:
+                case 0:
                     return ProcessBuilderUtil.getOutput(p);
-                //Il peut ne pas y avoir de résultat à la recherche meme si ça se passe bien
+                default:
+                    throw new ExceptionAptInstallFailure(ProcessBuilderUtil.getOutputError(p));
+
             }
 
         } catch (IOException | InterruptedException e) {

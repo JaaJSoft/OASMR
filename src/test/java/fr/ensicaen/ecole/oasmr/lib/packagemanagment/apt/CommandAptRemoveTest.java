@@ -9,14 +9,14 @@ import static org.junit.Assert.assertTrue;
 public class CommandAptRemoveTest {
     @Test
     public void execute() throws Exception{
-        CommandAptShow c = new CommandAptShow("apcalc");
+        CommandAptRemove c = new CommandAptRemove("apcalc");
         assertTrue(c.execute() instanceof String);
     }
 
 
     @Test(expected = ExceptionAptRemoveInexistantPackage.class)
     public void executeFailure() throws Exception {
-        CommandAptShow c = new CommandAptShow("fuufeaofjeej");
+        CommandAptRemove c = new CommandAptRemove("fuufeaofjeej");
         c.execute();
     }
 }

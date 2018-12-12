@@ -21,10 +21,10 @@ public class CommandAptAutoRemove extends Command {
             p.waitFor();
             int ret = p.exitValue();
             switch (ret) {
-                case 100:
-                    throw new ExceptionAptAutoRemoveFail(ProcessBuilderUtil.getOutputError(p));
-                default:
+                case 0:
                     return ProcessBuilderUtil.getOutput(p);
+                default:
+                    throw new ExceptionAptAutoRemoveFail(ProcessBuilderUtil.getOutputError(p));
             }
 
         } catch (IOException | InterruptedException e) {

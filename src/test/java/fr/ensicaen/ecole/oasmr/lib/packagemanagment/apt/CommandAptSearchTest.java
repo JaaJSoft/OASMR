@@ -8,19 +8,14 @@ import static org.junit.Assert.assertEquals;
 public class CommandAptSearchTest {
     @Test
     public void execute() throws Exception{
-        CommandAptShow c = new CommandAptShow("gcc");
+        CommandAptSearch c = new CommandAptSearch("apcalc");
         assert(c.execute() instanceof String);
     }
 
-    @Test(expected = ExceptionAptSearchFailure.class)
-    public void executeFailure1() throws Exception{
-        CommandAptShow c = new CommandAptShow("eanfifjeaucbnaoebuifsq");
-        c.execute();
+    @Test
+    public void execute1() throws Exception{
+        CommandAptSearch c = new CommandAptSearch("eanfifjeaucbnaoebuifsq");
+        assert(c.execute() instanceof String);
     }
-
-    @Test(expected = ExceptionAptSearchFailure.class)
-    public void executeFailure2() throws Exception{
-        CommandAptShow c = new CommandAptShow("");
-        c.execute();
-    }
+    //how have exception?
 }
