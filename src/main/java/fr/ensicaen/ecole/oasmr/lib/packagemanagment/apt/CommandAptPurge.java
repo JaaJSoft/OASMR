@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public class CommandAptPurge extends Command {
-    private String packageName;
 
     public CommandAptPurge() {
     }
@@ -21,10 +20,11 @@ public class CommandAptPurge extends Command {
             p.waitFor();
             int ret = p.exitValue();
             switch (ret) {
-                case 100:
-                    throw new ExceptionPurgeFailure(ProcessBuilderUtil.getOutputError(p));
-                default:
+                case 0:
                     return ProcessBuilderUtil.getOutput(p);
+                default:
+                    throw new ExceptionPurgeFailure(ProcessBuilderUtil.getOutputError(p));
+
             }
 
         } catch (IOException | InterruptedException e) {

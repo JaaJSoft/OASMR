@@ -1,3 +1,4 @@
+
 package fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt;
 
 import fr.ensicaen.ecole.oasmr.lib.ProcessBuilderUtil;
@@ -22,9 +23,12 @@ public class CommandAptList extends Command {
             int ret = p.exitValue();
             switch (ret) {
                 case 100:
-                    throw new ExceptionAptFailGettingList(ProcessBuilderUtil.getOutputError(p));
-                default:
+                    //System.out.println(ProcessBuilderUtil.getOutput(p));
                     return ProcessBuilderUtil.getOutput(p);
+
+                default:
+                    throw new ExceptionAptFailGettingList(ProcessBuilderUtil.getOutputError(p));
+
             }
 
         } catch (IOException | InterruptedException e) {

@@ -21,11 +21,12 @@ public class CommandAptShow extends Command {
             Process p = processBuilder.start();
             p.waitFor();
             int ret = p.exitValue();
+
             switch (ret) {
-                case 100:
-                    throw new ExceptionAptPackageNotFound(ProcessBuilderUtil.getOutputError(p));
-                default: //théoriquement c'est que ca marche (il n'y a qu'une seule valeur de retour pour les erreurs)
+                case 0:
                     return ProcessBuilderUtil.getOutput(p);
+                default:
+                    throw new ExceptionAptPackageNotFound(ProcessBuilderUtil.getOutputError(p));
             }
 
         } catch (IOException | InterruptedException e) {

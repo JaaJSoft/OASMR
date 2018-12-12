@@ -22,12 +22,15 @@ public class CommandAptSearch extends Command {
             Process p = processBuilder.start();
             p.waitFor();
             int ret = p.exitValue();
+
             switch (ret) {
-                case 100:
-                    throw new ExceptionAptSearchFailure(ProcessBuilderUtil.getOutputError(p));
-                default:
+                case 0:
                     return ProcessBuilderUtil.getOutput(p);
-                    //Il peut ne pas y avoir de résultat à la recherche meme si ça se passe bien
+                default:
+                    throw new ExceptionAptSearchFailure(ProcessBuilderUtil.getOutputError(p));
+
+
+                //Il peut ne pas y avoir de résultat à la recherche meme si ça se passe bien
             }
 
         } catch (IOException | InterruptedException e) {

@@ -7,6 +7,8 @@ import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.exceptions.ExceptionAptU
 import java.io.IOException;
 import java.io.Serializable;
 
+//ToDO: check if it work
+
 public class CommandAptUpgrade extends Command {
 
     public CommandAptUpgrade() {
@@ -20,11 +22,14 @@ public class CommandAptUpgrade extends Command {
             Process p = processBuilder.start();
             p.waitFor();
             int ret = p.exitValue();
+            //System.out.println(ProcessBuilderUtil.getOutput(p));
             switch (ret) {
-                case 100:
-                    throw new ExceptionAptUpgradeFailure(ProcessBuilderUtil.getOutputError(p));
-                default:
+                case 0:
                     return ProcessBuilderUtil.getOutput(p);
+
+                default:
+                    throw new ExceptionAptUpgradeFailure(ProcessBuilderUtil.getOutputError(p));
+
             }
 
         } catch (IOException | InterruptedException e) {

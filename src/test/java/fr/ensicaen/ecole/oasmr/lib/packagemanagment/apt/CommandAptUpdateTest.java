@@ -13,5 +13,4 @@ public class CommandAptUpdateTest {
         assertEquals("".getClass().getTypeName(), c.execute().getClass().getTypeName());
     }
     /*How provocate an exception??*/
-    /*Check si la sortie n'est pas une demande d'authentification sudo qui est probablement aussi une string*/
 }
