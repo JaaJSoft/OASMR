@@ -5,16 +5,19 @@ import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Node implements Comparable, Serializable {
-    private final Integer id;
 
+    private final Integer id;
     private String name;
     private LocalDate lastHeartBeat;
     protected InetAddress nodeAddress;
     protected int port;
+    private Set<Tag> tags = new HashSet<>();
 
-    Node(int id, InetAddress nodeAddress, int port) {
+    public Node(int id, InetAddress nodeAddress, int port) {
         this.id = id;
         this.nodeAddress = nodeAddress;
         this.port = port;
@@ -75,5 +78,17 @@ public abstract class Node implements Comparable, Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void addTag(Tag s) {
+        tags.add(s);
+    }
+
+    public void addTags(Set<Tag> s) {
+        tags.addAll(s);
     }
 }
