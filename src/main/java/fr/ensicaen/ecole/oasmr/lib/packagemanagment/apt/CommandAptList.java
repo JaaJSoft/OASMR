@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public class CommandAptList extends Command {
+
     public CommandAptList() {
 
     }
@@ -22,7 +23,7 @@ public class CommandAptList extends Command {
             p.waitFor();
             int ret = p.exitValue();
             switch (ret) {
-                case 100:
+                case 0:
                     //System.out.println(ProcessBuilderUtil.getOutput(p));
                     return ProcessBuilderUtil.getOutput(p);
 
