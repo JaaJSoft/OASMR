@@ -22,11 +22,11 @@ public class Server implements Serializable {
         } else {
             throw new ExceptionPortInvalid();
         }
-        serverSocket = new ServerSocket(port);
         this.runnable = runnable;
     }
 
     public void start() throws IOException {
+        serverSocket = new ServerSocket(port);
         run = true;
         while (run) {
             try {
