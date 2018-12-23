@@ -1,7 +1,6 @@
 package fr.ensicaen.ecole.oasmr.supervisor.node.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
