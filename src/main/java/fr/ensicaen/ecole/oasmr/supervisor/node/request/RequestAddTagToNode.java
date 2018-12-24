@@ -20,7 +20,7 @@ public class RequestAddTagToNode extends Request {
     public Serializable execute(Supervisor supervisor) throws Exception {
         Node n = supervisor.getNodeFlyweightFactory().getNode(id);
         n.addTag(t);
-        return null;
+        return 0;
     }
 
     @Override

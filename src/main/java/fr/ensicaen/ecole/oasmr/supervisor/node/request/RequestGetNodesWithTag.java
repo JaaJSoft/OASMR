@@ -9,14 +9,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class RequestGetNodeswithTag extends Request {
+public class RequestGetNodesWithTag extends Request {
     private final Set<Tag> tags;
 
-    public RequestGetNodeswithTag(Set<Tag> tags) {
+    public RequestGetNodesWithTag(Set<Tag> tags) {
         this.tags = tags;
     }
 
-    public RequestGetNodeswithTag(Tag t) {
+    public RequestGetNodesWithTag(Tag t) {
         tags = new HashSet<>();
         tags.add(t);
     }
