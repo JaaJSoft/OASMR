@@ -6,24 +6,39 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import picocli.CommandLine;
 
+import java.net.InetAddress;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
-class MainCli {
+@CommandLine.Command(name = "MainCli", subcommands = {ListCli.class})
+public class MainCli implements Callable {
 
-    public static void main(String[] args) throws Exception {
-        SupervisorCli s = new SupervisorCli();
-        CommandLine cmd = new CommandLine(s);
-        cmd.parse(args);
-        if (cmd.isUsageHelpRequested()) {
-            cmd.usage(System.out);
-        } else if (cmd.isVersionHelpRequested()) {
-            cmd.printVersionHelp(System.out);
-        } else {
-            RequestManager r = RequestManagerFlyweightFactory.getInstance().getRequestManager(s.supervisorAddress, s.port);
-            Set<Node> nodes = (Set<Node>) r.sendRequest(new RequestGetNodes());
-            System.out.println(nodes);
+    @CommandLine.Option(names = {"-s", "--supervisor"}, required = true, description = "Supervisor address")
+    InetAddress supervisorAddress;
+
+    @CommandLine.Option(names = {"-p", "--port"}, description = "Supervisor port")
+    int port = 40404;
+
+    @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "display a help message")
+    boolean help = false;
+
+    @CommandLine.Option(names = {"-u", "--user"}, description = "username")
+    String username = "admin";
+
+    RequestManager r;
+
+
+    @Override
+    public Object call() throws Exception {
+        if (help) {
+            CommandLine.usage(this, System.err);
+            return null;
         }
-
+        r = RequestManagerFlyweightFactory.getInstance().getRequestManager(supervisorAddress, port);
+        return r;
     }
 
+    public static void main(String[] args) throws Exception {
+        CommandLine.call(new MainCli(), args);
+    }
 }
