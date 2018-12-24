@@ -1,17 +1,14 @@
 package fr.ensicaen.ecole.oasmr.cli;
 
-import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNodes;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import picocli.CommandLine;
 
 import java.net.InetAddress;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "MainCli", subcommands = {ListCli.class})
-public class MainCli implements Callable {
+public class MainCli implements Callable<Void> {
 
     @CommandLine.Option(names = {"-s", "--supervisor"}, required = true, description = "Supervisor address")
     InetAddress supervisorAddress;
@@ -29,13 +26,13 @@ public class MainCli implements Callable {
 
 
     @Override
-    public Object call() throws Exception {
+    public Void call() throws Exception {
         if (help) {
             CommandLine.usage(this, System.err);
             return null;
         }
         r = RequestManagerFlyweightFactory.getInstance().getRequestManager(supervisorAddress, port);
-        return r;
+        return null;
     }
 
     public static void main(String[] args) throws Exception {
