@@ -1,45 +1,41 @@
 package fr.ensicaen.ecole.oasmr.cli;
 
-import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestExecuteCommand;
-import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNodes;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import picocli.CommandLine;
 
 import java.net.InetAddress;
-import java.util.Set;
+import java.util.concurrent.Callable;
 
-class MainCli {
+@CommandLine.Command(name = "MainCli", subcommands = {ListCli.class})
+public class MainCli implements Callable<Void> {
 
-    public static void main(String[] args) throws Exception {
-        if (args.length != 2) {
-            System.out.println("Usage <IPAddress> <port>");
-            return;
+    @CommandLine.Option(names = {"-s", "--supervisor"}, required = true, description = "Supervisor address")
+    InetAddress supervisorAddress;
+
+    @CommandLine.Option(names = {"-p", "--port"}, description = "Supervisor port")
+    int port = 40404;
+
+    @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "display a help message")
+    boolean help = false;
+
+    @CommandLine.Option(names = {"-u", "--user"}, description = "username")
+    String username = "admin";
+
+    RequestManager r;
+
+
+    @Override
+    public Void call() throws Exception {
+        if (help) {
+            CommandLine.usage(this, System.err);
+            return null;
         }
-        String ip = args[0];
-        int port = Integer.parseInt(args[1]);
-        try {
-            RequestManager r;
-            r = new RequestManager(InetAddress.getByName(ip), port);
-
-            @SuppressWarnings("unchecked")
-            Set<Node> nodes = (Set<Node>) r.sendRequest(new RequestGetNodes());
-
-            for (Node n : nodes) {
-                System.out.println(n);
-            }
-            System.out.println(r.sendRequest(new RequestExecuteCommand(nodes.iterator().next().getId(), new CommandEchoString("jeej"))));
-
-        } catch (ExceptionPortInvalid exceptionPortInvalid) {
-            System.out.println("Port invalid : " + port);
-        } catch (ExceptionConnectionFailure e) {
-            System.out.println("Server not found");
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+        r = RequestManagerFlyweightFactory.getInstance().getRequestManager(supervisorAddress, port);
+        return null;
     }
 
+    public static void main(String[] args) throws Exception {
+        CommandLine.call(new MainCli(), args);
+    }
 }
