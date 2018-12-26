@@ -24,7 +24,9 @@ public class ListCli implements Callable {
             return null;
         }
         Set<Node> nodes = (Set<Node>) supervisor.r.sendRequest(new RequestGetNodes());
-        System.out.println(nodes);
+        for (Node n : nodes) {
+            System.out.println(n.getId() + " -> " + n.getNodeAddress() + ":" + n.getPort());
+        }
         return nodes;
     }
 }
