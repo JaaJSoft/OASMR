@@ -7,7 +7,7 @@ import picocli.CommandLine;
 import java.net.InetAddress;
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "MainCli", subcommands = {ListCli.class})
+@CommandLine.Command(name = "MainCli", subcommands = {ListCli.class, NodeCli.class})
 public class MainCli implements Callable<Void> {
 
     @CommandLine.Option(names = {"-s", "--supervisor"}, required = true, description = "Supervisor address")

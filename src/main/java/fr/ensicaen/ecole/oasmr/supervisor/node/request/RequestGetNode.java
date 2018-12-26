@@ -19,6 +19,6 @@ public class RequestGetNode extends Request {
 
     @Override
     public String toString() {
-        return null;
+        return "get node " + id;
     }
 }
