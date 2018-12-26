@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+//TODO OR TAG
 public class RequestGetNodesWithTag extends Request {
     private final Set<Tag> tags;
 
@@ -24,7 +25,7 @@ public class RequestGetNodesWithTag extends Request {
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
         return (Serializable) supervisor.getNodeFlyweightFactory().getNodes().parallelStream()
-            .filter(n -> n.getTags().containsAll(tags)).collect(Collectors.toSet());
+                .filter(n -> n.getTags().containsAll(tags)).collect(Collectors.toSet());
     }
 
     @Override
