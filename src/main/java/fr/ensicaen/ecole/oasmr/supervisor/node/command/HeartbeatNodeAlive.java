@@ -1,4 +1,4 @@
-package fr.ensicaen.ecole.oasmr.supervisor.node;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command;
 
 import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Client;
@@ -6,6 +6,8 @@ import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionCannotDisconnect;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.network.util;
+import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.CommandNode;
 
 import java.io.IOException;
 import java.io.Serializable;

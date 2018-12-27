@@ -12,34 +12,34 @@ import java.io.Serializable;
 public class CommandAptList extends Command {
 
     public CommandAptList() {
-
     }
 
     @Override
     public Serializable execute(Object... params) throws Exception {
-        ProcessBuilder processBuilder = new ProcessBuilder("apt", "list");
+        throw new ExceptionAptFailGettingList("DOES NOT WORK !");
+        /*ProcessBuilder processBuilder = new ProcessBuilder("apt", "list");
         try {
             Process p = processBuilder.start();
             p.waitFor();
             int ret = p.exitValue();
             switch (ret) {
                 case 0:
-                    //System.out.println(ProcessBuilderUtil.getOutput(p));
-                    return ProcessBuilderUtil.getOutput(p);
-
+                    String output = ProcessBuilderUtil.getOutput(p);
+                    System.out.println(output);
+                    return output;
                 default:
                     throw new ExceptionAptFailGettingList(ProcessBuilderUtil.getOutputError(p));
-
             }
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return e;
         }
+        */
     }
 
     @Override
     public String toString() {
-        return "apt" + " " + "list";
+        return "apt list";
     }
 }

@@ -1,6 +1,7 @@
-package fr.ensicaen.ecole.oasmr.supervisor.node;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
 
 import java.io.Serializable;
 

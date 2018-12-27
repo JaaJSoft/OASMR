@@ -5,8 +5,7 @@ import fr.ensicaen.ecole.oasmr.lib.command.Heart;
 import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.supervisor.node.HeartbeatNodeAlive;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.HeartbeatNodeAlive;
 
 import java.io.IOException;
 import java.io.Serializable;

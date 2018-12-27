@@ -10,10 +10,10 @@ import java.util.concurrent.Callable;
 @CommandLine.Command(name = "MainCli", subcommands = {ListCli.class, NodeCli.class})
 public class MainCli implements Callable<Void> {
 
-    @CommandLine.Option(names = {"-s", "--supervisor"}, required = true, description = "Supervisor address")
+    @CommandLine.Option(names = {"-s", "--supervisor"}, required = true, description = "supervisor address")
     InetAddress supervisorAddress;
 
-    @CommandLine.Option(names = {"-p", "--port"}, description = "Supervisor port")
+    @CommandLine.Option(names = {"-p", "--port"}, description = "supervisor port")
     int port = 40404;
 
     @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "display a help message")
