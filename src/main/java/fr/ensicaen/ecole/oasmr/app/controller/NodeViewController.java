@@ -11,4 +11,5 @@ public class NodeViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
 }

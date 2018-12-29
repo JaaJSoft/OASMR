@@ -3,26 +3,19 @@ package fr.ensicaen.ecole.oasmr.app.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import fr.ensicaen.ecole.oasmr.app.view.SceneManagerFlyweight;
-import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionFXMLNotFound;
+import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
-    private SceneManagerFlyweight sceneManager;
+    private SceneManager sceneManager;
 
     @FXML
     Text loginError;
@@ -38,7 +31,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        sceneManager = SceneManagerFlyweight.getInstance();
+        sceneManager = SceneManager.getInstance();
     }
 
 
@@ -47,6 +40,7 @@ public class LoginController implements Initializable {
             loginError.setText("No username");
         }else if(loginPassword.getText() == null || loginPassword.getText().trim().isEmpty()){
             loginError.setText("No password");
+            loginUser.setDisableAnimation(true);
         }else{
             loginError.setText("");
             try {

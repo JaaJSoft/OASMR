@@ -9,9 +9,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.TreeView?>
+<BorderPane fx:controller="fr.ensicaen.ecole.oasmr.app.controller.NodeTreeController" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="vbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" BorderPane.alignment="CENTER">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="OASMR" textAlignment="CENTER" wrappingWidth="66.2900390625">
                <font>
@@ -31,7 +32,6 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Separator>
-            <JFXTreeView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
          </children>
       </VBox>
    </center>
