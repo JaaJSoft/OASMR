@@ -13,10 +13,10 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.exceptions;
+package fr.ensicaen.ecole.oasmr.supervisor.node.exception;
 
-public class ExceptionAptPackageNotFound extends Exception {
-    public ExceptionAptPackageNotFound(String message) {
-        super(message);
+public class ExceptionNodeNotFound extends Exception {
+    public ExceptionNodeNotFound(String s) {
+        super(s);
     }
 }
