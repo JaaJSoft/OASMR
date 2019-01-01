@@ -13,15 +13,19 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib;
+package fr.ensicaen.ecole.oasmr.lib.command.script;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
-public class dateUtil {
+import java.util.HashMap;
 
-    public static String getFormattedDate() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return dtf.format(LocalDateTime.now());
+public abstract class Script extends Command {
+    private String filename;
+
+    public Script(String filename) {
+        this.filename = filename;
     }
+
+    abstract String[] parseParameters();
+
 }

@@ -13,15 +13,28 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib;
+package fr.ensicaen.ecole.oasmr.lib.command.script;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.Serializable;
 
-public class dateUtil {
+public class ScriptPython extends Script {
 
-    public static String getFormattedDate() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return dtf.format(LocalDateTime.now());
+    public ScriptPython(String filename) {
+        super(filename);
+    }
+
+    @Override
+    public Serializable execute(Object... params) throws Exception {
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return null;
+    }
+
+    @Override
+    String[] parseParameters() {
+        return new String[0];
     }
 }
