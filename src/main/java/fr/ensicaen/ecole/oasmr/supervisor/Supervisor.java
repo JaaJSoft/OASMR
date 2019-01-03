@@ -19,6 +19,8 @@ import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
+import fr.ensicaen.ecole.oasmr.supervisor.auth.User;
+import fr.ensicaen.ecole.oasmr.supervisor.auth.UserList;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeFlyweightFactory;
 import fr.ensicaen.ecole.oasmr.supervisor.node.ServerRunnableHeartBeatsHandler;
 
@@ -28,11 +30,16 @@ public class Supervisor {
     private NodeFlyweightFactory nodeFlyweightFactory;
     private Server serverHeartBeatsHandler;
     private Server serverRequestHandler;
+    private UserList userList;
+    private boolean authenticated;
+
 
     public Supervisor(int portHeartBeats, int portRequests) throws IOException, ExceptionPortInvalid {
         serverHeartBeatsHandler = new Server(portHeartBeats, new ServerRunnableHeartBeatsHandler(this));
         serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler("Request", this));
         this.nodeFlyweightFactory = new NodeFlyweightFactory();
+        this.userList = new UserList();
+        this.authenticated = false;
     }
 
     public void start() throws InterruptedException {
@@ -63,4 +70,17 @@ public class Supervisor {
     public NodeFlyweightFactory getNodeFlyweightFactory() {
         return nodeFlyweightFactory;
     }
+
+    public UserList getUserList() {
+        return userList;
+    }
+
+    public boolean isAuthenticated() {
+        return authenticated;
+    }
+
+    public void authentication(){
+        authenticated = true;
+    }
+
 }
