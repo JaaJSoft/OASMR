@@ -1,11 +1,24 @@
+/*
+ *  Copyright (c) 2019. CCC-Development-Team
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package fr.ensicaen.ecole.oasmr.supervisor.request;
 
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Client;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionCannotDisconnect;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.network.util;
 import fr.ensicaen.ecole.oasmr.supervisor.request.exception.ExceptionRequestError;
@@ -13,27 +26,26 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.exception.ExceptionRequestResp
 
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.util.ArrayDeque;
 import java.util.Objects;
-import java.util.Queue;
 
 public class RequestManager {
     private final InetAddress address;
     private final int port;
-    //private Queue<Command> commandToSendQueue;
 
     public RequestManager(InetAddress address, int port) throws ExceptionPortInvalid {
         this.address = address;
-        this.port = port;
-        //commandToSendQueue = new ArrayDeque<>();
+        if (port < 65536 && port > 0) {
+            this.port = port;
+        } else {
+            throw new ExceptionPortInvalid();
+        }
     }
 
     public Serializable sendRequest(Command r) throws Exception {
-        //commandToSendQueue.add(r);
         try {
             Client client = new Client(address, port);
             client.connect();
-            System.out.println("[" + dateUtil.getFormattedDate() + "]-> Command " + r + " to " + client.getSocket().getInetAddress() + ":" + client.getSocket().getPort());
+            System.out.println("[" + dateUtil.getFormattedDate() + "]-> Command " + r + " on " + client.getSocket().getInetAddress() + ":" + client.getSocket().getPort());
             util.sendSerializable(client.getSocket(), r);
             Serializable response = util.receiveSerializable(client.getSocket());
             if (response == null) {
