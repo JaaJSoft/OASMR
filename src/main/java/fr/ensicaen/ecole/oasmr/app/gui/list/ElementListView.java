@@ -1,4 +1,4 @@
-package fr.ensicaen.ecole.oasmr.app.gui;
+package fr.ensicaen.ecole.oasmr.app.gui.list;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;

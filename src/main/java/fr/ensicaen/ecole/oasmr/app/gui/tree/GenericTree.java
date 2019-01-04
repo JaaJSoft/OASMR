@@ -1,4 +1,4 @@
-package fr.ensicaen.ecole.oasmr.app.gui;
+package fr.ensicaen.ecole.oasmr.app.gui.tree;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
