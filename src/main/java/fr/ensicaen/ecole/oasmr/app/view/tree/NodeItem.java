@@ -1,5 +1,6 @@
 package fr.ensicaen.ecole.oasmr.app.view.tree;
 
+import fr.ensicaen.ecole.oasmr.app.gui.GenericTreeItem;
 import javafx.collections.FXCollections;
 
 public class NodeItem extends GenericTreeItem<GenericTreeItem<?>> {

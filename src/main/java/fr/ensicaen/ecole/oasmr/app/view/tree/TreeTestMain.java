@@ -1,5 +1,7 @@
 package fr.ensicaen.ecole.oasmr.app.view.tree;
 
+import fr.ensicaen.ecole.oasmr.app.gui.GenericTree;
+import fr.ensicaen.ecole.oasmr.app.gui.GenericTreeItem;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeView;

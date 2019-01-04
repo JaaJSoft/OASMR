@@ -1,4 +1,4 @@
-package fr.ensicaen.ecole.oasmr.app.view.tree;
+package fr.ensicaen.ecole.oasmr.app.gui;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.toList;
 
 public class GenericTree<T> {
 
-    private TreeView<T> treeView ;
+    private TreeView<T> treeView;
 
     private Function<T, ObservableList<? extends T>> childrenGetter ;
 
