@@ -20,7 +20,7 @@ public class RequestAuthentication extends Request {
         if (supervisor.getUserList().authenticate(login, password)){
             supervisor.authentication();
         }
-        return null;
+        return 0;
     }
 
     @Override

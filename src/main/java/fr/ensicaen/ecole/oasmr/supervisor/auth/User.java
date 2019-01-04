@@ -19,7 +19,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.HashUtil;
 
 public class User {
     private String login;
-    private String password;
+    private String password;//Hashed...
 
     public User(String login, String password){
         this.login = login;

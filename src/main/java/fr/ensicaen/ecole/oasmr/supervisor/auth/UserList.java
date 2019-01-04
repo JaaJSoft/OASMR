@@ -1,5 +1,7 @@
 package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
+import fr.ensicaen.ecole.oasmr.supervisor.HashUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,15 +26,12 @@ public class UserList {
     }
 
     public boolean authenticate(String login, String password){
-        for(int i = 0; i<userList.size(); ++i){
-            if (userList.get(i).getLogin().equals(login)){
-                if (userList.get(i).getPassword().equals(password)){
-                    return true;
-                } else {
-                    return false;
-                }
+        for (User user : userList) {
+            if (user.getLogin().equals(login)) {
+                return user.getPassword().equals(HashUtil.get_SHA_SecurePassword(password,"SHA-256"));
             }
         }
         return false;
     }
+    //Il serait peut etre plus propre de passer un User en parametre...
 }

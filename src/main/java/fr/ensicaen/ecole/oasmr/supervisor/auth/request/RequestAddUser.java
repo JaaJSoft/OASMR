@@ -18,7 +18,7 @@ public class RequestAddUser extends Request {
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
         supervisor.getUserList().addUser(new User(login, password));
-        return null;
+        return 0;
     }
 
     @Override

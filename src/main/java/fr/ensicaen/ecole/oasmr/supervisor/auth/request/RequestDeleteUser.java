@@ -10,10 +10,15 @@ public class RequestDeleteUser extends Request {
     private String login;
     private String password;
 
+    public RequestDeleteUser(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
+
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
         supervisor.getUserList().deleteUser(new User(login, password));
-        return null;
+        return 0;
     }
 
     @Override
