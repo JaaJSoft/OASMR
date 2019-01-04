@@ -83,4 +83,5 @@ public class Supervisor {
         authenticated = true;
     }
 
+    public void disconnection() { authenticated = false; }
 }

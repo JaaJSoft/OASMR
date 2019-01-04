@@ -1,36 +1,18 @@
-/*
- *  Copyright (c) 2018. CCC-Development-Team
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAddUser;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAuthentication;
-import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestDeleteUser;
-import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestModifyUser;
 import org.junit.Before;
 import org.junit.Test;
 
-
-public class AuthenticationTests {
-
+public class AuthenticationTest {
     private Supervisor s;
 
     @Before
     public void setUp() throws Exception {
         s = new Supervisor(5221, 5852);
+        new RequestAddUser("Jooj", "ah");
     }
 
     @Test
@@ -57,11 +39,5 @@ public class AuthenticationTests {
         RequestAuthentication r = new RequestAuthentication( "Joefaj", "aheaf");
         r.execute(s);
         assert (!s.isAuthenticated());
-    }
-    @Test
-    public void deleteUser() throws Exception{
-        RequestDeleteUser r = new RequestDeleteUser( "Jooj", "ah");
-        r.execute(s);
-        assert (!s.getUserList().authenticate("Jooj", "ah"));
     }
 }

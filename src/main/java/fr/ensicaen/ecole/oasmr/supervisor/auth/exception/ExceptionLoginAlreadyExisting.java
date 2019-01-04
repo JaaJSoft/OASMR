@@ -13,24 +13,9 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.auth;
+package fr.ensicaen.ecole.oasmr.supervisor.auth.exception;
 
-import fr.ensicaen.ecole.oasmr.supervisor.HashUtil;
-
-public class User {
-    private String login;
-    private String password;
-
-    public User(String login, String password){
-        this.login = login;
-        this.password = HashUtil.get_SHA_SecurePassword(password, "SHA-256");
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword(){
-        return password;
+public class ExceptionLoginAlreadyExisting extends Exception{
+    public ExceptionLoginAlreadyExisting(String message) {
     }
 }

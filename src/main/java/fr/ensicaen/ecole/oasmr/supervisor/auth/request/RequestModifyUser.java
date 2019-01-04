@@ -2,6 +2,7 @@ package fr.ensicaen.ecole.oasmr.supervisor.auth.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.User;
+import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionUserUnknown;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
@@ -21,7 +22,11 @@ public class RequestModifyUser extends Request {
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        supervisor.getUserList().modifyUser(new User(login, password), new User(newLogin, newPassword));
+        try {
+            supervisor.getUserList().modifyUser(new User(login, password), new User(newLogin, newPassword));
+        } catch (ExceptionUserUnknown e) {
+            e.printStackTrace();
+        }
         return 0;
     }
 
