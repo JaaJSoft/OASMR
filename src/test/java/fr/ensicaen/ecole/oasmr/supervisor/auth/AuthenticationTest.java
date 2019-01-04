@@ -13,6 +13,8 @@ public class AuthenticationTest {
     public void setUp() throws Exception {
         s = new Supervisor(5221, 5852);
         new RequestAddUser("Jooj", "ah");
+        new RequestAddUser("jefa", "ah");
+
     }
 
     @Test

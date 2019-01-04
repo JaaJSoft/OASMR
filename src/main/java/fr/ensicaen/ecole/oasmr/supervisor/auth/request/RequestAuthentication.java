@@ -17,6 +17,7 @@ package fr.ensicaen.ecole.oasmr.supervisor.auth.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.HashUtil;
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
+import fr.ensicaen.ecole.oasmr.supervisor.auth.User;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
@@ -26,8 +27,9 @@ public class RequestAuthentication extends Request {
     private String password;
 
     public RequestAuthentication(String login, String password){
-        this.login = login;
-        this.password = HashUtil.get_SHA_SecurePassword(password, "SHA-256");;
+        User tmp = new User(login, password);
+        this.login = tmp.getLogin();
+        this.password = tmp.getPassword();
     }
 
     @Override

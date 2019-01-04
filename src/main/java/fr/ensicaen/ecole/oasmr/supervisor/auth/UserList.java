@@ -42,7 +42,7 @@ public class UserList {
                 throw new ExceptionLoginAlreadyExisting(newUser.getLogin()+ ": login already used");
             }
         }
-        if (!authenticate(oldUser.getLogin(), HashUtil.get_SHA_SecurePassword(oldUser.getPassword(), "SHA-256"))){
+        if (!authenticate(oldUser.getLogin(),oldUser.getPassword())){
             throw new ExceptionUserUnknown(oldUser.getLogin()+ ": incorrect user (login or password)");
         }
         userList.remove(oldUser);
@@ -50,19 +50,20 @@ public class UserList {
     }
 
     public void deleteUser(User user2delete) throws ExceptionUserUnknown {
-        if (!userList.contains(user2delete)){
+        if (!authenticate(user2delete.getLogin(),user2delete.getPassword())){
             throw new ExceptionUserUnknown(user2delete.getLogin()+ ": incorrect user (login or password)");
         }
         userList.remove(user2delete);
     }
 
-    public boolean authenticate(String login, String password){
+    public boolean authenticate(String login, String passwordHashed){
         for (User user : userList) {
             if (user.getLogin().equals(login)) {
                 System.out.println(user.getLogin());
                 System.out.println(user.getPassword());
-                System.out.println(password);
-                return user.getPassword().equals(password);
+                System.out.println(passwordHashed);
+                System.out.println(user.getPassword().equals(passwordHashed));
+                return user.getPassword().equals(passwordHashed);
             }
         }
         return false;

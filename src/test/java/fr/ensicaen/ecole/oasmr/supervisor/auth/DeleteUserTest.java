@@ -1,6 +1,7 @@
 package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
+import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionUserUnknown;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAddUser;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestDeleteUser;
 import org.junit.Before;
@@ -18,8 +19,16 @@ public class DeleteUserTest {
 
     @Test
     public void deleteUser() throws Exception{
+        User u = new User("Jooj","ah");
         RequestDeleteUser r = new RequestDeleteUser( "Jooj", "ah");
         r.execute(s);
-        assert (!s.getUserList().authenticate("Jooj", "ah"));
+        assert (!s.getUserList().authenticate(u.getLogin(), u.getPassword()));
     }
+
+    @Test(expected = ExceptionUserUnknown.class)
+    public void deleteUnexistingUser() throws Exception{
+        RequestDeleteUser r = new RequestDeleteUser( "Jofzafeaoj", "ah");
+        r.execute(s);
+    }
+
 }
