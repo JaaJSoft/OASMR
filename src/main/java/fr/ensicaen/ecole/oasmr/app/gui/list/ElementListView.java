@@ -2,6 +2,7 @@ package fr.ensicaen.ecole.oasmr.app.gui.list;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 
 public class ElementListView<K, T> extends JFXListView<T> {
 
@@ -11,6 +12,7 @@ public class ElementListView<K, T> extends JFXListView<T> {
         this.key = key;
         super.setGroupnode(new Label(key.toString()));
         super.setItems(elements);
+        super.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     public K getKey() {

@@ -1,8 +1,9 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
-import fr.ensicaen.ecole.oasmr.app.beans.Node;
+import fr.ensicaen.ecole.oasmr.app.beans.NodeBean;
 import fr.ensicaen.ecole.oasmr.app.view.DataModel;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
@@ -26,13 +27,21 @@ public class NodeViewController implements Initializable {
     }
 
     public void setDataModel(DataModel dataModel) {
-        this.model = dataModel ;
-        this.model.nodeProperty().addListener(nodeListener);
+        this.model = dataModel;
+        this.model.getCurrentNodeBeans().addListener((ListChangeListener.Change<? extends NodeBean> c) -> {
+            System.out.println("JS");
+            nodeName.setText("");
+            nodeId.setText("");
+            if(model.getSelectedAmount() == 1){
+                nodeName.setText(model.getCurrentNodeBeans().get(0).toString());
+                nodeId.setText(String.valueOf(model.getCurrentNodeBeans().get(0).getId()));
+            }else{
+                nodeName.setText("Group : ");
+                for(NodeBean node : model.getCurrentNodeBeans()){
+                    nodeName.setText(nodeName.getText() + node.toString() + " ");
+                }
+            }
+        });
     }
-
-    private ChangeListener<Node> nodeListener = (obsValue, oldValue, newValue) -> {
-        nodeName.setText(newValue.toString());
-        nodeId.setText(Integer.toString(newValue.getId()));
-    };
 
 }
