@@ -29,7 +29,7 @@ public class RequestGetNode extends Request {
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        return supervisor.getNodeFlyweightFactory().getNode(id);
+        return supervisor.getNodeFlyweightFactory().getNode(id).getData();
     }
 
     @Override

@@ -18,9 +18,11 @@ package fr.ensicaen.ecole.oasmr.supervisor.node;
 import fr.ensicaen.ecole.oasmr.supervisor.node.exception.ExceptionNodeNotFound;
 
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class NodeFlyweightFactory {
 
@@ -68,5 +70,9 @@ public class NodeFlyweightFactory {
 
     public final Set<Node> getNodes() {
         return Collections.unmodifiableSet(nodes);
+    }
+
+    public final NodeBean[] getNodesBean() {
+        return nodes.stream().map(Node::getData).toArray(NodeBean[]::new);
     }
 }

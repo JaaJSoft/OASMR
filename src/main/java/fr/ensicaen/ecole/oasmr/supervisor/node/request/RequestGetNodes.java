@@ -24,7 +24,7 @@ public class RequestGetNodes extends Request {
 
     @Override
     public Serializable execute(Supervisor supervisor) {
-        return (Serializable) supervisor.getNodeFlyweightFactory().getNodes();
+        return supervisor.getNodeFlyweightFactory().getNodesBean();
     }
 
     @Override
