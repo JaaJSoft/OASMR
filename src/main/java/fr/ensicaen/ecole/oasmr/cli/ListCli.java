@@ -15,12 +15,10 @@
 
 package fr.ensicaen.ecole.oasmr.cli;
 
-import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNodes;
 import picocli.CommandLine;
 
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "list")

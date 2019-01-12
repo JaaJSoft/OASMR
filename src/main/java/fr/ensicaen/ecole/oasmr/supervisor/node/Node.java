@@ -20,12 +20,11 @@ import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 public abstract class Node implements Comparable, Serializable {
 
-    private NodeBean data;
+    private final NodeBean data;
 
 
     public Node(int id, InetAddress nodeAddress, int port) {

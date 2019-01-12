@@ -27,7 +27,7 @@ public class NodeBean implements Comparable, Serializable {
     private LocalDate lastHeartBeat;
     protected InetAddress nodeAddress;
     protected int port;
-    private Set<Tag> tags = new HashSet<>();
+    private final Set<Tag> tags = new HashSet<>();
 
     public NodeBean(Integer id, String name, InetAddress nodeAddress, int port) {
         this.id = id;
@@ -92,6 +92,14 @@ public class NodeBean implements Comparable, Serializable {
 
     public void setLastHeartBeat(LocalDate lastHeartBeat) {
         this.lastHeartBeat = lastHeartBeat;
+    }
+
+    public void setNodeAddress(InetAddress nodeAddress) {
+        this.nodeAddress = nodeAddress;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     public void addTag(Tag s) {

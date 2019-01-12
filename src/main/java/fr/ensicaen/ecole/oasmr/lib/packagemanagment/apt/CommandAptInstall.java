@@ -25,7 +25,7 @@ import java.io.Serializable;
 public class CommandAptInstall extends Command {
 
 
-    private String packageName;
+    private final String packageName;
 
     public CommandAptInstall(String packageName) {
         this.packageName = packageName;

@@ -19,7 +19,6 @@ import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNode;
 import picocli.CommandLine;
 
-import java.net.InetAddress;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "node")
