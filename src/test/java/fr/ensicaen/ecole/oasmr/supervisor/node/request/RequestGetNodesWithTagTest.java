@@ -17,6 +17,7 @@ package fr.ensicaen.ecole.oasmr.supervisor.node.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,20 +48,20 @@ public class RequestGetNodesWithTagTest {
 
     @Test
     public void executeTestTag1() throws Exception {
-        Set<Node> nodes = (Set<Node>) new RequestGetNodesWithTag(new Tag("jeej")).execute(s);
-        assertEquals(1, nodes.size());
+        NodeBean[] nodes = (NodeBean[]) new RequestGetNodesWithTag(new Tag("jeej")).execute(s);
+        assertEquals(1, nodes.length);
     }
 
     @Test
     public void executeTestTag2() throws Exception {
-        Set<Node> nodes = (Set<Node>) new RequestGetNodesWithTag(new Tag("batE")).execute(s);
-        assertEquals(2, nodes.size());
+        NodeBean[] nodes = (NodeBean[]) new RequestGetNodesWithTag(new Tag("batE")).execute(s);
+        assertEquals(2, nodes.length);
     }
 
     @Test
     public void executeTestTag3() throws Exception {
-        Set<Node> nodes = (Set<Node>) new RequestGetNodesWithTag(new Tag("batA")).execute(s);
-        assertEquals(1, nodes.size());
+        NodeBean[] nodes = (NodeBean[]) new RequestGetNodesWithTag(new Tag("batA")).execute(s);
+        assertEquals(1, nodes.length);
     }
 
     @Test
@@ -68,8 +69,8 @@ public class RequestGetNodesWithTagTest {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("batA"));
         tags.add(new Tag("jeej"));
-        Set<Node> nodes = (Set<Node>) new RequestGetNodesWithTag(new Tag("batA")).execute(s);
-        assertEquals(1, nodes.size());
+        NodeBean[] nodes = (NodeBean[]) new RequestGetNodesWithTag(new Tag("batA")).execute(s);
+        assertEquals(1, nodes.length);
 
     }
 }

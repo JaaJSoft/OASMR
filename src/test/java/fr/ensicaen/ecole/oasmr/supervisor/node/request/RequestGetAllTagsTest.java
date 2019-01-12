@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -37,22 +38,19 @@ public class RequestGetAllTagsTest {
     public void setUp() throws Exception {
         tagSet = new HashSet<>();
         tagSet.add(new Tag("jeej"));
+        tagSet.add(new Tag("test"));
         s = new Supervisor(42424, 4242);
         InetAddress a = InetAddress.getByName("48.28.25.2");
         Node node = s.getNodeFlyweightFactory().getNode(a, 85);
         new RequestAddTagsToNode(node.getId(), tagSet).execute(s);
+        Node node2 = s.getNodeFlyweightFactory().getNode(a, 85);
+        new RequestAddTagsToNode(node2.getId(), tagSet).execute(s);
     }
 
     @Test
     public void executeGetAllTag() throws Exception {
-        Set<Tag> tags = (Set<Tag>) new RequestGetAllTags().execute(s);
-        assertEquals(tags, tagSet);
-    }
-
-    @Test
-    public void executeGetAllTagFalse() throws Exception {
-        Set<Tag> tags = (Set<Tag>) new RequestGetAllTags().execute(s);
-        assertNotEquals(tags, new HashSet<>());
+        Tag[] tags = (Tag[]) new RequestGetAllTags().execute(s);
+        assertArrayEquals(tags, tagSet.toArray());
     }
 
 }
