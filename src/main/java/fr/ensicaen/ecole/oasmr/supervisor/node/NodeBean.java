@@ -15,27 +15,31 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.node;
 
-import fr.ensicaen.ecole.oasmr.lib.command.Command;
-
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class Node implements Comparable, Serializable {
+public class NodeBean implements Comparable, Serializable {
+    private final Integer id;
+    private String name;
+    private LocalDate lastHeartBeat;
+    protected InetAddress nodeAddress;
+    protected int port;
+    private Set<Tag> tags = new HashSet<>();
 
-    private NodeBean data;
-
-
-    public Node(int id, InetAddress nodeAddress, int port) {
-        data = new NodeBean(id, nodeAddress.toString() + ":" + port, nodeAddress, port);
+    public NodeBean(Integer id, String name, InetAddress nodeAddress, int port) {
+        this.id = id;
+        this.name = name;
+        this.nodeAddress = nodeAddress;
+        this.port = port;
     }
 
     @Override
     public int compareTo(Object o) {
-        if (o instanceof Node) {
-            return data.compareTo(((Node) o).getData());
+        if (o instanceof NodeBean) {
+            return id.compareTo(((NodeBean) o).getId());
         }
         return 1;
     }
@@ -44,63 +48,57 @@ public abstract class Node implements Comparable, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Node node = (Node) o;
-        return data.equals(node.getData());
+        NodeBean node = (NodeBean) o;
+        return id.equals(node.id);
     }
 
     @Override
     public int hashCode() {
-        return data.getId();
-    }
-
-    public abstract Serializable executeCommand(Command c) throws Exception;
-
-    public Integer getId() {
-        return data.getId();
-    }
-
-    public String getName() {
-        return data.getName();
-    }
-
-    public LocalDate getLastHeartBeat() {
-        return data.getLastHeartBeat();
-    }
-
-    public InetAddress getNodeAddress() {
-        return data.getNodeAddress();
-    }
-
-    public int getPort() {
-        return data.getPort();
-    }
-
-    public void setLastHeartBeat(LocalDate lastHeartBeat) {
-        data.setLastHeartBeat(lastHeartBeat);
+        return id;
     }
 
     @Override
     public String toString() {
-        return data.toString();
+        return name;
     }
 
-    public void setName(String name) {
-        data.setName(name);
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDate getLastHeartBeat() {
+        return lastHeartBeat;
+    }
+
+    public InetAddress getNodeAddress() {
+        return nodeAddress;
+    }
+
+    public int getPort() {
+        return port;
     }
 
     public Set<Tag> getTags() {
-        return data.getTags();
+        return tags;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLastHeartBeat(LocalDate lastHeartBeat) {
+        this.lastHeartBeat = lastHeartBeat;
     }
 
     public void addTag(Tag s) {
-        data.addTag(s);
+        tags.add(s);
     }
 
     public void addTags(Set<Tag> s) {
-        data.addTags(s);
-    }
-
-    public NodeBean getData() {
-        return data;
+        tags.addAll(s);
     }
 }
