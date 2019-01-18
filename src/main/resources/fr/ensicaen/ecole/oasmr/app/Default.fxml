@@ -3,8 +3,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ensicaen.ecole.oasmr.app.controller.DefaultController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ensicaen.ecole.oasmr.app.controller.DefaultController">
    <center>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to OASMR, Select a Node." textAlignment="CENTER" BorderPane.alignment="CENTER" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="No nodes selected !" textAlignment="CENTER" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

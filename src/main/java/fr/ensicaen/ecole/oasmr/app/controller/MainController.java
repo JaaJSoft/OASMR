@@ -40,10 +40,12 @@ public class MainController implements Initializable {
             final FXMLLoader loaderList = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/NodeList.fxml"));
             final FXMLLoader loaderNode = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/NodeView.fxml"));
             final FXMLLoader loaderGroup = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/GroupView.fxml"));
+            final FXMLLoader loaderDefault = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/Default.fxml"));
             Parent nodeViewNode = loaderNode.load();
             Parent groupViewNode = loaderGroup.load();
+            Parent defaultViewNode = loaderDefault.load();
             mainPane.getItems().add(0, loaderList.load());
-            mainPane.getItems().add(1, nodeViewNode);
+            mainPane.getItems().add(1, defaultViewNode);
             NodeListController nodeListController = loaderList.getController();
             NodeViewController nodeViewController = loaderNode.getController();
             GroupViewController groupViewController = loaderGroup.getController();
@@ -51,9 +53,11 @@ public class MainController implements Initializable {
                 if(dataModel.getSelectedAmount() > 1){
                     groupViewController.update();
                     mainPane.getItems().set(1, groupViewNode);
-                }else{
+                }else if (dataModel.getSelectedAmount() == 1){
                     nodeViewController.update();
                     mainPane.getItems().set(1, nodeViewNode);
+                }else{
+                    mainPane.getItems().set(1, defaultViewNode);
                 }
             });
             nodeListController.setDataModel(dataModel);

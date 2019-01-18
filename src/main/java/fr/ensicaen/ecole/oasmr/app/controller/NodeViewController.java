@@ -26,16 +26,16 @@ public class NodeViewController implements Initializable {
     }
 
     public void setDataModel(DataModel dataModel) {
-        //TODO : Change the page content
         model = dataModel;
     }
 
     public void update(){
+        //TODO : give goood infos
         if(model.getSelectedAmount() == 1){
             nodeName.setText(model.getCurrentNodeBeans().get(0).toString());
             nodeId.setText(String.valueOf(model.getCurrentNodeBeans().get(0).getId()));
         }else{
-            nodeName.setText("");
+            nodeName.setText("No node selected");
             nodeId.setText("");
         }
     }

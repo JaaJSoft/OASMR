@@ -29,6 +29,7 @@ public class GroupViewController implements Initializable {
     }
 
     public void update(){
+        //TODO : give good infos
         nodeName.setText("Group : ");
         for(NodeBean node : model.getCurrentNodeBeans()) {
             nodeName.setText(nodeName.getText() + node.toString() + " ");
