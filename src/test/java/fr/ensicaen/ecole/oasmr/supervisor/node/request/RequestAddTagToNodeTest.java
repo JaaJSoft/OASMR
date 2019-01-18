@@ -16,7 +16,8 @@
 package fr.ensicaen.ecole.oasmr.supervisor.node.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
-import fr.ensicaen.ecole.oasmr.supervisor.node.*;
+import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
+import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class RequestAddTagToNodeTest {
     private Node n;

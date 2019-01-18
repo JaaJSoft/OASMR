@@ -25,8 +25,11 @@ public class NodeBean implements Comparable, Serializable {
     private final Integer id;
     private String name;
     private LocalDate lastHeartBeat;
-    protected InetAddress nodeAddress;
+    private InetAddress nodeAddress;
     protected int port;
+
+    private String sshLogin = "root";
+    private int sshPort = 22;
     private final Set<Tag> tags = new HashSet<>();
 
     public NodeBean(Integer id, String name, InetAddress nodeAddress, int port) {
@@ -34,6 +37,15 @@ public class NodeBean implements Comparable, Serializable {
         this.name = name;
         this.nodeAddress = nodeAddress;
         this.port = port;
+    }
+
+    public NodeBean(Integer id, String name, InetAddress nodeAddress, int port, String sshLogin, int sshPort) {
+        this.id = id;
+        this.name = name;
+        this.nodeAddress = nodeAddress;
+        this.port = port;
+        this.sshLogin = sshLogin;
+        this.sshPort = sshPort;
     }
 
     @Override
@@ -68,6 +80,14 @@ public class NodeBean implements Comparable, Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public int getSshPort() {
+        return sshPort;
+    }
+
+    public void setSshPort(int sshPort) {
+        this.sshPort = sshPort;
     }
 
     public LocalDate getLastHeartBeat() {

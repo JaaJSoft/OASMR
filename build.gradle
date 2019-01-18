@@ -28,6 +28,15 @@ repositories {
     maven {
         url 'https://github.com/javaterminal/terminalfx/raw/master/releases'
     }
+    maven {
+        url 'https://github.com/javaterminal/pty4j/raw/master/releases'
+    }
+    maven {
+        url 'http://www.sparetimelabs.com/maven2'
+    }
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
 }
 
 dependencies {

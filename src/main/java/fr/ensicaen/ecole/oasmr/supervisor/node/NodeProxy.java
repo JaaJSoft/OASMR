@@ -27,8 +27,8 @@ import java.io.Serializable;
 import java.net.InetAddress;
 
 public class NodeProxy extends Node {
-    NodeProxy(int id, InetAddress address, int port) {
-        super(id, address, port);
+    NodeProxy(NodeBean data) {
+        super(data);
     }
 
     @Override

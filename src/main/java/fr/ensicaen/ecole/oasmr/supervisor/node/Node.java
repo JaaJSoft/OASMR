@@ -24,10 +24,10 @@ import java.util.Set;
 
 public abstract class Node implements Comparable, Serializable {
 
-    private final NodeBean data;
+    protected final NodeBean data;
 
-    public Node(int id, InetAddress nodeAddress, int port) {
-        data = new NodeBean(id, nodeAddress.toString() + ":" + port, nodeAddress, port);
+    protected Node(NodeBean data) {
+        this.data = data;
     }
 
     @Override
