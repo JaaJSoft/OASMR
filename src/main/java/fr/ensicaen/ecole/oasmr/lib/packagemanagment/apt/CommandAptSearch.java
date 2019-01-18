@@ -24,7 +24,7 @@ import java.io.Serializable;
 
 public class CommandAptSearch extends Command {
 
-    private String seachingTerms;
+    private final String seachingTerms;
 
     public CommandAptSearch(String packageName) {
         this.seachingTerms = packageName;

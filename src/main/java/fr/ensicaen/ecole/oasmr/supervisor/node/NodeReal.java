@@ -32,12 +32,12 @@ public class NodeReal extends Node {
     private InetAddress supervisorAddress;
     private int supervisorPort;
 
-    NodeReal(int id, InetAddress nodeAddress, int nodePort, InetAddress supervisorAddress, int supervisorPort) throws IOException, ExceptionPortInvalid {
-        super(id, nodeAddress, nodePort);
+    NodeReal(NodeBean data, InetAddress supervisorAddress, int supervisorPort) throws IOException, ExceptionPortInvalid {
+        super(data);
         this.supervisorAddress = supervisorAddress;
         this.supervisorPort = supervisorPort;
-        server = new Server(nodePort, new ServerRunnableCommandHandler("command", this));
-        heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort, nodePort), 5, this);
+        server = new Server(data.getPort(), new ServerRunnableCommandHandler("command", this));
+        heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort, data.getPort()), 5, this);
     }
 
     public void start() throws IOException {

@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public class CommandAptRemove extends Command {
-    private String packageName;
+    private final String packageName;
 
     public CommandAptRemove(String packageName) {
         this.packageName=packageName;

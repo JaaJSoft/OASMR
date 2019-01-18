@@ -15,12 +15,9 @@
 
 package fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt;
 
-import fr.ensicaen.ecole.oasmr.lib.ProcessBuilderUtil;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.exceptions.ExceptionAptFailGettingList;
-import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.exceptions.ExceptionAptPackageNotFound;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 public class CommandAptList extends Command {

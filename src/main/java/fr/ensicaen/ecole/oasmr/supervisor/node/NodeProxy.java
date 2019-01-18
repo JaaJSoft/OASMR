@@ -27,13 +27,13 @@ import java.io.Serializable;
 import java.net.InetAddress;
 
 public class NodeProxy extends Node {
-    NodeProxy(int id, InetAddress address, int port) {
-        super(id, address, port);
+    NodeProxy(NodeBean data) {
+        super(data);
     }
 
     @Override
     public Serializable executeCommand(Command c) throws ExceptionPortInvalid, ExceptionConnectionFailure, ExceptionCannotDisconnect, IOException, ClassNotFoundException {
-        Client client = new Client(nodeAddress, port);
+        Client client = new Client(this.getNodeAddress(), this.getPort());
         client.connect();
         util.sendSerializable(client.getSocket(), c);
         Serializable s = util.receiveSerializable(client.getSocket());

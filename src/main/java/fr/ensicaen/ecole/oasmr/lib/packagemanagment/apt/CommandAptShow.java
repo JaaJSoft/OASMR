@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public class CommandAptShow extends Command {
-    private String packageName;
+    private final String packageName;
 
     public CommandAptShow(String packageName) {
         this.packageName = packageName;

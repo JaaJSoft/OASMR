@@ -16,6 +16,8 @@
 package fr.ensicaen.ecole.oasmr.supervisor.node.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
+import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
@@ -39,8 +41,8 @@ public class RequestGetNodesWithTag extends Request {
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        return (Serializable) supervisor.getNodeFlyweightFactory().getNodes().parallelStream()
-                .filter(n -> n.getTags().containsAll(tags)).collect(Collectors.toSet());
+        return supervisor.getNodeFlyweightFactory().getNodes().parallelStream().map(Node::getData)
+                .filter(n -> n.getTags().containsAll(tags)).toArray(NodeBean[]::new);
     }
 
     @Override
