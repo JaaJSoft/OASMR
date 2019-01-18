@@ -6,9 +6,10 @@ import fr.ensicaen.ecole.oasmr.app.beans.GroupBean;
 import fr.ensicaen.ecole.oasmr.app.beans.NodeBean;
 import fr.ensicaen.ecole.oasmr.app.view.DataModel;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
@@ -31,11 +32,14 @@ public class NodeListController implements Initializable {
     public ElementListView<GroupBean, NodeBean> generateListView(){
         GroupBean g = model.getCurrentGroupBean();
         ElementListView<GroupBean, NodeBean> list = new ElementListView<>(g, g.getNodes());
-        list.getSelectionModel().selectedItemProperty().addListener((obs,ov,nv)-> {
-            ObservableList<NodeBean> l = list.getSelectionModel().getSelectedItems();
-            model.getCurrentNodeBeans().clear();
-            for(NodeBean node : l){
-                model.addCurrentNodes(node);
+        list.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                ObservableList<NodeBean> l = list.getSelectionModel().getSelectedItems();
+                model.getCurrentNodeBeans().clear();
+                for(NodeBean node : l){
+                    model.addCurrentNodes(node);
+                }
             }
         });
         return list;

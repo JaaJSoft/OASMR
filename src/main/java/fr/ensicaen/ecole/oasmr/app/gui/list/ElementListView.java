@@ -14,12 +14,10 @@ public class ElementListView<K, T> extends JFXListView<T> {
         super.setItems(elements);
         super.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         super.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
     }
 
     public K getKey() {
         return key;
     }
-
 
 }
