@@ -36,7 +36,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            dataModel = new DataModel(getNodeList());
+            dataModel = new DataModel(getAllNodes());
             final FXMLLoader loaderLeft = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/NodeList.fxml"));
             final FXMLLoader loaderRight = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/NodeView.fxml"));
             mainPane.getItems().add(loaderLeft.load());
@@ -51,18 +51,13 @@ public class MainController implements Initializable {
         }
     }
 
-    private List<GroupBean> getNodeList() throws Exception {
-        //TODO : With request manager
-        List<GroupBean> groupList = new ArrayList<>();
-        for (int i=0; i<5; i++){
-            GroupBean g = new GroupBean("Group "+i, i);
-            for(int j=i; j<5; j++){
-                NodeBean n = new NodeBean("Node " + j, j);
-                g.addNode(n);
-            }
-            groupList.add(g);
+    private GroupBean getAllNodes() throws Exception {
+        GroupBean g = new GroupBean("All node", 1);
+        for(int i=0; i<10; i++){
+            NodeBean n = new NodeBean("Node " + i, i);
+            g.addNode(n);
         }
-        return groupList;
+        return g;
     }
 
 

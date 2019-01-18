@@ -12,6 +12,8 @@
 <?import javafx.scene.control.TreeView?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <BorderPane fx:controller="fr.ensicaen.ecole.oasmr.app.controller.NodeListController" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <VBox fx:id="vbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" BorderPane.alignment="CENTER">
@@ -34,8 +36,10 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Separator>
-            <JFXListView fx:id="listView">
-            </JFXListView>
+            <VBox fx:id="vboxList" alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+               <children>
+               </children>
+            </VBox>
          </children>
       </VBox>
    </center>

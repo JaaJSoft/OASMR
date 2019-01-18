@@ -29,7 +29,6 @@ public class NodeViewController implements Initializable {
     public void setDataModel(DataModel dataModel) {
         this.model = dataModel;
         this.model.getCurrentNodeBeans().addListener((ListChangeListener.Change<? extends NodeBean> c) -> {
-            System.out.println("JS");
             nodeName.setText("");
             nodeId.setText("");
             if(model.getSelectedAmount() == 1){

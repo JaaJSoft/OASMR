@@ -13,6 +13,8 @@ public class ElementListView<K, T> extends JFXListView<T> {
         super.setGroupnode(new Label(key.toString()));
         super.setItems(elements);
         super.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        super.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
     }
 
     public K getKey() {
