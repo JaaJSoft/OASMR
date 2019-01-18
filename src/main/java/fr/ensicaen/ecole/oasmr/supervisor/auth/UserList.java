@@ -61,7 +61,6 @@ public class UserList {
                 break;
             }
         }
-        userList.remove(user2delete);
     }
 
     public boolean authenticate(String login, String passwordHashed){
