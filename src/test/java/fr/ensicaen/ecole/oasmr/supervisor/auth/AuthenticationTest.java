@@ -21,25 +21,33 @@ public class AuthenticationTest {
     public void authenticateExistingUser() throws Exception{
         RequestAuthentication r = new RequestAuthentication( "Jooj", "ah");
         r.execute(s);
-        assert (s.isAuthenticated());
+        assert (s.getUserList().isAuthenticate("Jooj"));
     }
 
     @Test
     public void authenticateUnknowLoginUser() throws Exception{
         RequestAuthentication r = new RequestAuthentication( "Joefaj", "ah");
         r.execute(s);
-        assert (!s.isAuthenticated());
+        assert (!s.getUserList().isAuthenticate("Joefaj"));
     }
+
     @Test
     public void authenticateWrongPasswordUser() throws Exception{
         RequestAuthentication r = new RequestAuthentication( "Jooj", "aha");
         r.execute(s);
-        assert (!s.isAuthenticated());
+        assert (!s.getUserList().isAuthenticate("Jooj"));
     }
     @Test
     public void authenticateUnknowUser() throws Exception{
         RequestAuthentication r = new RequestAuthentication( "Joefaj", "aheaf");
         r.execute(s);
-        assert (!s.isAuthenticated());
+        assert (!s.getUserList().isAuthenticate("Joefaj"));
+    }
+
+    @Test
+    public void dontAuthenticateWrongUser() throws Exception{
+        RequestAuthentication r = new RequestAuthentication( "jefa", "ah");
+        r.execute(s);
+        assert (!s.getUserList().isAuthenticate("Jooj"));
     }
 }

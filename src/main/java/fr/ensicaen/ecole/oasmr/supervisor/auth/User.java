@@ -20,10 +20,12 @@ import fr.ensicaen.ecole.oasmr.supervisor.HashUtil;
 public class User {
     private String login;
     private String password;
+    private boolean authenticated;
 
     public User(String login, String password){
         this.login = login;
         this.password = HashUtil.get_SHA_SecurePassword(password, "SHA-256");
+        this.authenticated = false;
     }
 
     public String getLogin() {
@@ -32,5 +34,18 @@ public class User {
 
     public String getPassword(){
         return password;
+    }
+
+    public boolean getAuthentication(){ return authenticated; }
+
+    public void authenticate(){ authenticated = true; }
+
+    public void disconnect(){ authenticated = false; }
+
+    public boolean equals(User u) {
+        if (u != null && u.getClass() == User.class) {
+            return login.equals(u.getLogin()) && password.equals(u.getPassword());
+        }
+        return false;
     }
 }

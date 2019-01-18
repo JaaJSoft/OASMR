@@ -19,6 +19,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.HashUtil;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionUserUnknown;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionLoginAlreadyExisting;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 public class UserList {
     private List<User> userList;
@@ -53,17 +54,37 @@ public class UserList {
         if (!authenticate(user2delete.getLogin(),user2delete.getPassword())){
             throw new ExceptionUserUnknown(user2delete.getLogin()+ ": incorrect user (login or password)");
         }
+        for (Iterator<User> it = userList.iterator(); it.hasNext();){
+            User u = it.next();
+            if (u.equals(user2delete)){
+                it.remove();
+                break;
+            }
+        }
         userList.remove(user2delete);
     }
 
     public boolean authenticate(String login, String passwordHashed){
         for (User user : userList) {
             if (user.getLogin().equals(login)) {
-                System.out.println(user.getLogin());
-                System.out.println(user.getPassword());
-                System.out.println(passwordHashed);
-                System.out.println(user.getPassword().equals(passwordHashed));
-                return user.getPassword().equals(passwordHashed);
+                System.out.println("Login" + user.getLogin());
+                System.out.println("Password Hashed" + user.getPassword());
+                System.out.println("Try authenticate with hashed:" + passwordHashed);
+                System.out.println("Authentication Result:" + user.getPassword().equals(passwordHashed));
+                if (user.getPassword().equals(passwordHashed)){
+                    user.authenticate();
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean isAuthenticate(String login){
+        for (User user : userList) {
+            if (user.getLogin().equals(login)){
+                return user.getAuthentication();
             }
         }
         return false;

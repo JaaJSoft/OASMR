@@ -31,7 +31,7 @@ public class Supervisor {
     private Server serverHeartBeatsHandler;
     private Server serverRequestHandler;
     private UserList userList;
-    private boolean authenticated;
+    //private boolean authenticated;
 
 
     public Supervisor(int portHeartBeats, int portRequests) throws IOException, ExceptionPortInvalid {
@@ -39,7 +39,7 @@ public class Supervisor {
         serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler("Request", this));
         this.nodeFlyweightFactory = new NodeFlyweightFactory();
         this.userList = new UserList();
-        this.authenticated = false;
+        //this.authenticated = false;
     }
 
     public void start() throws InterruptedException {
@@ -71,10 +71,12 @@ public class Supervisor {
         return nodeFlyweightFactory;
     }
 
+
     public UserList getUserList() {
         return userList;
     }
 
+    /*
     public boolean isAuthenticated() {
         return authenticated;
     }
@@ -83,5 +85,5 @@ public class Supervisor {
         authenticated = true;
     }
 
-    public void disconnection() { authenticated = false; }
+    public void disconnection() { authenticated = false; }*/
 }
