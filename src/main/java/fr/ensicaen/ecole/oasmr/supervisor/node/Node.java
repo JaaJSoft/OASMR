@@ -26,7 +26,6 @@ public abstract class Node implements Comparable, Serializable {
 
     private final NodeBean data;
 
-
     public Node(int id, InetAddress nodeAddress, int port) {
         data = new NodeBean(id, nodeAddress.toString() + ":" + port, nodeAddress, port);
     }
