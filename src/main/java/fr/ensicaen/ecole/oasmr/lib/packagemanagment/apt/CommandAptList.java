@@ -22,6 +22,7 @@ import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.exceptions.ExceptionAptP
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.management.ManagementFactory;
 
 public class CommandAptList extends Command {
 
@@ -30,26 +31,34 @@ public class CommandAptList extends Command {
 
     @Override
     public Serializable execute(Object... params) throws Exception {
-        throw new ExceptionAptFailGettingList("DOES NOT WORK !");
-        /*ProcessBuilder processBuilder = new ProcessBuilder("apt", "list");
+        String pid = "";
         try {
-            Process p = processBuilder.start();
+            pid = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String tmpFileLocation = "/tmp/AptList" + pid;
+        ProcessBuilder processBuilderList2Txt = new ProcessBuilder("apt", "list", ">", tmpFileLocation);
+        ProcessBuilder processBuilderTxtReading = new ProcessBuilder("cat", tmpFileLocation);
+        try {
+            Process p = processBuilderList2Txt.start();
             p.waitFor();
-            int ret = p.exitValue();
+            Process p2 = processBuilderTxtReading.start();
+            p2.waitFor();
+            int ret = p2.exitValue();
             switch (ret) {
                 case 0:
-                    String output = ProcessBuilderUtil.getOutput(p);
+                    String output = ProcessBuilderUtil.getOutput(p2);
                     System.out.println(output);
                     return output;
                 default:
                     throw new ExceptionAptFailGettingList(ProcessBuilderUtil.getOutputError(p));
             }
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return e;
+        } catch(IOException | InterruptedException e){
+                e.printStackTrace();
+                return e;
         }
-        */
+
     }
 
     @Override
