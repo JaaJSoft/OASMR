@@ -1,5 +1,6 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
+import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.beans.GroupBean;
 import fr.ensicaen.ecole.oasmr.app.view.DataModel;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
@@ -24,15 +25,13 @@ public class MainController implements Initializable {
 
     private RequestManager requestManager;
     private DataModel dataModel;
-    private String ip = "127.0.0.1";
-    private int port = 40404;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             //TODO :
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(ip), port);
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(Config.ip), Config.port);
             dataModel = new DataModel(getAllNodes());
             final FXMLLoader loaderList = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/NodeList.fxml"));
             final FXMLLoader loaderNode = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/NodeView.fxml"));
@@ -47,13 +46,13 @@ public class MainController implements Initializable {
             NodeViewController nodeViewController = loaderNode.getController();
             GroupViewController groupViewController = loaderGroup.getController();
             dataModel.getCurrentNodeBeans().addListener((ListChangeListener.Change<? extends NodeBean> c) -> {
-                if(dataModel.getSelectedAmount() > 1){
+                if (dataModel.getSelectedAmount() > 1) {
                     groupViewController.update();
                     mainPane.getItems().set(1, groupViewNode);
-                }else if (dataModel.getSelectedAmount() == 1){
+                } else if (dataModel.getSelectedAmount() == 1) {
                     nodeViewController.update();
                     mainPane.getItems().set(1, nodeViewNode);
-                }else{
+                } else {
                     mainPane.getItems().set(1, defaultViewNode);
                 }
             });
@@ -64,12 +63,13 @@ public class MainController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        mainPane.setDividerPositions(0.2);
     }
 
     private GroupBean getAllNodes() throws Exception {
         NodeBean[] nodeList = (NodeBean[]) requestManager.sendRequest(new RequestGetNodes());
         GroupBean g = new GroupBean("All node", 1);
-        for(NodeBean n : nodeList){
+        for (NodeBean n : nodeList) {
             g.addNode(n);
         }
         return g;

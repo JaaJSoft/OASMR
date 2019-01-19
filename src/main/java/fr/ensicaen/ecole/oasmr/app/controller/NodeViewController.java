@@ -1,6 +1,7 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.controls.JFXTabPane;
+import com.kodedu.terminalfx.Terminal;
 import com.kodedu.terminalfx.TerminalBuilder;
 import com.kodedu.terminalfx.TerminalTab;
 import com.kodedu.terminalfx.config.TerminalConfig;
@@ -91,7 +92,7 @@ public class NodeViewController implements Initializable {
         NodeBean n = model.getCurrentNodeBeans().get(0);
 
         TerminalTab terminal = terminalBuilder.newTerminal();
-
+        Terminal term = terminal.getTerminal();
         //terminal.getTerminal().command("ssh -t pierre@127.0.0.1 -p 22 ssh " + n.getSshLogin() + "@" + n.getNodeAddress().toString() + "-p " + n.getSshPort());
 
         bottomPane.getTabs().add(terminal);
