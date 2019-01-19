@@ -1,5 +1,6 @@
 package fr.ensicaen.ecole.oasmr.app.beans;
 
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

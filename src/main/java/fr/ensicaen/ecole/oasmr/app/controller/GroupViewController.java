@@ -1,8 +1,8 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.controls.JFXTabPane;
-import fr.ensicaen.ecole.oasmr.app.beans.NodeBean;
 import fr.ensicaen.ecole.oasmr.app.view.DataModel;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

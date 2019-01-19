@@ -1,10 +1,8 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.controls.JFXTabPane;
-import fr.ensicaen.ecole.oasmr.app.beans.NodeBean;
 import fr.ensicaen.ecole.oasmr.app.view.DataModel;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
-import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -62,7 +60,7 @@ public class NodeViewController implements Initializable {
     }
 
     private void updateNodeInfo(){
-        nodeName.setText(model.getCurrentNodeBeans().get(0).toString());
+        nodeName.setText(model.getCurrentNodeBeans().get(0).getName());
         nodeId.setText(String.valueOf(model.getCurrentNodeBeans().get(0).getId()));
     }
 

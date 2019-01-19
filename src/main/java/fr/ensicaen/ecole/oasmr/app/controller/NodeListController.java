@@ -1,10 +1,9 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
-import com.jfoenix.controls.JFXListView;
 import fr.ensicaen.ecole.oasmr.app.gui.list.ElementListView;
 import fr.ensicaen.ecole.oasmr.app.beans.GroupBean;
-import fr.ensicaen.ecole.oasmr.app.beans.NodeBean;
 import fr.ensicaen.ecole.oasmr.app.view.DataModel;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

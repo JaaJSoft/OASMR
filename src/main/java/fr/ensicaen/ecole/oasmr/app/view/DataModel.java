@@ -1,7 +1,7 @@
 package fr.ensicaen.ecole.oasmr.app.view;
 
 import fr.ensicaen.ecole.oasmr.app.beans.GroupBean;
-import fr.ensicaen.ecole.oasmr.app.beans.NodeBean;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
