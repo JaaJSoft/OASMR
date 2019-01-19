@@ -129,4 +129,12 @@ public class NodeBean implements Comparable, Serializable {
     public void addTags(Set<Tag> s) {
         tags.addAll(s);
     }
+
+    public String getSshLogin() {
+        return sshLogin;
+    }
+
+    public void setSshLogin(String sshLogin) {
+        this.sshLogin = sshLogin;
+    }
 }

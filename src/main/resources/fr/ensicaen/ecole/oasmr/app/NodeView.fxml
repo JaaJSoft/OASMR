@@ -31,7 +31,7 @@
                         <JFXTabPane fx:id="moduleTabPane" />
                      </children>
                   </VBox>
-                  <AnchorPane fx:id="bottomPane" prefHeight="200.0" prefWidth="200.0" />
+                  <JFXTabPane fx:id="bottomPane" prefHeight="200.0" prefWidth="200.0" />
                </items>
             </SplitPane>
             <VBox fx:id="rightVBox" prefHeight="398.0" prefWidth="149.0" />
