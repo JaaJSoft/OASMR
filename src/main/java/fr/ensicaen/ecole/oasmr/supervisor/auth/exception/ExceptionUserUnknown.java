@@ -15,7 +15,7 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.auth.exception;
 
-public class ExceptionUserUnknown extends Throwable {
+public class ExceptionUserUnknown extends Exception {
     public ExceptionUserUnknown(String s) {
         super(s);
     }

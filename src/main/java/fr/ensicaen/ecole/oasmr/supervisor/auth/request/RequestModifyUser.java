@@ -22,11 +22,7 @@ public class RequestModifyUser extends Request {
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        try {
-            supervisor.getUserList().modifyUser(new User(login, password), new User(newLogin, newPassword));
-        } catch (ExceptionUserUnknown e) {
-            e.printStackTrace();
-        }
+        supervisor.getUserList().modifyUser(new User(login, password), new User(newLogin, newPassword));
         return 0;
     }
 

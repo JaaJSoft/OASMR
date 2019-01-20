@@ -27,8 +27,7 @@ public class DeleteUserTest {
 
     @Test(expected = ExceptionUserUnknown.class)
     public void deleteUnexistingUser() throws Exception{
-        RequestDeleteUser r = new RequestDeleteUser( "Jofzafeaoj", "ah");
-        r.execute(s);
+        new RequestDeleteUser( "Jofzafeaoj", "ah").execute(s);
     }
 
 }

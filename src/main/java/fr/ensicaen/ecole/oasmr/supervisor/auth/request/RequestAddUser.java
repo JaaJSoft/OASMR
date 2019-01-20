@@ -33,11 +33,7 @@ public class RequestAddUser extends Request {
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        try {
-            supervisor.getUserList().addUser(new User(login, password));
-        } catch (ExceptionLoginAlreadyExisting e) {
-        e.printStackTrace();
-    }
+        supervisor.getUserList().addUser(new User(login, password));
         return 0;
     }
 
