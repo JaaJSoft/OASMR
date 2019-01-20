@@ -17,8 +17,6 @@ package fr.ensicaen.ecole.oasmr.lib.command.script;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
-import java.util.HashMap;
-
 public abstract class Script extends Command {
     private String filename;
 

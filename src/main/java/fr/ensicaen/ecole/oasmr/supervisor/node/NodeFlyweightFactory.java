@@ -38,7 +38,7 @@ public class NodeFlyweightFactory {
                 return n;
             }
         }
-        NodeProxy newNode = new NodeProxy(nbNode++, address, port);
+        NodeProxy newNode = new NodeProxy(new NodeBean(++nbNode, address + ":" + port, address, port));
         nodes.add(newNode);
         return newNode;
     }
@@ -68,5 +68,9 @@ public class NodeFlyweightFactory {
 
     public final Set<Node> getNodes() {
         return Collections.unmodifiableSet(nodes);
+    }
+
+    public final NodeBean[] getNodesBean() {
+        return nodes.stream().map(Node::getData).toArray(NodeBean[]::new);
     }
 }

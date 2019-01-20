@@ -25,15 +25,31 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://github.com/javaterminal/terminalfx/raw/master/releases'
+    }
+    maven {
+        url 'https://github.com/javaterminal/pty4j/raw/master/releases'
+    }
+    maven {
+        url 'http://www.sparetimelabs.com/maven2'
+    }
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
 }
 
 dependencies {
+    compile 'com.kodedu.terminalfx:terminalfx:1.0.8'
     compile 'info.picocli:picocli:3.8.2'
     compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
     compile 'com.jfoenix:jfoenix:8.0.8'
     compile 'org.controlsfx:controlsfx:8.40.14'
     compile 'org.testfx:testfx-junit:4.0.15-alpha'
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'com.jfoenix:jfoenix:8.0.8'
+    compile 'org.controlsfx:controlsfx:8.40.14'
+    compile 'org.testfx:testfx-junit:4.0.15-alpha'
 }
 
 task cli(type: JavaExec) {

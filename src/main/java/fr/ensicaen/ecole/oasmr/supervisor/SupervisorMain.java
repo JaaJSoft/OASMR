@@ -15,11 +15,9 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor;
 
-import com.google.gson.Gson;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class SupervisorMain {
 

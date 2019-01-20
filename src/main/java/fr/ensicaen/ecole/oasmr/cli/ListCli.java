@@ -15,11 +15,10 @@
 
 package fr.ensicaen.ecole.oasmr.cli;
 
-import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNodes;
 import picocli.CommandLine;
 
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "list")
@@ -38,8 +37,8 @@ public class ListCli implements Callable {
             CommandLine.usage(this, System.err);
             return null;
         }
-        Set<Node> nodes = (Set<Node>) main.r.sendRequest(new RequestGetNodes());
-        for (Node n : nodes) {
+        NodeBean[] nodes = (NodeBean[]) main.r.sendRequest(new RequestGetNodes());
+        for (NodeBean n : nodes) {
             System.out.println(n.getId() + " -> " + n.getNodeAddress() + ":" + n.getPort());
         }
         return nodes;
