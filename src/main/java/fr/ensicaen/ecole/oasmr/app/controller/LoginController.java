@@ -55,7 +55,7 @@ public class LoginController implements Initializable {
         }
 
         /* Only For Test: delete after */
-        RequestAddUser r = new RequestAddUser("Polnareff", "C@brel");
+        RequestAddUser r = new RequestAddUser("admin", "jeej");
         try {
             requestManager.sendRequest(r);
         } catch (Exception e) {
