@@ -15,7 +15,6 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
-import fr.ensicaen.ecole.oasmr.supervisor.HashUtil;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionUserUnknown;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionLoginAlreadyExisting;
 import java.util.ArrayList;

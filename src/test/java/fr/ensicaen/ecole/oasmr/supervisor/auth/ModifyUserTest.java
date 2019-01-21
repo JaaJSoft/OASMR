@@ -1,6 +1,5 @@
 package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
-import fr.ensicaen.ecole.oasmr.supervisor.HashUtil;
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionLoginAlreadyExisting;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionUserUnknown;

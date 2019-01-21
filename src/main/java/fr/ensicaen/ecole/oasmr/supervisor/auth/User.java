@@ -15,7 +15,7 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
-import fr.ensicaen.ecole.oasmr.supervisor.HashUtil;
+import fr.ensicaen.ecole.oasmr.lib.crypto.HashUtil;
 
 public class User {
     private String login;
