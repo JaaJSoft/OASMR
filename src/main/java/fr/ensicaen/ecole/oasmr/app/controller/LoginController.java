@@ -44,8 +44,6 @@ public class LoginController implements Initializable {
     @FXML
     JFXTextField portNumber;
 
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
