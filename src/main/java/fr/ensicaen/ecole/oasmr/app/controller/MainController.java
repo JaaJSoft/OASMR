@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
 
+import javax.xml.crypto.Data;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,6 +27,14 @@ public class MainController implements Initializable {
     private RequestManager requestManager;
     private DataModel dataModel;
 
+    private Parent nodeViewNode;
+    private Parent groupViewNode;
+    private Parent defaultViewNode;
+
+    private NodeListController nodeListController;
+    private NodeViewController nodeViewController;
+    private GroupViewController groupViewController;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -37,14 +46,14 @@ public class MainController implements Initializable {
             final FXMLLoader loaderNode = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/NodeView.fxml"));
             final FXMLLoader loaderGroup = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/GroupView.fxml"));
             final FXMLLoader loaderDefault = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/Default.fxml"));
-            Parent nodeViewNode = loaderNode.load();
-            Parent groupViewNode = loaderGroup.load();
-            Parent defaultViewNode = loaderDefault.load();
+            nodeViewNode = loaderNode.load();
+            groupViewNode = loaderGroup.load();
+            defaultViewNode = loaderDefault.load();
             mainPane.getItems().add(0, loaderList.load());
             mainPane.getItems().add(1, defaultViewNode);
-            NodeListController nodeListController = loaderList.getController();
-            NodeViewController nodeViewController = loaderNode.getController();
-            GroupViewController groupViewController = loaderGroup.getController();
+            nodeListController = loaderList.getController();
+            nodeViewController = loaderNode.getController();
+            groupViewController = loaderGroup.getController();
             dataModel.getCurrentNodeBeans().addListener((ListChangeListener.Change<? extends NodeBean> c) -> {
                 if (dataModel.getSelectedAmount() > 1) {
                     groupViewController.update();
@@ -57,6 +66,7 @@ public class MainController implements Initializable {
                 }
             });
             nodeListController.setDataModel(dataModel);
+            nodeListController.setMainController(this);
             nodeViewController.setDataModel(dataModel);
             groupViewController.setDataModel(dataModel);
             nodeListController.update();
@@ -75,5 +85,9 @@ public class MainController implements Initializable {
         return g;
     }
 
-
+    public void reload() throws Exception {
+        dataModel.reset(getAllNodes());
+        nodeListController.update();
+        mainPane.getItems().set(1, defaultViewNode);
+    }
 }

@@ -33,6 +33,11 @@ public class DataModel {
         }
     }
 
+    public void reset(GroupBean groupBean){
+        this.groupBeanObjectProperty = new SimpleObjectProperty<>(groupBean);
+        this.currentNodeBeans.clear();
+    }
+
     public ObservableList<NodeBean> getCurrentNodeBeans(){
         return currentNodeBeans;
     }
