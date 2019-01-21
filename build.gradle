@@ -37,6 +37,7 @@ repositories {
     maven {
         url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
+    
 }
 
 dependencies {
@@ -50,6 +51,7 @@ dependencies {
     compile 'com.jfoenix:jfoenix:8.0.8'
     compile 'org.controlsfx:controlsfx:8.40.14'
     compile 'org.testfx:testfx-junit:4.0.15-alpha'
+    compile group: 'com.github.oshi', name: 'oshi-core', version: '3.13.0'
 }
 
 task cli(type: JavaExec) {
