@@ -7,6 +7,7 @@ import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAddUser;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAuthentication;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
@@ -52,6 +53,16 @@ public class LoginController implements Initializable {
         } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
             exceptionPortInvalid.printStackTrace();
         }
+
+        /* Only For Test: delete after */
+        RequestAddUser r = new RequestAddUser("Polnareff", "C@brel");
+        try {
+            requestManager.sendRequest(r);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //End of test section
+
         sceneManager = SceneManager.getInstance();
     }
 
@@ -70,10 +81,14 @@ public class LoginController implements Initializable {
                 correctAuth = (boolean) requestManager.sendRequest(requestAuthentication);
                 if (correctAuth){
                     try {
+                        Config.ip = IPServer.getText();
+                        Config.port = Integer.parseInt(portNumber.getText());
                         sceneManager.setScenes("Main");
                     } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                         exceptionSceneNotFound.printStackTrace();
                     }
+                } else {
+                    loginError.setText("Authentication Failure");
                 }
 
             } catch (Exception e) {
