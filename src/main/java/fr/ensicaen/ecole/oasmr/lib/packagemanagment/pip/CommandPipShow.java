@@ -25,7 +25,6 @@ public class CommandPipShow extends Command {
                 case 0:
                     //System.out.println(ProcessBuilderUtil.getOutput(p));
                     return ProcessBuilderUtil.getOutput(p);
-
                 default:
                     throw new PipException(ProcessBuilderUtil.getOutputError(p));
             }

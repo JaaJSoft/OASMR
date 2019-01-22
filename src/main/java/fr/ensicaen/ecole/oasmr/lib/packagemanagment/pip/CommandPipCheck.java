@@ -10,7 +10,8 @@ import java.io.Serializable;
 
 public class CommandPipCheck extends Command {
 
-    public CommandPipCheck() {}
+    public CommandPipCheck() {
+    }
 
     @Override
     public Serializable execute(Object... params) throws Exception {
@@ -21,6 +22,7 @@ public class CommandPipCheck extends Command {
             int ret = p.exitValue();
             switch (ret) {
                 case 0:
+                case 1:
                     //System.out.println(ProcessBuilderUtil.getOutput(p));
                     return ProcessBuilderUtil.getOutput(p);
 
