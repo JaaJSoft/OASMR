@@ -1,7 +1,10 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.animation.alert.JFXAlertAnimation;
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXAlert;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXTabPane;
 import com.kodedu.terminalfx.Terminal;
 import com.kodedu.terminalfx.TerminalBuilder;
 import com.kodedu.terminalfx.TerminalTab;
@@ -19,7 +22,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -107,10 +109,10 @@ public class NodeViewController implements Initializable {
         jeej.setOnAction(e -> {
             try {
                 String response = (String) requestManager.sendRequest(
-                        new RequestExecuteCommand(
-                                model.getCurrentNodeBeans().get(0).getId(),
-                                new CommandEchoString("Test from node")
-                        ));
+                    new RequestExecuteCommand(
+                        model.getCurrentNodeBeans().get(0).getId(),
+                        new CommandEchoString("Test from node")
+                    ));
                 System.out.println(response);
                 Stage stage = (Stage) mainVBox.getScene().getWindow();
                 JFXDialogLayout layout = new JFXDialogLayout();
@@ -128,6 +130,7 @@ public class NodeViewController implements Initializable {
                 e1.printStackTrace();
             }
         });
+
         t.setContent(jeej);
     }
 
