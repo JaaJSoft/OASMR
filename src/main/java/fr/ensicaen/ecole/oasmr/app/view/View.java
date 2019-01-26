@@ -43,7 +43,7 @@ public abstract class View {
     public abstract void onCreate();
 
     /**
-     * Called at every setScene()
+     * Called at every SceneManager::setScene()
      */
     public abstract void onStart();
 
