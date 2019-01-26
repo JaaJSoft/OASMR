@@ -99,6 +99,7 @@ public class LoginController implements Initializable {
                 if ((boolean) requestManager.sendRequest(requestAuthentication)) {
                     try {
                         sceneManager.setScenes("Main");
+                        Config.userConnected=loginUser.getText();
                     } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                         exceptionSceneNotFound.printStackTrace();
                     }

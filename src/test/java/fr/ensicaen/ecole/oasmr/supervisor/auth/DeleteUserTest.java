@@ -20,14 +20,14 @@ public class DeleteUserTest {
     @Test
     public void deleteUser() throws Exception{
         User u = new User("Jooj","ah");
-        RequestDeleteUser r = new RequestDeleteUser( "Jooj", "ah");
+        RequestDeleteUser r = new RequestDeleteUser( "Jooj");
         r.execute(s);
         assert (!s.getUserList().authenticate(u.getLogin(), u.getPassword()));
     }
 
     @Test(expected = ExceptionUserUnknown.class)
     public void deleteUnexistingUser() throws Exception{
-        new RequestDeleteUser( "Jofzafeaoj", "ah").execute(s);
+        new RequestDeleteUser( "Jofzafeaoj").execute(s);
     }
 
 }

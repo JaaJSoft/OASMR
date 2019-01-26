@@ -36,22 +36,27 @@ public class UserList {
         userList.add(newUser);
     }
 
-    public void modifyUser(User oldUser, User newUser) throws ExceptionLoginAlreadyExisting, ExceptionUserUnknown {
+    public void modifyUserLogin(String login, String newLogin) throws ExceptionLoginAlreadyExisting, ExceptionUserUnknown {
         for (User user : userList) {
-            if (user.getLogin().equals(newUser.getLogin())){
-                throw new ExceptionLoginAlreadyExisting(newUser.getLogin()+ ": login already used");
+            if (user.getLogin().equals(newLogin)){
+                throw new ExceptionLoginAlreadyExisting(newLogin + ": login already used");
             }
         }
-        if (!authenticate(oldUser.getLogin(),oldUser.getPassword())){
-            throw new ExceptionUserUnknown(oldUser.getLogin()+ ": incorrect user (login or password)");
-        }
-        userList.remove(oldUser);
-        userList.add(newUser);
+        getUser(login).setLogin(newLogin);
+
     }
+    public void modifyUserPassword(String login, String password, String newPassword) throws ExceptionLoginAlreadyExisting, ExceptionUserUnknown {
+        User oldUser = new User(login, password);
+        if (!authenticate(oldUser.getLogin(),oldUser.getPassword())){
+            throw new ExceptionUserUnknown(oldUser.getLogin()+ ": incorrect password)");
+        }
+        getUser(login).setPassword(newPassword);
+    }
+
 
     public void deleteUser(User user2delete) throws ExceptionUserUnknown {
         if (!authenticate(user2delete.getLogin(),user2delete.getPassword())){
-            throw new ExceptionUserUnknown(user2delete.getLogin()+ ": incorrect user (login or password)");
+            throw new ExceptionUserUnknown(user2delete.getLogin() + ": incorrect user (login or password)");
         }
         for (Iterator<User> it = userList.iterator(); it.hasNext();){
             User u = it.next();
@@ -79,6 +84,15 @@ public class UserList {
         return false;
     }
 
+    public User getUser(String login) throws ExceptionUserUnknown {
+        for (User user : userList) {
+            if (user.getLogin().equals(login)){
+                return user;
+            }
+        }
+        throw new ExceptionUserUnknown(login + "not found");
+    }
+
     public boolean isAuthenticate(String login){
         for (User user : userList) {
             if (user.getLogin().equals(login)){
@@ -88,9 +102,11 @@ public class UserList {
         return false;
     }
 
-    void display(){
+    public List<String> getLoginList(){
+        List<String> loginList = new ArrayList<>();
         for (User user : userList) {
-            System.out.println(user.getLogin());
+            loginList.add(user.getLogin());
         }
+        return loginList;
     }
 }

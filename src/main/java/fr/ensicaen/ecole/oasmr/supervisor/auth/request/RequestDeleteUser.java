@@ -24,16 +24,14 @@ import java.io.Serializable;
 
 public class RequestDeleteUser extends Request {
     private String login;
-    private String password;
 
-    public RequestDeleteUser(String login, String password) {
+    public RequestDeleteUser(String login) {
         this.login = login;
-        this.password = password;
     }
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        supervisor.getUserList().deleteUser(new User(login, password));
+        supervisor.getUserList().deleteUser(supervisor.getUserList().getUser(login));
         return 0;
     }
 

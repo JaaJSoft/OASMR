@@ -17,6 +17,7 @@ public class Main extends Application {
         try {
             sceneManager.addScene("Login", 400, 450);
             sceneManager.addScene("Main", 1500, 800);
+            sceneManager.addScene("UserManagement", 1500, 800);
             sceneManager.setScenes("Login");
             sceneManager.show();
         } catch (Exception e) {
