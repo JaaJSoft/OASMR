@@ -37,8 +37,14 @@ public abstract class View {
         scene = new Scene(root, width, height);
     }
 
+    /**
+     * Called only once
+     */
     public abstract void onCreate();
 
+    /**
+     * Called at every setScene()
+     */
     public abstract void onStart();
 
     public abstract void onStop();
