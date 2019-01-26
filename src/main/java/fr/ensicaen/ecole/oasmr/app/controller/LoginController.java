@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
+import fr.ensicaen.ecole.oasmr.lib.PropertiesFactory;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAddUser;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAuthentication;
@@ -16,16 +17,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
     private SceneManager sceneManager;
     private RequestManager requestManager;
-
+    private Properties p;
     @FXML
     Text loginError;
 
@@ -46,41 +49,55 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(Config.ip), Config.port);
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
-        }
 
-        /* Only For Test: delete after */
-        RequestAddUser r = new RequestAddUser("admin", "jeej");
+        //End of test section
         try {
-            requestManager.sendRequest(r);
-        } catch (Exception e) {
+            p = PropertiesFactory.getProperties();
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        //End of test section
-
         sceneManager = SceneManager.getInstance();
     }
 
-
-    public void connect(ActionEvent actionEvent) {
-        if(loginUser.getText() == null || loginUser.getText().trim().isEmpty()){
+    private boolean checkInput() { //TODO CHECK PORT NOT VALID
+        if (IPServer.getText() == null || IPServer.getText().trim().isEmpty()) {
+            loginError.setText("No IP");
+            return false;
+        } else if (portNumber.getText() == null || portNumber.getText().trim().isEmpty()) {
+            loginError.setText("No port");
+            return false;
+        } else if (loginUser.getText() == null || loginUser.getText().trim().isEmpty()) {
             loginError.setText("No username");
-        }else if(loginPassword.getText() == null || loginPassword.getText().trim().isEmpty()){
+            return false;
+        } else if (loginPassword.getText() == null || loginPassword.getText().trim().isEmpty()) {
             loginError.setText("No password");
             loginUser.setDisableAnimation(true);
-        }else{
-            boolean correctAuth;
+            return false;
+        }
+        return true;
+    }
+
+    //TODO use Validator
+    public void connect(ActionEvent actionEvent) throws UnknownHostException, ExceptionPortInvalid {
+        if (checkInput()) {
             loginError.setText("");
+
+            Config.ip = IPServer.getText();
+            Config.port = Integer.parseInt(portNumber.getText());
+
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(IPServer.getText()), Integer.parseInt(portNumber.getText()));
+
+            RequestAddUser r = new RequestAddUser("admin", "jeej");
+            try {
+                requestManager.sendRequest(r);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             RequestAuthentication requestAuthentication = new RequestAuthentication(loginUser.getText(), loginPassword.getText());
             try {
-                correctAuth = (boolean) requestManager.sendRequest(requestAuthentication);
-                if (correctAuth){
+                if ((boolean) requestManager.sendRequest(requestAuthentication)) {
                     try {
-                        Config.ip = IPServer.getText();
-                        Config.port = Integer.parseInt(portNumber.getText());
                         sceneManager.setScenes("Main");
                     } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                         exceptionSceneNotFound.printStackTrace();
