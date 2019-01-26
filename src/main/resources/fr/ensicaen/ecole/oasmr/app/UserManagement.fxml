@@ -2,7 +2,6 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -12,6 +11,8 @@
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import java.net.URL?>
+
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.121"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="fr.ensicaen.ecole.oasmr.app.controller.UserManagementController"
@@ -58,8 +59,6 @@
             </JFXButton>
         </HBox>
 
-        <Text fx:id="loginError" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="NEVER"/>
-
         <JFXTextField fx:id="userLogin" promptText="UserName">
             <VBox.margin>
                 <Insets bottom="20.0"/>
@@ -76,5 +75,8 @@
                 <Insets top="20"/>
             </VBox.margin>
         </JFXButton>
+        <VBox fx:id="userTableVBox">
+
+        </VBox>
     </VBox>
 </AnchorPane>
