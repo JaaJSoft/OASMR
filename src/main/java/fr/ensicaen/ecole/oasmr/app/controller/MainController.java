@@ -3,6 +3,7 @@ package fr.ensicaen.ecole.oasmr.app.controller;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.beans.GroupBean;
 import fr.ensicaen.ecole.oasmr.app.view.DataModel;
+import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNodes;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
@@ -15,11 +16,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
 
 import javax.xml.crypto.Data;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
+public class MainController extends View implements Initializable {
 
     @FXML
     SplitPane mainPane;
@@ -34,6 +36,10 @@ public class MainController implements Initializable {
     private NodeListController nodeListController;
     private NodeViewController nodeViewController;
     private GroupViewController groupViewController;
+
+    public MainController(int width, int height) throws IOException {
+        super("Main", width, height);
+    }
 
 
     @Override
@@ -89,5 +95,20 @@ public class MainController implements Initializable {
         dataModel.reset(getAllNodes());
         nodeListController.update();
         mainPane.getItems().set(1, defaultViewNode);
+    }
+
+    @Override
+    public void onCreate() {
+
+    }
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onStop() {
+
     }
 }

@@ -28,17 +28,21 @@ public abstract class View {
     protected String fxml;
     protected int width;
     protected int height;
+    private String path = "/fr/ensicaen/ecole/oasmr/app/";
 
     public View(String fxml, int width, int height) throws IOException {
         this.fxml = fxml;
         this.width = width;
         this.height = height;
-        Parent root = FXMLLoader.load(getClass().getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource(path + fxml + ".fxml"));
+        fxmlLoader.setController(this);
+        Parent root = fxmlLoader.load();
         scene = new Scene(root, width, height);
     }
 
     /**
-     * Called only once
+     * Called when the scene is add in the scene manager
      */
     public abstract void onCreate();
 
@@ -74,9 +78,7 @@ public abstract class View {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         View view = (View) o;
-        return width == view.width &&
-                height == view.height &&
-                Objects.equals(fxml, view.fxml);
+        return Objects.equals(fxml, view.fxml);
     }
 
     @Override

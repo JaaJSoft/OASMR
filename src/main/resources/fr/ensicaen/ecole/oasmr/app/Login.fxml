@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ensicaen.ecole.oasmr.app.controller.LoginController">
+            xmlns:fx="http://javafx.com/fxml/1" > <!-- fx:controller="fr.ensicaen.ecole.oasmr.app.controller.LoginController"-->
     <stylesheets>
         <URL value="@css/style.css"/>
     </stylesheets>
@@ -55,7 +55,7 @@
             </VBox.margin>
         </JFXPasswordField>
 
-        <JFXButton fx:id="loginConnect" onAction="#connect" ripplerFill="#e8dcdc" text="Connect">
+        <JFXButton fx:id="loginConnect" ripplerFill="#e8dcdc" text="Connect">
             <VBox.margin>
                 <Insets top="20"/>
             </VBox.margin>
