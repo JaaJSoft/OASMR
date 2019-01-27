@@ -29,8 +29,11 @@ public class SceneManager {
     }
 
     public void addScene(View view) throws IOException, ExceptionSceneAlrdeadyExists {
-        views.add(view);
-        view.onCreate();
+        if(views.add(view)){
+            view.onCreate();
+        }else{
+            throw new ExceptionSceneAlrdeadyExists();
+        }
     }
 
     public View getView(Class<? extends View> klazz) throws ExceptionSceneNotFound {
