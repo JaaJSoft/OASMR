@@ -54,6 +54,7 @@ public class LoginController extends View implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        loginConnect.setDefaultButton(true);
         loginConnect.setOnAction(actionEvent -> {
             try {
                 connect(actionEvent);
