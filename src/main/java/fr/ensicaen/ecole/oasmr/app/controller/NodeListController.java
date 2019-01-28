@@ -6,6 +6,7 @@ import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.gui.list.ElementListView;
 import fr.ensicaen.ecole.oasmr.app.beans.GroupBean;
 import fr.ensicaen.ecole.oasmr.app.view.DataModel;
+import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
@@ -21,12 +22,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.*;
 
-public class NodeListController implements Initializable {
+public class NodeListController extends View {
 
     @FXML
     JFXButton refreshBtn;
@@ -44,13 +46,8 @@ public class NodeListController implements Initializable {
     private RequestManager requestManager;
     private MainController mainController;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        try {
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(Config.ip), Config.port);
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
-        }
+    public NodeListController() throws IOException {
+        super("NodeList");
     }
 
     public ElementListView<GroupBean, NodeBean> generateListView() {
@@ -77,8 +74,22 @@ public class NodeListController implements Initializable {
         this.mainController = mainController;
     }
 
-    public void update() {
 
+    public void refreshNodes(ActionEvent actionEvent) throws Exception {
+        mainController.onStart();
+    }
+
+    @Override
+    public void onCreate() {
+        try {
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(Config.ip), Config.port);
+        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+            exceptionPortInvalid.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onStart() {
         ElementListView<GroupBean, NodeBean> list = generateListView();
         vboxList.getChildren().clear();
         vboxList.getChildren().add(list);
@@ -91,8 +102,8 @@ public class NodeListController implements Initializable {
         }
     }
 
-    public void refreshNodes(ActionEvent actionEvent) throws Exception {
-        mainController.reload();
-        update();
+    @Override
+    public void onStop() {
+
     }
 }

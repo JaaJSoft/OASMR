@@ -13,7 +13,7 @@
     </top>
     <center>
         <SplitPane fx:id="mainPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                   prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                   dividerPositions="0.8" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <items></items>
         </SplitPane>
     </center>

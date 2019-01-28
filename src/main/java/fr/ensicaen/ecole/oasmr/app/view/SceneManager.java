@@ -49,7 +49,7 @@ public class SceneManager {
     public Scene getScene(Class<? extends View> klazz) throws ExceptionSceneNotFound {
         for (View v : views) {
             if (v.getClass().equals(klazz)) {
-                return v.scene;
+                return v.getScene();
             }
         }
         throw new ExceptionSceneNotFound();
@@ -62,7 +62,7 @@ public class SceneManager {
         View v = getView(klazz);
         v.onStart();
         activeView = v;
-        primaryStage.setScene(v.scene);
+        primaryStage.setScene(v.getScene());
     }
 
 

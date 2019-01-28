@@ -25,6 +25,7 @@ import java.util.Objects;
 public abstract class View {
 
     protected Scene scene;
+    protected Parent root;
     protected String fxml;
     protected int width;
     protected int height;
@@ -37,9 +38,19 @@ public abstract class View {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource(path + fxml + ".fxml"));
         fxmlLoader.setController(this);
-        Parent root = fxmlLoader.load();
-        scene = new Scene(root, width, height);
+        root = fxmlLoader.load();
     }
+
+    public View(String fxml) throws IOException {
+        this.fxml = fxml;
+        this.width = 0;
+        this.height = 0;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource(path + fxml + ".fxml"));
+        fxmlLoader.setController(this);
+        root = fxmlLoader.load();
+    }
+
 
     /**
      * Called when the scene is add in the scene manager
@@ -54,11 +65,15 @@ public abstract class View {
     public abstract void onStop();
 
     public Scene getScene() {
-        return scene;
+        if(scene == null){
+            return new Scene(root, width, height);
+        }else{
+            return scene;
+        }
     }
 
-    public void setScene(Scene scene) {
-        this.scene = scene;
+    public Parent getRoot() {
+        return root;
     }
 
     public String getFxml() {
