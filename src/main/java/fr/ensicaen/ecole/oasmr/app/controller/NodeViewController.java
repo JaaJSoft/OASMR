@@ -11,6 +11,7 @@ import com.kodedu.terminalfx.TerminalTab;
 import com.kodedu.terminalfx.config.TerminalConfig;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.DataModel;
+import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
@@ -28,12 +29,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
-public class NodeViewController implements Initializable {
+public class NodeViewController extends View {
 
     @FXML
     Text nodeName;
@@ -57,15 +59,11 @@ public class NodeViewController implements Initializable {
     private RequestManager requestManager;
     private TerminalBuilder terminalBuilder;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        TerminalConfig darkConfig = new TerminalConfig();
-        darkConfig.setBackgroundColor(Color.rgb(16, 16, 16));
-        darkConfig.setForegroundColor(Color.rgb(240, 240, 240));
-        darkConfig.setCursorColor(Color.rgb(255, 0, 0, 0.5));
-
-        terminalBuilder = new TerminalBuilder(darkConfig);
+    public NodeViewController() throws IOException {
+        super("NodeView");
+        onCreate();
     }
+
 
     public void setDataModel(DataModel dataModel) {
         model = dataModel;
@@ -75,18 +73,6 @@ public class NodeViewController implements Initializable {
         requestManager = rm;
     }
 
-    //TODO : fill with good infos
-    public void update() {
-        try {
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(Config.ip), Config.port);
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
-        }
-        updateNodeInfo();
-        updateModuleTab();
-        updateNodeTerm();
-        updateRightInfo();
-    }
 
     private void updateNodeInfo() {
         nodeName.setText(model.getCurrentNodeBeans().get(0).getName());
@@ -154,4 +140,31 @@ public class NodeViewController implements Initializable {
     }
 
 
+    @Override
+    public void onCreate() {
+        try {
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(Config.ip), Config.port);
+        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+            exceptionPortInvalid.printStackTrace();
+        }
+        TerminalConfig darkConfig = new TerminalConfig();
+        darkConfig.setBackgroundColor(Color.rgb(16, 16, 16));
+        darkConfig.setForegroundColor(Color.rgb(240, 240, 240));
+        darkConfig.setCursorColor(Color.rgb(255, 0, 0, 0.5));
+
+        terminalBuilder = new TerminalBuilder(darkConfig);
+    }
+
+    @Override
+    public void onStart() {
+        updateNodeInfo();
+        updateModuleTab();
+        updateNodeTerm();
+        updateRightInfo();
+    }
+
+    @Override
+    public void onStop() {
+
+    }
 }
