@@ -65,13 +65,13 @@ public class MainController extends View {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mainPane.setDividerPositions(0.2);
     }
 
     @Override
     public void onStart() {
         try {
             mainPane.getItems().clear();
+            mainPane.setDividerPositions(0.2);
             dataModel = new DataModel(getAllNodes());
             mainPane.getItems().add(0, nodeListView.getRoot());
             mainPane.getItems().add(1, defaultView.getRoot());
