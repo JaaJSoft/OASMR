@@ -13,8 +13,11 @@ import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestModifyUserLogin;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +25,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTreeTableCell;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.net.InetAddress;
 import java.net.URL;
@@ -75,7 +81,12 @@ public class UserManagementController implements Initializable {
 
     }
 
+
+
     private void onLoadTest() {
+
+        userTableVBox.getChildren().clear();
+
         RequestGetUsersList r = new RequestGetUsersList();
 
         try {
@@ -93,6 +104,16 @@ public class UserManagementController implements Initializable {
                 return userCol.getComputedValue(param);
             }
         });
+
+
+        JFXTreeTableColumn<UserInfo, Boolean> adminCol = new JFXTreeTableColumn<>("is Admin");
+        adminCol.setPrefWidth(150);
+        adminCol.setCellFactory(CheckBoxTreeTableCell.forTreeTableColumn(adminCol));
+        adminCol.setCellValueFactory(param -> {
+                return new SimpleBooleanProperty(param.getValue().getValue().admin);
+        });
+
+
 
         userCol.setCellFactory((TreeTableColumn<UserInfo, String> param) -> new GenericEditableTreeTableCell<>(
                 new TextFieldEditorBuilder()));
@@ -113,6 +134,9 @@ public class UserManagementController implements Initializable {
             }
         });
 
+        adminCol.setCellFactory((TreeTableColumn<UserInfo, JFXCheckBox> param) -> new CheckBoxTreeTableCell<>(
+                new JFXCheckBox()));
+
 
         ObservableList<UserInfo> users = FXCollections.observableArrayList();
         for (String s : loginList) {
@@ -124,11 +148,11 @@ public class UserManagementController implements Initializable {
         JFXTreeTableView<UserInfo> userTable = new JFXTreeTableView(root);
         userTable.setShowRoot(false);
         userTable.setEditable(true);
-        userTable.getColumns().setAll(userCol);
+        userTable.getColumns().setAll(userCol, adminCol);
 
         userTableVBox.getChildren().add(userTable);
 
-
+/*
         JFXButton groupButton = new JFXButton("Group");
         groupButton.setOnAction((action) -> new Thread(() -> userTable.group(userCol)).start());
         userTableVBox.getChildren().add(groupButton);
@@ -136,6 +160,7 @@ public class UserManagementController implements Initializable {
         JFXButton unGroupButton = new JFXButton("unGroup");
         unGroupButton.setOnAction((action) -> userTable.unGroup(userCol));
         userTableVBox.getChildren().add(unGroupButton);
+*/
 
         JFXTextField filterField = new JFXTextField();
         userTableVBox.getChildren().add(filterField);
@@ -158,9 +183,20 @@ public class UserManagementController implements Initializable {
 
     private static final class UserInfo extends RecursiveTreeObject<UserInfo> {
         final StringProperty login;
+        final JFXButton delete;
+        final BooleanProperty admin;
 
         UserInfo(String login) {
             this.login = new SimpleStringProperty(login);
+            this.delete = new JFXButton("");
+            this.admin = new SimpleBooleanProperty(false);
+        }
+
+        UserInfo(String login, boolean isAdmin) {
+            this.login = new SimpleStringProperty(login);
+            this.delete = new JFXButton("");
+            this.admin = new SimpleBooleanProperty(isAdmin);
+
         }
     }
 }

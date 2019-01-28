@@ -7,8 +7,8 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 import java.io.Serializable;
 
 public class RequestModifyUserLogin extends Request {
-    private String login;
-    private String newLogin;
+    private final String login;
+    private final String newLogin;
 
     public RequestModifyUserLogin(String login, String newLogin) {
         this.login = login;
@@ -23,6 +23,6 @@ public class RequestModifyUserLogin extends Request {
 
     @Override
     public String toString() {
-        return login + " RequestModifyUserLogin";
+        return login + " RequestModifyUserLogin" + newLogin;
     }
 }

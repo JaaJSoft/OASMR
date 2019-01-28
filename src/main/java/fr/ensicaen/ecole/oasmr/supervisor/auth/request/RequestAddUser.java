@@ -23,8 +23,8 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 import java.io.Serializable;
 
 public class RequestAddUser extends Request {
-    private String login;
-    private String password;
+    private final String login;
+    private final String password;
 
     public RequestAddUser(String login, String password) {
         this.login = login;

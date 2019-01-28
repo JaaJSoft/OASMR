@@ -23,7 +23,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 import java.io.Serializable;
 
 public class RequestDeleteUser extends Request {
-    private String login;
+    private final String login;
 
     public RequestDeleteUser(String login) {
         this.login = login;

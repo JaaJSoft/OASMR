@@ -20,6 +20,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionLoginAlreadyEx
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 public class UserList {
     private List<User> userList;
 
@@ -43,8 +44,8 @@ public class UserList {
             }
         }
         getUser(login).setLogin(newLogin);
-
     }
+
     public void modifyUserPassword(String login, String password, String newPassword) throws ExceptionLoginAlreadyExisting, ExceptionUserUnknown {
         User oldUser = new User(login, password);
         if (!authenticate(oldUser.getLogin(),oldUser.getPassword())){
@@ -52,7 +53,6 @@ public class UserList {
         }
         getUser(login).setPassword(newPassword);
     }
-
 
     public void deleteUser(User user2delete) throws ExceptionUserUnknown {
         if (!authenticate(user2delete.getLogin(),user2delete.getPassword())){

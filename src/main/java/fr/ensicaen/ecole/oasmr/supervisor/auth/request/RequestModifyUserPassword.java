@@ -6,9 +6,9 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 import java.io.Serializable;
 
 public class RequestModifyUserPassword extends Request {
-    private String login;
-    private String password;
-    private String newPassword;
+    private final String login;
+    private final String password;
+    private final String newPassword;
 
     public RequestModifyUserPassword(String login, String password , String newPassword) {
         this.login = login;

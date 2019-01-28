@@ -25,6 +25,7 @@ public class ModifyUserTest {
         r.execute(s);
         User newUser = new User("Jooj", "ahhh");
         assert (s.getUserList().authenticate(newUser.getLogin(), newUser.getPassword()));
+        assert (!s.getUserList().authenticate("JOOJ", newUser.getPassword()));
     }
 
     @Test
@@ -33,6 +34,7 @@ public class ModifyUserTest {
         r.execute(s);
         User newUser = new User("JOOJ", "ah");
         assert (s.getUserList().authenticate(newUser.getLogin(),newUser.getPassword() ));
+
     }
 
     @Test(expected = ExceptionLoginAlreadyExisting.class)
