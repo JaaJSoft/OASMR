@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public class CommandPipSearch extends Command {
 
-    private String searchingTerms;
+    private final String searchingTerms;
 
     public CommandPipSearch(String searchingTerms) {
         this.searchingTerms = searchingTerms;
@@ -19,17 +19,7 @@ public class CommandPipSearch extends Command {
     public Serializable execute(Object... params) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("pip", "search", searchingTerms);
         try {
-            Process p = processBuilder.start();
-            p.waitFor();
-            int ret = p.exitValue();
-            System.out.println(ret);
-            switch (ret) {
-                case 0:
-                    return ProcessBuilderUtil.getOutput(p);
-                default:
-                    throw new PipException(ProcessBuilderUtil.getOutputError(p));
-            }
-
+            return PipUtil.executeDefault(processBuilder);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return e;
@@ -38,6 +28,6 @@ public class CommandPipSearch extends Command {
 
     @Override
     public String toString() {
-        return "pip" + " " + "search" + " " + searchingTerms;
+        return "pip " + "search " + searchingTerms;
     }
 }

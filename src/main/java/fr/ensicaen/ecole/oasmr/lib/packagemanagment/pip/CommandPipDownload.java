@@ -6,11 +6,12 @@ import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.packagemanagment.pip.exceptions.PipException;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.Serializable;
 
 public class CommandPipDownload extends Command {
 
-    private String packageName;
+    private final String packageName;
 
     public CommandPipDownload(String packageName) { this.packageName = packageName; }
 
@@ -18,19 +19,7 @@ public class CommandPipDownload extends Command {
     public Serializable execute(Object... params) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("pip", "download", packageName);
         try {
-            Process p = processBuilder.start();
-            p.waitFor();
-            int ret = p.exitValue();
-            switch (ret) {
-                case 0:
-                    //System.out.println(ProcessBuilderUtil.getOutput(p));
-                    return ProcessBuilderUtil.getOutput(p);
-
-                default:
-                    throw new PipException(ProcessBuilderUtil.getOutputError(p));
-
-            }
-
+            return PipUtil.executeDefault(processBuilder);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return e;
@@ -39,6 +28,6 @@ public class CommandPipDownload extends Command {
 
     @Override
     public String toString() {
-        return "pip" + " " + "download" + " " + packageName;
+        return "pip " + "download " + packageName;
     }
 }

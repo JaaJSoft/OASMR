@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class CommandPipInstall extends Command {
 
-    private String packageName;
+    private final String packageName;
 
     public CommandPipInstall(String packageName) { this.packageName = packageName; }
 
@@ -18,19 +18,7 @@ public class CommandPipInstall extends Command {
     public Serializable execute(Object... params) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("pip", "install", packageName);
         try {
-            Process p = processBuilder.start();
-            p.waitFor();
-            int ret = p.exitValue();
-            switch (ret) {
-                case 0:
-                    //System.out.println(ProcessBuilderUtil.getOutput(p));
-                    return ProcessBuilderUtil.getOutput(p);
-
-                default:
-                    throw new PipException(ProcessBuilderUtil.getOutputError(p));
-
-            }
-
+            return PipUtil.executeDefault(processBuilder);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return e;
@@ -39,6 +27,6 @@ public class CommandPipInstall extends Command {
 
     @Override
     public String toString() {
-        return "pip" + " " + "install" + " " + packageName;
+        return "pip " + "install " + packageName;
     }
 }
