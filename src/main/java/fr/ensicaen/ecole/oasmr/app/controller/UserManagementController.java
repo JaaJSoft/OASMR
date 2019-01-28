@@ -105,14 +105,14 @@ public class UserManagementController implements Initializable {
             }
         });
 
-
+/*
         JFXTreeTableColumn<UserInfo, Boolean> adminCol = new JFXTreeTableColumn<>("is Admin");
         adminCol.setPrefWidth(150);
         adminCol.setCellFactory(CheckBoxTreeTableCell.forTreeTableColumn(adminCol));
         adminCol.setCellValueFactory(param -> {
                 return new SimpleBooleanProperty(param.getValue().getValue().admin);
         });
-
+*/
 
 
         userCol.setCellFactory((TreeTableColumn<UserInfo, String> param) -> new GenericEditableTreeTableCell<>(
@@ -133,9 +133,23 @@ public class UserManagementController implements Initializable {
                 }
             }
         });
-
+/*
         adminCol.setCellFactory((TreeTableColumn<UserInfo, JFXCheckBox> param) -> new CheckBoxTreeTableCell<>(
                 new JFXCheckBox()));
+*/
+
+
+        TreeTableColumn<UserInfo,Boolean> columnWeight=new TreeTableColumn<>("Admin");
+        // case TreeTableColumn (uncomment to run)
+        columnWeight.setCellFactory(CheckBoxTreeTableCell.forTreeTableColumn(columnWeight));
+
+        // case Callback:
+        columnWeight.setCellFactory(
+                CheckBoxTreeTableCell.forTreeTableColumn(
+                        (Integer param) -> data.get(param).getAdmin()));
+
+        columnWeight.setCellValueFactory(cellData -> cellData.getValue().getValue().getAdmin());
+        columnWeight.setPrefWidth(150);
 
 
         ObservableList<UserInfo> users = FXCollections.observableArrayList();
@@ -148,7 +162,7 @@ public class UserManagementController implements Initializable {
         JFXTreeTableView<UserInfo> userTable = new JFXTreeTableView(root);
         userTable.setShowRoot(false);
         userTable.setEditable(true);
-        userTable.getColumns().setAll(userCol, adminCol);
+        userTable.getColumns().setAll(userCol, columnWeight);
 
         userTableVBox.getChildren().add(userTable);
 
@@ -197,6 +211,10 @@ public class UserManagementController implements Initializable {
             this.delete = new JFXButton("");
             this.admin = new SimpleBooleanProperty(isAdmin);
 
+        }
+
+        BooleanProperty getAdmin(){
+            return admin;
         }
     }
 }
