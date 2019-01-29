@@ -5,28 +5,23 @@ import com.jfoenix.controls.JFXChipView;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.gui.list.ElementListView;
 import fr.ensicaen.ecole.oasmr.app.beans.GroupBean;
-import fr.ensicaen.ecole.oasmr.app.view.DataModel;
+import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetAllTags;
-import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNodes;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.*;
 
 public class NodeListController extends View {
 
@@ -42,7 +37,7 @@ public class NodeListController extends View {
     @FXML
     VBox vboxList;
 
-    private DataModel model;
+    private NodesModel nodesModel;
     private RequestManager requestManager;
     private MainController mainController;
 
@@ -50,24 +45,23 @@ public class NodeListController extends View {
         super("NodeList");
     }
 
-    public ElementListView<GroupBean, NodeBean> generateListView() {
-        GroupBean g = model.getCurrentGroupBean();
-        ElementListView<GroupBean, NodeBean> list = new ElementListView<>(g, g.getNodes());
+    public ElementListView<NodeBean> generateListView() {
+        ElementListView<NodeBean> list = new ElementListView<>(nodesModel.getAllNodeBeans());
         list.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 ObservableList<NodeBean> l = list.getSelectionModel().getSelectedItems();
-                model.getCurrentNodeBeans().clear();
+                nodesModel.getCurrentNodeBeans().clear();
                 for (NodeBean node : l) {
-                    model.addCurrentNodes(node);
+                    nodesModel.addCurrentNodes(node);
                 }
             }
         });
         return list;
     }
 
-    public void setDataModel(DataModel dataModel) {
-        this.model = dataModel;
+    public void setDataModel(NodesModel nodesModel) {
+        this.nodesModel = nodesModel;
     }
 
     public void setMainController(MainController mainController) {
@@ -90,7 +84,7 @@ public class NodeListController extends View {
 
     @Override
     public void onStart() {
-        ElementListView<GroupBean, NodeBean> list = generateListView();
+        ElementListView<NodeBean> list = generateListView();
         vboxList.getChildren().clear();
         vboxList.getChildren().add(list);
 

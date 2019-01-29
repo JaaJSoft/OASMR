@@ -1,19 +1,16 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.controls.JFXTabPane;
-import fr.ensicaen.ecole.oasmr.app.view.DataModel;
+import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+
 
 public class GroupViewController extends View {
 
@@ -35,7 +32,7 @@ public class GroupViewController extends View {
     @FXML
     AnchorPane bottomPane;
 
-    private DataModel model;
+    private NodesModel nodesModel;
     private RequestManager requestManager;
 
     public GroupViewController() throws IOException {
@@ -43,17 +40,13 @@ public class GroupViewController extends View {
         onCreate();
     }
 
-    public void setDataModel(DataModel dataModel) {
-        model = dataModel;
-    }
-
-    public void setRequestManager(RequestManager rm) {
-        requestManager = rm;
+    public void setDataModel(NodesModel nodesModel) {
+        nodesModel = nodesModel;
     }
 
     private void updateNodesInfo(){
         nodeName.setText("Group : ");
-        for(NodeBean node : model.getCurrentNodeBeans()) {
+        for(NodeBean node : nodesModel.getCurrentNodeBeans()) {
             nodeName.setText(nodeName.getText() + node.toString() + " ");
         }
     }
