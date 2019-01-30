@@ -19,6 +19,7 @@ import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
+import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionServerRunnableNotEnded;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.UserList;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeFlyweightFactory;
 import fr.ensicaen.ecole.oasmr.supervisor.node.ServerRunnableHeartBeatsHandler;
@@ -61,6 +62,11 @@ public class Supervisor {
         System.out.println("Done !");
         ThreadServerHeartBeatsHandler.join();
         ThreadServerRequestHandler.join();
+    }
+
+    public void stop() throws ExceptionServerRunnableNotEnded {
+        serverHeartBeatsHandler.stop();
+        serverRequestHandler.stop();
     }
 
     public NodeFlyweightFactory getNodeFlyweightFactory() {
