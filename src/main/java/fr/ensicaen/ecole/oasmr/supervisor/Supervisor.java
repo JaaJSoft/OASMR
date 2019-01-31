@@ -15,6 +15,7 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor;
 
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
@@ -25,18 +26,19 @@ import fr.ensicaen.ecole.oasmr.supervisor.node.NodeFlyweightFactory;
 import fr.ensicaen.ecole.oasmr.supervisor.node.ServerRunnableHeartBeatsHandler;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Supervisor {
-    private NodeFlyweightFactory nodeFlyweightFactory;
+    private NodeFlyweightFactory nodeFlyweightFactory = new NodeFlyweightFactory();
     private Server serverHeartBeatsHandler;
     private Server serverRequestHandler;
-    private UserList userList;
+    private UserList userList = new UserList();
+    private Set<Class<? extends Command>> commands = new HashSet<>();
 
     public Supervisor(int portHeartBeats, int portRequests) throws IOException, ExceptionPortInvalid {
         serverHeartBeatsHandler = new Server(portHeartBeats, new ServerRunnableHeartBeatsHandler(this));
         serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler("Request", this));
-        this.nodeFlyweightFactory = new NodeFlyweightFactory();
-        this.userList = new UserList();
     }
 
     public void start() throws InterruptedException {
@@ -75,5 +77,13 @@ public class Supervisor {
 
     public UserList getUserList() {
         return userList;
+    }
+
+    public Set<Class<? extends Command>> getCommands() {
+        return commands;
+    }
+
+    public void addCommand(Class<? extends Command> klazz) {
+        commands.add(klazz);
     }
 }
