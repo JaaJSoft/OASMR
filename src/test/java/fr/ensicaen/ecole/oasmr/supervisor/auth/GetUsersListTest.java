@@ -2,7 +2,7 @@ package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAddUser;
-import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestGetUsersList;
+import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestGetLoginList;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +22,7 @@ public class GetUsersListTest {
     @Test
     public void deleteUser() throws Exception{
         User u = new User("Jooj","ah");
-        RequestGetUsersList r = new RequestGetUsersList();
+        RequestGetLoginList r = new RequestGetLoginList();
         List<String> l1 = (List<String>) r.execute(s);
         List<String> l2 = new ArrayList<>();
         l2.add("JOOJ");

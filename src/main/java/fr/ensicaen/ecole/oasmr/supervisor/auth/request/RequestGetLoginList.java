@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestGetUsersList extends Request {
-    public RequestGetUsersList() {
+public class RequestGetLoginList extends Request {
+    public RequestGetLoginList() {
     }
 
     @Override

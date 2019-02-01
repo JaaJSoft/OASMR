@@ -20,7 +20,7 @@
     <stylesheets>
         <URL value="@css/style.css"/>
     </stylesheets>
-    <JFXButton fx:id="return" onAction="#applyChanges" ripplerFill="#e8dcdc" text="Return to app">
+    <JFXButton fx:id="returnPrev" onAction="#returnAction" ripplerFill="#e8dcdc" text="Return to app">
         <VBox.margin>
             <Insets top="20" />
         </VBox.margin>
@@ -44,7 +44,7 @@
                     <Insets right="20" />
                 </HBox.margin>
             </JFXButton>
-            <JFXButton fx:id="addUser" onAction="#applyChanges" ripplerFill="#e8dcdc" text="Add a new user">
+            <JFXButton fx:id="addUser" onAction="#addUser" ripplerFill="#e8dcdc" text="Add a new user">
                 <VBox.margin>
                     <Insets top="20"/>
                 </VBox.margin>

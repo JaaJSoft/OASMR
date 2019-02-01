@@ -1,28 +1,28 @@
 package fr.ensicaen.ecole.oasmr.supervisor.auth.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
-import fr.ensicaen.ecole.oasmr.supervisor.auth.User;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
 
-public class RequestModifyUserLogin extends Request {
+public class RequestSetAdmin extends Request {
     private final String login;
-    private final String newLogin;
+    private final boolean admin;
 
-    public RequestModifyUserLogin(String login, String newLogin) {
+    public RequestSetAdmin(String login, boolean admin){
         this.login = login;
-        this.newLogin = newLogin;
+        this.admin = admin;
     }
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        supervisor.getUserList().modifyUserLogin(login, newLogin);
+        supervisor.getUserList().getUser(login).setAdmin(admin);
         return 0;
     }
 
     @Override
     public String toString() {
-        return login + " RequestModifyUserLogin " + newLogin;
+        return login + " RequestSetAdmin " + admin;
     }
 }
+//to test
