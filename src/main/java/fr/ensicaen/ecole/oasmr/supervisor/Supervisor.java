@@ -34,7 +34,8 @@ public class Supervisor {
     private Server serverHeartBeatsHandler;
     private Server serverRequestHandler;
     private UserList userList = new UserList();
-    private Set<Class<? extends Command>> commands = new HashSet<>();
+
+    private CommandFinder finder;
 
     public Supervisor(int portHeartBeats, int portRequests) throws IOException, ExceptionPortInvalid {
         serverHeartBeatsHandler = new Server(portHeartBeats, new ServerRunnableHeartBeatsHandler(this));
@@ -79,11 +80,7 @@ public class Supervisor {
         return userList;
     }
 
-    public Set<Class<? extends Command>> getCommands() {
-        return commands;
-    }
-
-    public void addCommand(Class<? extends Command> klazz) {
-        commands.add(klazz);
+    public CommandFinder getCommandFinder() {
+        return finder;
     }
 }

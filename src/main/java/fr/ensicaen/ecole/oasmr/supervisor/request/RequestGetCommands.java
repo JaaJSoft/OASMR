@@ -10,7 +10,7 @@ public class RequestGetCommands extends Request {
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception { //TODO FIX THAT SHIT
-        return (Serializable) supervisor.getCommands();
+        return (Serializable) supervisor.getCommandFinder().getCommands();
     }
 
     @Override
