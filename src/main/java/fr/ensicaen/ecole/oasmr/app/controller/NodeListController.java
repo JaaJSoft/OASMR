@@ -63,7 +63,8 @@ public class NodeListController extends View {
     @Override
     public void onCreate() {
         try {
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(Config.ip), Config.port);
+            Config config = Config.getInstance();
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), Integer.parseInt(config.getPort()));
         } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
             exceptionPortInvalid.printStackTrace();
         }

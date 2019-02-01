@@ -93,9 +93,9 @@ public class LoginController extends View implements Initializable {
     public void connect(ActionEvent actionEvent) throws UnknownHostException, ExceptionPortInvalid {
         if (checkInput()) {
             loginError.setText("");
-
-            Config.ip = IPServer.getText();
-            Config.port = Integer.parseInt(portNumber.getText());
+            Config config = Config.getInstance();
+            config.setIP(IPServer.getText());
+            config.setPort(Integer.parseInt(portNumber.getText()));
 
             requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(IPServer.getText()), Integer.parseInt(portNumber.getText()));
 

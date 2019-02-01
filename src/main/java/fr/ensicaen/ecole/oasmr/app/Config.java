@@ -22,7 +22,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
-public class Config {
+public final class Config {
     private final static int DEFAULT_PORT = 40404;
     private static String file = "config.properties";
     private Properties properties;

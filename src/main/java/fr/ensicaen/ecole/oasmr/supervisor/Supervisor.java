@@ -35,7 +35,7 @@ public class Supervisor {
     private Server serverRequestHandler;
     private UserList userList = new UserList();
 
-    private CommandFinder finder;
+    private CommandFinder finder = new CommandFinder("commands");
 
     public Supervisor(int portHeartBeats, int portRequests) throws IOException, ExceptionPortInvalid {
         serverHeartBeatsHandler = new Server(portHeartBeats, new ServerRunnableHeartBeatsHandler(this));
