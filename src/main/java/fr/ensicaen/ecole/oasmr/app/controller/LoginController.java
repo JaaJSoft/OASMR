@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
+import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
 import fr.ensicaen.ecole.oasmr.lib.PropertiesFactory;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
@@ -24,7 +25,7 @@ import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable {
+public class LoginController extends View implements Initializable {
 
     private SceneManager sceneManager;
     private RequestManager requestManager;
@@ -47,9 +48,20 @@ public class LoginController implements Initializable {
     @FXML
     JFXTextField portNumber;
 
+    public LoginController(int width, int height) throws IOException {
+        super("Login", width, height);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        loginConnect.setDefaultButton(true);
+        loginConnect.setOnAction(actionEvent -> {
+            try {
+                connect(actionEvent);
+            } catch (UnknownHostException | ExceptionPortInvalid e) {
+                e.printStackTrace(); //TODO print an error on screen
+            }
+        });
         //End of test section
         try {
             p = PropertiesFactory.getProperties();
@@ -98,7 +110,7 @@ public class LoginController implements Initializable {
             try {
                 if ((boolean) requestManager.sendRequest(requestAuthentication)) {
                     try {
-                        sceneManager.setScenes("Main");
+                        sceneManager.setScenes(MainController.class);
                     } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                         exceptionSceneNotFound.printStackTrace();
                     }
@@ -111,5 +123,20 @@ public class LoginController implements Initializable {
             }
 
         }
+    }
+
+    @Override
+    public void onCreate() {
+
+    }
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onStop() {
+
     }
 }

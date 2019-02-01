@@ -1,5 +1,6 @@
 package fr.ensicaen.ecole.oasmr.app.view;
 
+import fr.ensicaen.ecole.oasmr.app.controller.LoginController;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneAlrdeadyExists;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
 
@@ -18,21 +19,16 @@ public class SceneManagerTest extends ApplicationTest {
         sceneManager = SceneManager.getInstance();
     }
 
-    @Test (expected = NullPointerException.class)
-    public void addNonExistingFXML() throws IOException, ExceptionSceneAlrdeadyExists, NullPointerException {
-           sceneManager.addScene("Nothing", 0, 0);
-
-    }
 
     @Test (expected = ExceptionSceneNotFound.class)
     public void getNonExistingScene() throws ExceptionSceneNotFound {
-        sceneManager.getScene("Nothing");
+        sceneManager.getScene(LoginController.class);
     }
 
     @Test (expected = ExceptionSceneAlrdeadyExists.class)
     public void addExistingScene() throws IOException, ExceptionSceneAlrdeadyExists {
-        sceneManager.addScene("Default", 0, 0);
-        sceneManager.addScene("Default", 0, 0);
+        sceneManager.addScene(new LoginController(0, 0));
+        sceneManager.addScene(new LoginController(0, 0));
     }
 
 

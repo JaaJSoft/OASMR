@@ -1,19 +1,18 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.controls.JFXTabPane;
-import fr.ensicaen.ecole.oasmr.app.view.DataModel;
+import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
+import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import java.io.IOException;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class GroupViewController implements Initializable {
+public class GroupViewController extends View {
 
     @FXML
     Text nodeName;
@@ -33,33 +32,21 @@ public class GroupViewController implements Initializable {
     @FXML
     AnchorPane bottomPane;
 
-    private DataModel model;
+    private NodesModel nodesModel;
     private RequestManager requestManager;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
+    public GroupViewController() throws IOException {
+        super("GroupView");
+        onCreate();
     }
 
-    public void setDataModel(DataModel dataModel) {
-        model = dataModel;
-    }
-
-    public void setRequestManager(RequestManager rm) {
-        requestManager = rm;
-    }
-
-    //TODO : fill with good infos
-    public void update(){
-        updateNodesInfo();
-        updateModuleTab();
-        updateNodeTerm();
-        updateRightInfo();
+    public void setDataModel(NodesModel nodesModel) {
+        nodesModel = nodesModel;
     }
 
     private void updateNodesInfo(){
         nodeName.setText("Group : ");
-        for(NodeBean node : model.getCurrentNodeBeans()) {
+        for(NodeBean node : nodesModel.getCurrentNodeBeans()) {
             nodeName.setText(nodeName.getText() + node.toString() + " ");
         }
     }
@@ -76,4 +63,21 @@ public class GroupViewController implements Initializable {
 
     }
 
+    @Override
+    public void onCreate() {
+
+    }
+
+    @Override
+    public void onStart() {
+        updateNodesInfo();
+        updateModuleTab();
+        updateNodeTerm();
+        updateRightInfo();
+    }
+
+    @Override
+    public void onStop() {
+
+    }
 }
