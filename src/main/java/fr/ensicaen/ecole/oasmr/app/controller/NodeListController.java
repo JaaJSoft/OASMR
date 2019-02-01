@@ -1,5 +1,6 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXChipView;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.gui.list.ElementListView;
@@ -9,9 +10,11 @@ import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetAllTags;
+import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNodes;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +29,9 @@ import java.util.*;
 public class NodeListController implements Initializable {
 
     @FXML
+    JFXButton refreshBtn;
+
+    @FXML
     JFXChipView filter;
 
     @FXML
@@ -36,6 +42,7 @@ public class NodeListController implements Initializable {
 
     private DataModel model;
     private RequestManager requestManager;
+    private MainController mainController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -66,6 +73,10 @@ public class NodeListController implements Initializable {
         this.model = dataModel;
     }
 
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
     public void update() {
 
         ElementListView<GroupBean, NodeBean> list = generateListView();
@@ -78,5 +89,10 @@ public class NodeListController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void refreshNodes(ActionEvent actionEvent) throws Exception {
+        mainController.reload();
+        update();
     }
 }

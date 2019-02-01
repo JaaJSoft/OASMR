@@ -10,7 +10,7 @@ public class Main extends Application {
 
         SceneManager sceneManager = SceneManager.getInstance();
         try{
-            sceneManager.addScene("Login", 400, 400);
+            sceneManager.addScene("Login", 400, 450);
             sceneManager.addScene("Main", 1500, 800);
             sceneManager.setScenes("Login");
             sceneManager.show();
