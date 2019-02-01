@@ -15,11 +15,62 @@
 
 package fr.ensicaen.ecole.oasmr.app;
 
+import fr.ensicaen.ecole.oasmr.lib.PropertiesFactory;
+
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Properties;
 
-public class Config { //TODO FIND A CLEANER SOLUTION
-    public static String ip = "127.0.0.1";
+public class Config {
+    private final static int DEFAULT_PORT = 40404;
+    private static String file = "config.properties";
+    private Properties properties;
 
-    public static int port = 40404;
+    private static Config ourInstance = new Config();
+
+    public static Config getInstance() {
+        return ourInstance;
+    }
+
+    private Config() {
+        try {
+            properties = PropertiesFactory.getProperties(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getProperty(String key) {
+        return properties.getProperty(key);
+    }
+
+    public void setProperty(String key, String value) {
+        properties.setProperty(key, value);
+    }
+
+    public String getIP() throws UnknownHostException {
+        return properties.getProperty("ip", "127.0.0.1");
+    }
+
+    public void setIP(String ip) {
+        properties.setProperty("ip", ip);
+    }
+
+    public void setIP(InetAddress ip) {
+        properties.setProperty("ip", ip.toString());
+    }
+
+    public String getPort() {
+        return properties.getProperty("supervisor_port", String.valueOf(DEFAULT_PORT));
+    }
+
+    public void setPort(int port) {
+        properties.setProperty("port", String.valueOf(port));
+    }
+
+    public void setPort(String port) {
+        properties.setProperty("port", port);
+    }
+
 }
