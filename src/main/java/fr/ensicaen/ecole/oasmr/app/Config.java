@@ -22,6 +22,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 public final class Config {
@@ -38,6 +41,7 @@ public final class Config {
     private Config() {
         try {
             properties = PropertiesFactory.getProperties(file);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,13 +51,19 @@ public final class Config {
         return properties.getProperty(key);
     }
 
-    public void setProperty(String key, String value) throws IOException {
+    public synchronized void setProperty(String key, String value) throws IOException {
         setAndStoreProperty(key, value);
-        properties.store(new FileWriter(file), "save");
     }
 
     private void setAndStoreProperty(String key, String value) {
         properties.setProperty(key, value);
+        try {
+            BufferedWriter writer = Files.newBufferedWriter(Paths.get(file));
+            properties.store(writer, "save");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getIP() {
