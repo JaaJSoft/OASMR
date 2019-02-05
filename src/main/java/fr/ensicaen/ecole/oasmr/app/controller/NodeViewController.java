@@ -92,10 +92,10 @@ public class NodeViewController extends View {
         jeej.setOnAction(e -> {
             try {
                 String response = (String) requestManager.sendRequest(
-                    new RequestExecuteCommand(
-                        nodesModel.getCurrentNodeBeans().get(0).getId(),
-                        new CommandEchoString("Test from node")
-                    ));
+                        new RequestExecuteCommand(
+                                nodesModel.getCurrentNodeBeans().get(0).getId(),
+                                new CommandEchoString("Test from node")
+                        ));
                 System.out.println(response);
                 Stage stage = (Stage) mainVBox.getScene().getWindow();
                 JFXDialogLayout layout = new JFXDialogLayout();
@@ -141,7 +141,7 @@ public class NodeViewController extends View {
     public void onCreate() {
         try {
             Config config = Config.getInstance();
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), Integer.parseInt(config.getPort()));
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
         } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
             exceptionPortInvalid.printStackTrace();
         }

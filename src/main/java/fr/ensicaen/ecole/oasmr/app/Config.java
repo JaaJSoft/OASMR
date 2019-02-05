@@ -17,6 +17,8 @@ package fr.ensicaen.ecole.oasmr.app;
 
 import fr.ensicaen.ecole.oasmr.lib.PropertiesFactory;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -45,32 +47,41 @@ public final class Config {
         return properties.getProperty(key);
     }
 
-    public void setProperty(String key, String value) {
+    public void setProperty(String key, String value) throws IOException {
+        setAndStoreProperty(key, value);
+        properties.store(new FileWriter(file), "save");
+    }
+
+    private void setAndStoreProperty(String key, String value) {
         properties.setProperty(key, value);
     }
 
-    public String getIP() throws UnknownHostException {
+    public String getIP() {
         return properties.getProperty("ip", "127.0.0.1");
     }
 
     public void setIP(String ip) {
-        properties.setProperty("ip", ip);
+        setAndStoreProperty("ip", ip);
     }
 
     public void setIP(InetAddress ip) {
-        properties.setProperty("ip", ip.toString());
+        setAndStoreProperty("ip", ip.toString());
     }
 
-    public String getPort() {
+    public String getPortinString() {
         return properties.getProperty("supervisor_port", String.valueOf(DEFAULT_PORT));
     }
 
+    public int getPort() {
+        return Integer.parseInt(properties.getProperty("supervisor_port", String.valueOf(DEFAULT_PORT)));
+    }
+
     public void setPort(int port) {
-        properties.setProperty("port", String.valueOf(port));
+        setAndStoreProperty("port", String.valueOf(port));
     }
 
     public void setPort(String port) {
-        properties.setProperty("port", port);
+        setAndStoreProperty("port", port);
     }
 
 }

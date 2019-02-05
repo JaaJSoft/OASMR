@@ -19,7 +19,7 @@ public class RequestGetCommandsTest {
     @Before
     public void setUp() throws Exception {
         s = new Supervisor(5696, 45757);
-        s.addCommand(CommandEchoString.class);
+        s.getCommandFinder().addCommand(CommandEchoString.class);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class RequestGetCommandsTest {
 
     @Test
     public void executeDuplicate() throws Exception {
-        s.addCommand(CommandEchoString.class);
+        s.getCommandFinder().addCommand(CommandEchoString.class);
         Set<Class<? extends Command>> commands = (Set<Class<? extends Command>>) new RequestGetCommands().execute(s);
         Set<Class<? extends Command>> commands2 = new HashSet<>();
         commands2.add(CommandEchoString.class);
@@ -41,7 +41,7 @@ public class RequestGetCommandsTest {
 
     @Test
     public void executeFalse() throws Exception {
-        s.addCommand(CommandAptAutoRemove.class);
+        s.getCommandFinder().addCommand(CommandAptAutoRemove.class);
         Set<Class<? extends Command>> commands = (Set<Class<? extends Command>>) new RequestGetCommands().execute(s);
         Set<Class<? extends Command>> commands2 = new HashSet<>();
         commands2.add(CommandEchoString.class);

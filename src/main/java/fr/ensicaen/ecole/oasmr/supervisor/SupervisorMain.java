@@ -23,7 +23,6 @@ import java.io.IOException;
 public class SupervisorMain {
 
     public static void main(String[] args) throws IOException, ExceptionPortInvalid, CloneNotSupportedException, InterruptedException {
-        // System.out.println(Arrays.toString(args));
         Supervisor s = new Supervisor(6969, 40404);
         s.getCommandFinder().addCommand(CommandEchoString.class);
         s.start();

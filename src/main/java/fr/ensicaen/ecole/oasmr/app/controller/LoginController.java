@@ -29,7 +29,6 @@ public class LoginController extends View implements Initializable {
 
     private SceneManager sceneManager;
     private RequestManager requestManager;
-    private Properties p;
     @FXML
     Text loginError;
 
@@ -62,12 +61,6 @@ public class LoginController extends View implements Initializable {
                 e.printStackTrace(); //TODO print an error on screen
             }
         });
-        //End of test section
-        try {
-            p = PropertiesFactory.getProperties();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         sceneManager = SceneManager.getInstance();
     }
 
@@ -132,7 +125,9 @@ public class LoginController extends View implements Initializable {
 
     @Override
     public void onStart() {
-
+        Config c = Config.getInstance();
+        IPServer.setText(c.getIP());
+        portNumber.setText(String.valueOf(c.getPort()));
     }
 
     @Override
