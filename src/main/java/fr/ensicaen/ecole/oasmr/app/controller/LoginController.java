@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
+import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
 import fr.ensicaen.ecole.oasmr.lib.PropertiesFactory;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
@@ -25,7 +26,7 @@ import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable {
+public class LoginController extends View implements Initializable {
 
     private SceneManager sceneManager;
     private RequestManager requestManager;
@@ -48,15 +49,20 @@ public class LoginController implements Initializable {
     @FXML
     JFXTextField portNumber;
 
+    public LoginController(int width, int height) throws IOException {
+        super("Login", width, height);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        //End of test section
-        try {
-            p = PropertiesFactory.getProperties();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loginConnect.setDefaultButton(true);
+        loginConnect.setOnAction(actionEvent -> {
+            try {
+                connect(actionEvent);
+            } catch (UnknownHostException | ExceptionPortInvalid e) {
+                e.printStackTrace(); //TODO print an error on screen
+            }
+        });
         sceneManager = SceneManager.getInstance();
     }
 
@@ -85,9 +91,9 @@ public class LoginController implements Initializable {
     public void connect(ActionEvent actionEvent) throws UnknownHostException, ExceptionPortInvalid {
         if (checkInput()) {
             loginError.setText("");
-
-            Config.ip = IPServer.getText();
-            Config.port = Integer.parseInt(portNumber.getText());
+            Config config = Config.getInstance();
+            config.setIP(IPServer.getText());
+            config.setPort(Integer.parseInt(portNumber.getText()));
 
             requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(IPServer.getText()), Integer.parseInt(portNumber.getText()));
 
@@ -105,8 +111,7 @@ public class LoginController implements Initializable {
             try {
                 if ((boolean) requestManager.sendRequest(requestAuthentication)) {
                     try {
-                        sceneManager.setScenes("UserManagement");
-                        Config.userConnected=loginUser.getText();
+                        sceneManager.setScenes(MainController.class);
                     } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                         exceptionSceneNotFound.printStackTrace();
                     }
@@ -119,5 +124,22 @@ public class LoginController implements Initializable {
             }
 
         }
+    }
+
+    @Override
+    public void onCreate() {
+
+    }
+
+    @Override
+    public void onStart() {
+        Config c = Config.getInstance();
+        IPServer.setText(c.getIP());
+        portNumber.setText(String.valueOf(c.getPort()));
+    }
+
+    @Override
+    public void onStop() {
+
     }
 }

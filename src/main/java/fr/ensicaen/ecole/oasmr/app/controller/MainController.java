@@ -1,93 +1,89 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import fr.ensicaen.ecole.oasmr.app.Config;
-import fr.ensicaen.ecole.oasmr.app.beans.GroupBean;
-import fr.ensicaen.ecole.oasmr.app.view.DataModel;
+import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
+import fr.ensicaen.ecole.oasmr.app.view.View;
+import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNodes;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
 
-import javax.xml.crypto.Data;
+import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.net.UnknownHostException;
 
-public class MainController implements Initializable {
+public class MainController extends View {
 
     @FXML
     SplitPane mainPane;
 
     private RequestManager requestManager;
-    private DataModel dataModel;
+    private NodesModel nodesModel;
 
-    private Parent nodeViewNode;
-    private Parent groupViewNode;
-    private Parent defaultViewNode;
+    private NodeListController nodeListView;
+    private NodeViewController nodeView;
+    private GroupViewController groupView;
+    private DefaultController defaultView;
 
-    private NodeListController nodeListController;
-    private NodeViewController nodeViewController;
-    private GroupViewController groupViewController;
 
+    public MainController(int width, int height) throws IOException {
+        super("Main", width, height);
+    }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void onCreate() {
         try {
-            //TODO :
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(Config.ip), Config.port);
-            dataModel = new DataModel(getAllNodes());
-            final FXMLLoader loaderList = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/NodeList.fxml"));
-            final FXMLLoader loaderNode = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/NodeView.fxml"));
-            final FXMLLoader loaderGroup = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/GroupView.fxml"));
-            final FXMLLoader loaderDefault = new FXMLLoader(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/Default.fxml"));
-            nodeViewNode = loaderNode.load();
-            groupViewNode = loaderGroup.load();
-            defaultViewNode = loaderDefault.load();
-            mainPane.getItems().add(0, loaderList.load());
-            mainPane.getItems().add(1, defaultViewNode);
-            nodeListController = loaderList.getController();
-            nodeViewController = loaderNode.getController();
-            groupViewController = loaderGroup.getController();
-            dataModel.getCurrentNodeBeans().addListener((ListChangeListener.Change<? extends NodeBean> c) -> {
-                if (dataModel.getSelectedAmount() > 1) {
-                    groupViewController.update();
-                    mainPane.getItems().set(1, groupViewNode);
-                } else if (dataModel.getSelectedAmount() == 1) {
-                    nodeViewController.update();
-                    mainPane.getItems().set(1, nodeViewNode);
-                } else {
-                    mainPane.getItems().set(1, defaultViewNode);
-                }
-            });
-            nodeListController.setDataModel(dataModel);
-            nodeListController.setMainController(this);
-            nodeViewController.setDataModel(dataModel);
-            groupViewController.setDataModel(dataModel);
-            nodeListController.update();
+            Config config = Config.getInstance();
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+            exceptionPortInvalid.printStackTrace();
+        }
+        try {
+            nodeListView = new NodeListController();
+            nodeView = new NodeViewController();
+            groupView = new GroupViewController();
+            defaultView = new DefaultController();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mainPane.setDividerPositions(0.2);
     }
 
-    private GroupBean getAllNodes() throws Exception {
-        NodeBean[] nodeList = (NodeBean[]) requestManager.sendRequest(new RequestGetNodes());
-        GroupBean g = new GroupBean("All node", 1);
-        for (NodeBean n : nodeList) {
-            g.addNode(n);
+    @Override
+    public void onStart() {
+        try {
+            mainPane.getItems().clear();
+            mainPane.setDividerPositions(0.2);
+            NodeBean[] nodeList = (NodeBean[]) requestManager.sendRequest(new RequestGetNodes());
+            nodesModel = new NodesModel(nodeList);
+            mainPane.getItems().add(0, nodeListView.getRoot());
+            mainPane.getItems().add(1, defaultView.getRoot());
+            nodesModel.getCurrentNodeBeans().addListener((ListChangeListener.Change<? extends NodeBean> c) -> {
+                if (nodesModel.getSelectedAmount() > 1) {
+                    groupView.onStart();
+                    mainPane.getItems().set(1, groupView.getRoot());
+                } else if (nodesModel.getSelectedAmount() == 1) {
+                    nodeView.onStart();
+                    mainPane.getItems().set(1, nodeView.getRoot());
+                } else {
+                    mainPane.getItems().set(1, defaultView.getRoot());
+                }
+            });
+            nodeView.setDataModel(nodesModel);
+            nodeListView.setMainController(this);
+            nodeListView.setDataModel(nodesModel);
+            groupView.setDataModel(nodesModel);
+            nodeListView.onStart();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return g;
     }
 
-    public void reload() throws Exception {
-        dataModel.reset(getAllNodes());
-        nodeListController.update();
-        mainPane.getItems().set(1, defaultViewNode);
+    @Override
+    public void onStop() {
+
     }
 }

@@ -42,7 +42,6 @@ public class ServerRunnableCommandHandler extends ServerRunnable {
         this.commandType = commandType;
         authorizedAddress = new ArrayList<>();
         authorizedCommands = new HashSet<>();
-        System.out.println(Arrays.toString(o));
     }
 
     @Override

@@ -15,6 +15,8 @@
 
 package fr.ensicaen.ecole.oasmr.lib;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -24,6 +26,19 @@ import java.util.Properties;
 import static org.junit.Assert.*;
 
 public class PropertiesFactoryTest {
+    private Properties p;
+
+    @Before
+    public void setUp() throws Exception {
+        p = PropertiesFactory.getProperties("test.properties");
+        p.setProperty("test", "test");
+
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        //new File("test.properties").delete();
+    }
 
     @Test
     public void getPropertiesWithNewFile() throws IOException {
@@ -37,5 +52,17 @@ public class PropertiesFactoryTest {
         Properties p = PropertiesFactory.getProperties("jeej");
         new File("jeej").delete();
     }
+
+    @Test
+    public void getPropertiesDoesNotExist() {
+        assertNull(p.getProperty("jeej"));
+
+    }
+
+    @Test
+    public void getProperties() {
+        assertEquals("test", p.getProperty("test"));
+    }
+
 
 }
