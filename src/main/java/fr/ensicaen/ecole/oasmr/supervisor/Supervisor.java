@@ -63,8 +63,12 @@ public class Supervisor {
         System.out.print("[" + dateUtil.getFormattedDate() + "]-> RequestHandler loading... ");
         ThreadServerRequestHandler.start();
         System.out.println("Done !");
+        System.out.print("[" + dateUtil.getFormattedDate() + "]-> Command finder loading... ");
+        finder.start();
+        System.out.println("Done !");
         ThreadServerHeartBeatsHandler.join();
         ThreadServerRequestHandler.join();
+        finder.join();
     }
 
     public void stop() throws ExceptionServerRunnableNotEnded {

@@ -59,7 +59,7 @@ public final class Config {
         properties.setProperty(key, value);
         try {
             BufferedWriter writer = Files.newBufferedWriter(Paths.get(file));
-            properties.store(writer, "save");
+            properties.store(writer, "configuration file");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
