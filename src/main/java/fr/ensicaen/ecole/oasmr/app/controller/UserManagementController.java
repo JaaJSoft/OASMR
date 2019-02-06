@@ -228,7 +228,6 @@ public class UserManagementController implements Initializable {
             public void handle(ActionEvent event) {
                 final Label message = new Label("");
                 final Stage dialog = new Stage();
-                //HBox hb = new HBox();
                 GridPane grid = new GridPane();
                 grid.setPadding(new Insets(10, 10, 10, 10));
                 grid.setVgap(5);
@@ -240,8 +239,8 @@ public class UserManagementController implements Initializable {
                 Text password = new Text("Enter a password:");
                 GridPane.setConstraints(login,0,0);
                 grid.getChildren().add(login);
-                TextField loginField = new TextField();
-                PasswordField passwordField = new PasswordField();
+                JFXTextField loginField = new JFXTextField();
+                JFXPasswordField passwordField = new JFXPasswordField();
                 GridPane.setConstraints(loginField, 1,0);
                 grid.getChildren().add(loginField);
                 GridPane.setConstraints(password, 0,1);
@@ -252,11 +251,12 @@ public class UserManagementController implements Initializable {
                 dialog.setScene(dialogScene);
                 passwordField.setOnAction((ActionEvent e) -> {
                         if (passwordField.getText().trim().equals("")) {
-                            message.setText("New password is incorrect!");
+                            message.setText("You have to set a password");
+                            message.setTextFill(Color.rgb(210, 39, 30));
+                        } else if (loginField.getText().trim().equals("")) {
+                            message.setText("You have to set a login");
                             message.setTextFill(Color.rgb(210, 39, 30));
                         } else {
-                            //message.setText("Your password has been changed");
-                            //message.setTextFill(Color.rgb(21, 117, 84));
                             try {
                                 RequestAddUser addRequest = new RequestAddUser(loginField.getText(), passwordField.getText());
                                 requestManager.sendRequest(addRequest);
@@ -268,12 +268,13 @@ public class UserManagementController implements Initializable {
                 });
 
 
-                //hb.getChildren().addAll(newPasswordField, oldPasswordField);
-                dialogVbox.getChildren().addAll(message, /*hb,*/ grid);
+                dialogVbox.getChildren().addAll(message, grid);
                 dialog.show();
             }
         };
     }
+
+
 
 
     public void returnAction(ActionEvent actionEvent) {

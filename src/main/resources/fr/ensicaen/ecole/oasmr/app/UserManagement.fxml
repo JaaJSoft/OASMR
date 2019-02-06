@@ -21,12 +21,6 @@
         <URL value="@css/style.css"/>
     </stylesheets>
     <JFXButton fx:id="returnPrev" onAction="#returnAction" ripplerFill="#e8dcdc" text="Return to app">
-        <VBox.margin>
-            <Insets top="20" />
-        </VBox.margin>
-        <HBox.margin>
-            <Insets left="20" />
-        </HBox.margin>
     </JFXButton>
     <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
           prefHeight="200.0" prefWidth="300.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
