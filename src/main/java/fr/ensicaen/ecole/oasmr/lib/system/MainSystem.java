@@ -1,7 +1,5 @@
 package fr.ensicaen.ecole.oasmr.lib.system;
-/*
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.software.os.*;
@@ -301,4 +299,3 @@ public class MainSystem {
     }
 
 }
-*/
