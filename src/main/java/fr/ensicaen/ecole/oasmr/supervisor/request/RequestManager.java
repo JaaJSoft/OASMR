@@ -69,7 +69,7 @@ public class RequestManager {
         throw new ExceptionRequestError();
     }
 
-    public Future<? extends Serializable> aSyncSendRequest(Request r) {
+    public Future<? extends Serializable> aSyncSendRequest(Command r) {
         return executorService.submit(() -> sendRequest(r));
     }
 

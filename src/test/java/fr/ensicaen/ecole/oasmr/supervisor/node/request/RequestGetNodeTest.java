@@ -16,7 +16,7 @@
 package fr.ensicaen.ecole.oasmr.supervisor.node.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.exception.ExceptionNodeNotFound;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
 import org.junit.Before;
@@ -42,13 +42,13 @@ public class RequestGetNodeTest {
 
     @Test
     public void executeGetNode() throws Exception {
-        NodeBean n = (NodeBean) new RequestGetNode(node1.getId()).execute(s);
+        NodeData n = (NodeData) new RequestGetNode(node1.getId()).execute(s);
         assertEquals(node1.getData(), n);
     }
 
     @Test(expected = ExceptionNodeNotFound.class)
     public void executeGetNodeNotFound() throws Exception {
-        NodeBean n = (NodeBean) new RequestGetNode(5647474).execute(s);
+        NodeData n = (NodeData) new RequestGetNode(5647474).execute(s);
     }
 
 }

@@ -17,13 +17,12 @@ package fr.ensicaen.ecole.oasmr.supervisor.node.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -40,20 +39,20 @@ public class RequestGetNodesTest {
 
     @Test
     public void executeTestGetNodes() {
-        NodeBean[] nodes= (NodeBean[]) new RequestGetNodes().execute(s);
+        NodeData[] nodes= (NodeData[]) new RequestGetNodes().execute(s);
         assertEquals(3, nodes.length);
     }
 
     @Test
     public void executeTestGetNodesWithAddExistingNode() throws UnknownHostException {
         s.getNodeFlyweightFactory().getNode(InetAddress.getByName("192.169.9.3"), 56674);
-        NodeBean[] nodes= (NodeBean[]) new RequestGetNodes().execute(s);
+        NodeData[] nodes= (NodeData[]) new RequestGetNodes().execute(s);
         assertEquals(3, nodes.length);
     }
     @Test
     public void executeTestGetNodesWithAddNewNode() throws UnknownHostException {
         s.getNodeFlyweightFactory().getNode(InetAddress.getByName("192.169.9.5"), 56674);
-        NodeBean[] nodes= (NodeBean[]) new RequestGetNodes().execute(s);
+        NodeData[] nodes= (NodeData[]) new RequestGetNodes().execute(s);
         assertEquals(4, nodes.length);
     }
 }
