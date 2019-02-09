@@ -16,6 +16,7 @@
 package fr.ensicaen.ecole.oasmr.supervisor.node;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr.lib.command.CommandsHist;
 
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -24,11 +25,15 @@ import java.util.Set;
 
 public abstract class Node implements Comparable, Serializable {
 
-    protected final NodeBean data;
+    protected final NodeData data;
 
-    protected Node(NodeBean data) {
+    private final CommandsHist hist;
+
+    protected Node(NodeData data) {
         this.data = data;
+        hist = new CommandsHist();
     }
+
 
     @Override
     public int compareTo(Object o) {
@@ -51,7 +56,12 @@ public abstract class Node implements Comparable, Serializable {
         return data.getId();
     }
 
-    public abstract Serializable executeCommand(Command c) throws Exception;
+    public final Serializable executeCommand(Command c) throws Exception {
+
+        return execute(c);
+    }
+
+    protected abstract Serializable execute(Command c) throws Exception;
 
     public Integer getId() {
         return data.getId();
@@ -98,7 +108,7 @@ public abstract class Node implements Comparable, Serializable {
         data.addTags(s);
     }
 
-    public NodeBean getData() {
+    public NodeData getData() {
         return data;
     }
 }

@@ -42,7 +42,7 @@ public class Heart {
         final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         scheduleAtFixedRateHeartBeat = executor.scheduleAtFixedRate(() -> {
             try {
-                heartbeat.execute(params);
+                heartbeat.executeCommand(params);
             } catch (Exception e) {
                 e.printStackTrace();
             }

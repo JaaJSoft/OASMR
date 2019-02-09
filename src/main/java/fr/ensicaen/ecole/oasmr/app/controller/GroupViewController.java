@@ -3,7 +3,7 @@ package fr.ensicaen.ecole.oasmr.app.controller;
 import com.jfoenix.controls.JFXTabPane;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -46,7 +46,7 @@ public class GroupViewController extends View {
 
     private void updateNodesInfo(){
         nodeName.setText("Group : ");
-        for(NodeBean node : nodesModel.getCurrentNodeBeans()) {
+        for(NodeData node : nodesModel.getCurrentNodeData()) {
             nodeName.setText(nodeName.getText() + node.toString() + " ");
         }
     }

@@ -15,7 +15,7 @@
 
 package fr.ensicaen.ecole.oasmr.cli;
 
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNode;
 import picocli.CommandLine;
 
@@ -42,7 +42,7 @@ public class NodeCli implements Callable {
             return null;
         }
 
-        NodeBean n = (NodeBean) main.r.sendRequest(new RequestGetNode(idNode));
+        NodeData n = (NodeData) main.r.sendRequest(new RequestGetNode(idNode));
         System.out.println(n);
         return n;
     }

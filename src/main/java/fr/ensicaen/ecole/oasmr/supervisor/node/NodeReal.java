@@ -32,7 +32,7 @@ public class NodeReal extends Node {
     private InetAddress supervisorAddress;
     private int supervisorPort;
 
-    NodeReal(NodeBean data, InetAddress supervisorAddress, int supervisorPort) throws IOException, ExceptionPortInvalid {
+    NodeReal(NodeData data, InetAddress supervisorAddress, int supervisorPort) throws IOException, ExceptionPortInvalid {
         super(data);
         this.supervisorAddress = supervisorAddress;
         this.supervisorPort = supervisorPort;
@@ -47,7 +47,7 @@ public class NodeReal extends Node {
     }
 
     @Override
-    public Serializable executeCommand(Command c) throws Exception {
-        return c.execute(this);
+    protected Serializable execute(Command c) throws Exception {
+        return c.executeCommand(this);
     }
 }

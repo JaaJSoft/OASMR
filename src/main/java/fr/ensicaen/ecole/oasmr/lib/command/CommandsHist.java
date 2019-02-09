@@ -13,33 +13,21 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node;
+package fr.ensicaen.ecole.oasmr.lib.command;
 
-import java.io.Serializable;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class Tag implements Serializable {
-    private String name;
+public class CommandsHist {
 
-    public Tag(String name) {
-        this.name = name;
+    private List<Command> commands = new ArrayList<>();
+
+    public void addCommand(Command c) {
+        commands.add(c);
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tag tag = (Tag) o;
-        return Objects.equals(name, tag.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
+    public Collection<Command> getCommands() {
+        return commands;
     }
 }

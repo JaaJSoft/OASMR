@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-public class NodeBean implements Comparable, Serializable {
+public class NodeData implements Comparable, Serializable {
     private final Integer id;
     private String name;
     private LocalDate lastHeartBeat;
@@ -32,14 +32,15 @@ public class NodeBean implements Comparable, Serializable {
     private int sshPort = 22;
     private final Set<Tag> tags = new HashSet<>();
 
-    public NodeBean(Integer id, String name, InetAddress nodeAddress, int port) {
+    public NodeData(Integer id, String name, InetAddress nodeAddress, int port) {
         this.id = id;
         this.name = name;
         this.nodeAddress = nodeAddress;
         this.port = port;
+        tags.add(new Tag("ALL"));
     }
 
-    public NodeBean(Integer id, String name, InetAddress nodeAddress, int port, String sshLogin, int sshPort) {
+    public NodeData(Integer id, String name, InetAddress nodeAddress, int port, String sshLogin, int sshPort) {
         this.id = id;
         this.name = name;
         this.nodeAddress = nodeAddress;
@@ -50,8 +51,8 @@ public class NodeBean implements Comparable, Serializable {
 
     @Override
     public int compareTo(Object o) {
-        if (o instanceof NodeBean) {
-            return id.compareTo(((NodeBean) o).getId());
+        if (o instanceof NodeData) {
+            return id.compareTo(((NodeData) o).getId());
         }
         return 1;
     }
@@ -60,7 +61,7 @@ public class NodeBean implements Comparable, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        NodeBean node = (NodeBean) o;
+        NodeData node = (NodeData) o;
         return id.equals(node.id);
     }
 

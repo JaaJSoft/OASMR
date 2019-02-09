@@ -13,33 +13,26 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node;
+package fr.ensicaen.ecole.oasmr.app;
 
-import java.io.Serializable;
-import java.util.Objects;
+import java.util.Properties;
 
-public class Tag implements Serializable {
-    private String name;
+public class Session {
+    private static Properties session = new Properties();
 
-    public Tag(String name) {
-        this.name = name;
+    private Session() {
+
     }
 
-    @Override
-    public String toString() {
-        return name;
+    public static String getProperty(String key) {
+        return session.getProperty(key);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tag tag = (Tag) o;
-        return Objects.equals(name, tag.name);
+    public static String getProperty(String key, String defaultValue) {
+        return session.getProperty(key, defaultValue);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
+    public static void setProperty(String key, String value) {
+        session.setProperty(key, value);
     }
 }

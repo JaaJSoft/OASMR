@@ -14,7 +14,7 @@ import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
@@ -72,8 +72,8 @@ public class NodeViewController extends View {
 
 
     private void updateNodeInfo() {
-        nodeName.setText(nodesModel.getCurrentNodeBeans().get(0).getName());
-        nodeId.setText(String.valueOf(nodesModel.getCurrentNodeBeans().get(0).getId()));
+        nodeName.setText(nodesModel.getCurrentNodeData().get(0).getName());
+        nodeId.setText(String.valueOf(nodesModel.getCurrentNodeData().get(0).getId()));
     }
 
 
@@ -93,7 +93,7 @@ public class NodeViewController extends View {
             try {
                 String response = (String) requestManager.sendRequest(
                         new RequestExecuteCommand(
-                                nodesModel.getCurrentNodeBeans().get(0).getId(),
+                                nodesModel.getCurrentNodeData().get(0).getId(),
                                 new CommandEchoString("Test from node")
                         ));
                 System.out.println(response);
@@ -119,7 +119,7 @@ public class NodeViewController extends View {
 
     private void updateNodeTerm() {
         bottomPane.getTabs().clear();
-        NodeBean n = nodesModel.getCurrentNodeBeans().get(0);
+        NodeData n = nodesModel.getCurrentNodeData().get(0);
 
         TerminalTab terminal = terminalBuilder.newTerminal();
         Terminal term = terminal.getTerminal();

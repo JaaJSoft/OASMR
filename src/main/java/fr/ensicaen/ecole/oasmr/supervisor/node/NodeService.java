@@ -42,7 +42,7 @@ public class NodeService {
         util.sendSerializable(c.getSocket(), commandPort);
         int id = (int) util.receiveSerializable(c.getSocket());
         c.disconnect();
-        return new NodeReal(new NodeBean(id, localAddress + ":" + commandPort, localAddress, commandPort), supervisorAddress, port);
+        return new NodeReal(new NodeData(id, localAddress + ":" + commandPort, localAddress, commandPort), supervisorAddress, port);
     }
 
 }

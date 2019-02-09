@@ -19,7 +19,7 @@ public class GroupedCommand extends Command {
     public Serializable execute(Object... params) throws Exception {
         ArrayList<Serializable> requestArrayList = new ArrayList<>();
         for (Command r : commands) {
-            requestArrayList.add(r.execute(params));//TODO do it in parallel
+            requestArrayList.add(r.executeCommand(params));//TODO do it in parallel
         }
         return requestArrayList.toArray(new Serializable[commands.length]);
     }

@@ -4,7 +4,7 @@ import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNodes;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
@@ -57,11 +57,11 @@ public class MainController extends View {
         try {
             mainPane.getItems().clear();
             mainPane.setDividerPositions(0.2);
-            NodeBean[] nodeList = (NodeBean[]) requestManager.sendRequest(new RequestGetNodes());
+            NodeData[] nodeList = (NodeData[]) requestManager.sendRequest(new RequestGetNodes());
             nodesModel = new NodesModel(nodeList);
             mainPane.getItems().add(0, nodeListView.getRoot());
             mainPane.getItems().add(1, defaultView.getRoot());
-            nodesModel.getCurrentNodeBeans().addListener((ListChangeListener.Change<? extends NodeBean> c) -> {
+            nodesModel.getCurrentNodeData().addListener((ListChangeListener.Change<? extends NodeData> c) -> {
                 if (nodesModel.getSelectedAmount() > 1) {
                     groupView.onStart();
                     mainPane.getItems().set(1, groupView.getRoot());
