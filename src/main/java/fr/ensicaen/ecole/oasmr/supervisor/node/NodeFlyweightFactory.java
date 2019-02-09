@@ -70,7 +70,7 @@ public class NodeFlyweightFactory {
         return Collections.unmodifiableSet(nodes);
     }
 
-    public final NodeData[] getNodesBean() {
+    public final NodeData[] getNodesData() {
         return nodes.stream().map(Node::getData).toArray(NodeData[]::new);
     }
 }

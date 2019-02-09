@@ -57,7 +57,7 @@ public abstract class Node implements Comparable, Serializable {
     }
 
     public final Serializable executeCommand(Command c) throws Exception {
-
+        hist.addCommand(c);
         return execute(c);
     }
 
@@ -110,5 +110,9 @@ public abstract class Node implements Comparable, Serializable {
 
     public NodeData getData() {
         return data;
+    }
+
+    public CommandsHist getHist() {
+        return hist;
     }
 }

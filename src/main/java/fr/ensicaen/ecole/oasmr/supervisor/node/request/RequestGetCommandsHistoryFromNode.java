@@ -15,20 +15,26 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.node.request;
 
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
 
-public class RequestGetNodes extends Request {
+public class RequestGetCommandsHistoryFromNode extends Request {
+    private final Integer idNode;
+
+    public RequestGetCommandsHistoryFromNode(Integer idNode) {
+        this.idNode = idNode;
+    }
 
     @Override
-    public Serializable execute(Supervisor supervisor) {
-        return supervisor.getNodeFlyweightFactory().getNodesData();
+    public Serializable execute(Supervisor supervisor) throws Exception {
+        return supervisor.getNodeFlyweightFactory().getNode(idNode).getHist().getCommands().toArray(new Command[0]);
     }
 
     @Override
     public String toString() {
-        return "Get Nodes";
+        return null;
     }
 }
