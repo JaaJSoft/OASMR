@@ -1,10 +1,12 @@
 package fr.ensicaen.ecole.oasmr.app.view;
 
+import fr.ensicaen.ecole.oasmr.app.Main;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneAlrdeadyExists;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,6 +24,8 @@ public class SceneManager {
 
     private SceneManager() {
         primaryStage = new Stage();
+        primaryStage.setTitle("OASMR");
+        primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("img/OASMR.png")));
     }
 
     public static SceneManager getInstance() {
@@ -29,9 +33,9 @@ public class SceneManager {
     }
 
     public void addScene(View view) throws IOException, ExceptionSceneAlrdeadyExists {
-        if(views.add(view)){
+        if (views.add(view)) {
             view.onCreate();
-        }else{
+        } else {
             throw new ExceptionSceneAlrdeadyExists();
         }
     }
