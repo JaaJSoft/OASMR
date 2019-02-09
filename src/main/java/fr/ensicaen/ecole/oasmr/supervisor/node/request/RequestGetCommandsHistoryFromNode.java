@@ -35,6 +35,6 @@ public class RequestGetCommandsHistoryFromNode extends Request {
 
     @Override
     public String toString() {
-        return null;
+        return "get command hist";
     }
 }
