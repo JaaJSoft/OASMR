@@ -7,20 +7,20 @@ import oshi.hardware.HardwareAbstractionLayer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-public class CommandGetAvailableRAMTest {
+public class CommandGetUpTimeTest {
 
-    private CommandGetAvailableRAM c;
+    private CommandGetUptime c;
     private HardwareAbstractionLayer hal;
 
     @Before
     public void setUp() {
-        c = new CommandGetAvailableRAM();
+        c = new CommandGetUptime();
         hal = SystemInfoSingleton.getInstance().getHardware();
     }
 
     @Test
     public void execute() throws Exception {
-        assertEquals(hal.getMemory().getAvailable(), c.execute());
+        assertEquals(hal.getProcessor().getSystemUptime(), c.execute());
     }
 
     @Test
@@ -28,6 +28,4 @@ public class CommandGetAvailableRAMTest {
         assertNotEquals(0, c.execute());
     }
 
-
 }
-

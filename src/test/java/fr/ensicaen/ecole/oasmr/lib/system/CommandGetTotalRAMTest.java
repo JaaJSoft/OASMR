@@ -2,7 +2,6 @@ package fr.ensicaen.ecole.oasmr.lib.system;
 
 import org.junit.Before;
 import org.junit.Test;
-import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 
 import static org.junit.Assert.assertEquals;
@@ -26,7 +25,7 @@ public class CommandGetTotalRAMTest {
 
     @Test
     public void executeFailure() throws Exception {
-        assertNotEquals(-2, c.execute());
+        assertNotEquals(0, c.execute());
     }
 
 
