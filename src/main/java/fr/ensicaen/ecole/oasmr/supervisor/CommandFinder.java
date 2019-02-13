@@ -35,6 +35,7 @@ public class CommandFinder extends Thread {
     public CommandFinder(String directory) throws IOException {
         this.directory = directory;
         watchService = FileSystems.getDefault().newWatchService();
+        scanDirectory(new File(directory));
     }
 
     @Override
