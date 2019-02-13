@@ -25,6 +25,6 @@ public class CommandAptListTest {
     @Test(expected = ExceptionAptFailGettingList.class)
     public void execute() throws Exception {
         Command c = new CommandAptList();
-        assertEquals("".getClass().getTypeName(), c.execute().getClass().getTypeName());
+        assertEquals("".getClass().getTypeName(), c.executeCommand().getClass().getTypeName());
     }
 }
