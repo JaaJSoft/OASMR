@@ -43,20 +43,24 @@ public class CommandFinder extends Thread {
         Path p = Paths.get(directory);
         try {
             p.register(watchService,
-                StandardWatchEventKinds.ENTRY_CREATE,
-                StandardWatchEventKinds.ENTRY_DELETE,
-                StandardWatchEventKinds.ENTRY_MODIFY);
+                    StandardWatchEventKinds.ENTRY_CREATE,
+                    StandardWatchEventKinds.ENTRY_DELETE,
+                    StandardWatchEventKinds.ENTRY_MODIFY);
             WatchKey key;
             while ((key = watchService.take()) != null) {
                 //for (WatchEvent<?> event : key.pollEvents()) {
-                    //event.context();
-                    scanDirectory(new File(directory));
+                //event.context();
+                scan();
                 //}
                 key.reset();
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void scan() {
+        scanDirectory(new File(directory));
     }
 
     void scanDirectory(File f) {
