@@ -48,10 +48,10 @@ public class CommandFinder extends Thread {
                 StandardWatchEventKinds.ENTRY_MODIFY);
             WatchKey key;
             while ((key = watchService.take()) != null) {
-                for (WatchEvent<?> event : key.pollEvents()) {
+                //for (WatchEvent<?> event : key.pollEvents()) {
                     //event.context();
                     scanDirectory(new File(directory));
-                }
+                //}
                 key.reset();
             }
         } catch (IOException | InterruptedException e) {
@@ -60,6 +60,8 @@ public class CommandFinder extends Thread {
     }
 
     void scanDirectory(File f) {
+        commands.clear();
+        requests.clear();
         File[] files = f.listFiles();
         if (files != null) {
             for (File subFile : files) {
