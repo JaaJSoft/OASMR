@@ -88,7 +88,7 @@ public class LoginController extends View implements Initializable {
     }
 
     //TODO use Validator
-    public void connect(ActionEvent actionEvent) throws UnknownHostException, ExceptionPortInvalid {
+    private void connect(ActionEvent actionEvent) throws UnknownHostException, ExceptionPortInvalid {
         if (checkInput()) {
             loginError.setText("");
             Config config = Config.getInstance();
@@ -111,7 +111,7 @@ public class LoginController extends View implements Initializable {
             try {
                 if ((boolean) requestManager.sendRequest(requestAuthentication)) {
                     try {
-                        sceneManager.setScenes(MainController.class);
+                        sceneManager.setScenes(UserManagementController.class);
                     } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                         exceptionSceneNotFound.printStackTrace();
                     }
@@ -122,7 +122,6 @@ public class LoginController extends View implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     }
 

@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
-
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Text?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXPasswordField?>
-<?import com.jfoenix.controls.JFXButton?>
 <?import java.net.URL?>
 
-<?import com.jfoenix.controls.JFXTreeTableView?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.121"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="fr.ensicaen.ecole.oasmr.app.controller.UserManagementController"
             prefHeight="400.0" prefWidth="600.0">
     <stylesheets>
         <URL value="@css/style.css"/>
     </stylesheets>
-    <JFXButton fx:id="returnPrev" onAction="#returnAction" ripplerFill="#e8dcdc" text="Return to app">
+    <JFXButton fx:id="returnPrev" ripplerFill="#e8dcdc" text="Return to app">
     </JFXButton>
     <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
           prefHeight="200.0" prefWidth="300.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
@@ -38,7 +29,7 @@
                     <Insets right="20" />
                 </HBox.margin>
             </JFXButton>
-            <JFXButton fx:id="addUser" onAction="#addUser" ripplerFill="#e8dcdc" text="Add a new user">
+            <JFXButton fx:id="addUser" ripplerFill="#e8dcdc" text="Add a new user">
                 <VBox.margin>
                     <Insets top="20"/>
                 </VBox.margin>

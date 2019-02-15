@@ -6,6 +6,7 @@ import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
+import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.User;
@@ -36,14 +37,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class UserManagementController implements Initializable {
+public class UserManagementController extends View implements Initializable{
     private SceneManager sceneManager;
     private RequestManager requestManager;
     private List<String> userList;
@@ -70,16 +73,19 @@ public class UserManagementController implements Initializable {
     @FXML
     VBox userTableVBox;
 
+    public UserManagementController(int width, int height) throws IOException {
+        super("UserManagement", width, height);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        sceneManager = SceneManager.getInstance();
         try {
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(Config.ip), Config.port);
+            Config config = Config.getInstance();
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
         } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
             exceptionPortInvalid.printStackTrace();
         }
-        onLoadTest();
     }
 
 
@@ -93,8 +99,6 @@ public class UserManagementController implements Initializable {
 
     private void onLoadTest() {
 
-
-
         userTableVBox.getChildren().clear();
 
         RequestGetLoginList r = new RequestGetLoginList();
@@ -105,7 +109,14 @@ public class UserManagementController implements Initializable {
             e.printStackTrace();
         }
 
-
+        addUser.setOnAction(addUser(new Stage()));
+        returnPrev.setOnAction(actionEvent -> {
+            try {
+                returnAction(actionEvent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         JFXTreeTableColumn<UserInfo, String> userCol = new JFXTreeTableColumn<>("Login");
         userCol.setPrefWidth(300);
@@ -116,16 +127,6 @@ public class UserManagementController implements Initializable {
                 return userCol.getComputedValue(param);
             }
         });
-
-/*
-        JFXTreeTableColumn<UserInfo, Boolean> adminCol = new JFXTreeTableColumn<>("is Admin");
-        adminCol.setPrefWidth(150);
-        adminCol.setCellFactory(CheckBoxTreeTableCell.forTreeTableColumn(adminCol));
-        adminCol.setCellValueFactory(param -> {
-                return new SimpleBooleanProperty(param.getValue().getValue().admin);
-        });
-*/
-
 
         userCol.setCellFactory((TreeTableColumn<UserInfo, String> param) -> new GenericEditableTreeTableCell<>(
                 new TextFieldEditorBuilder()));
@@ -150,24 +151,6 @@ public class UserManagementController implements Initializable {
         column.setCellFactory(CheckBoxTreeTableCell.forTreeTableColumn(column));
         column.setCellValueFactory(param -> param.getValue().getValue().admin);
 
-/*
-        adminCol.setCellFactory((TreeTableColumn<UserInfo, JFXCheckBox> param) -> new CheckBoxTreeTableCell<>(
-                new JFXCheckBox()));
-
-
-
-        TreeTableColumn<UserInfo,Boolean> columnWeight=new TreeTableColumn<>("Admin");
-        // case TreeTableColumn (uncomment to run)
-        columnWeight.setCellFactory(CheckBoxTreeTableCell.forTreeTableColumn(columnWeight));
-
-        // case Callback:
-        columnWeight.setCellFactory(
-                CheckBoxTreeTableCell.forTreeTableColumn(
-                        (Integer param) -> data.get(param).getAdmin()));
-
-        columnWeight.setCellValueFactory(cellData -> cellData.getValue().getValue().getAdmin());
-        columnWeight.setPrefWidth(150);
-*/
 
         ObservableList<UserInfo> users = FXCollections.observableArrayList();
 
@@ -201,16 +184,6 @@ public class UserManagementController implements Initializable {
 
         userTableVBox.getChildren().add(userTable);
 
-/*
-        JFXButton groupButton = new JFXButton("Group");
-        groupButton.setOnAction((action) -> new Thread(() -> userTable.group(userCol)).start());
-        userTableVBox.getChildren().add(groupButton);
-
-        JFXButton unGroupButton = new JFXButton("unGroup");
-        unGroupButton.setOnAction((action) -> userTable.unGroup(userCol));
-        userTableVBox.getChildren().add(unGroupButton);
-*/
-
         JFXTextField filterField = new JFXTextField();
         userTableVBox.getChildren().add(filterField);
 
@@ -222,18 +195,21 @@ public class UserManagementController implements Initializable {
         userTableVBox.getChildren().add(size);
     }
 
-    public void addUser(ActionEvent actionEvent) {
-        new EventHandler<ActionEvent>() {
+
+
+    private EventHandler<ActionEvent>  addUser(Stage primaryStage) {
+        return new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 final Label message = new Label("");
                 final Stage dialog = new Stage();
+                //dialog.initStyle(new StageStyle());
                 GridPane grid = new GridPane();
                 grid.setPadding(new Insets(10, 10, 10, 10));
                 grid.setVgap(5);
                 grid.setHgap(5);
                 dialog.initModality(Modality.APPLICATION_MODAL);
-                dialog.initOwner(new Stage());
+                dialog.initOwner(primaryStage);
                 VBox dialogVbox = new VBox(20);
                 Text login = new Text("Enter a login:");
                 Text password = new Text("Enter a password:");
@@ -247,44 +223,60 @@ public class UserManagementController implements Initializable {
                 grid.getChildren().add(password);
                 GridPane.setConstraints(passwordField, 1,1);
                 grid.getChildren().add(passwordField);
+                JFXButton addBtn = new JFXButton("Add");
+                GridPane.setConstraints(addBtn, 1,2);
+                grid.getChildren().add(addBtn);
+                addBtn.setOnAction((ActionEvent e) -> addUserFunction(message, loginField, passwordField, dialog));
                 Scene dialogScene = new Scene(dialogVbox, 300, 200);
                 dialog.setScene(dialogScene);
-                passwordField.setOnAction((ActionEvent e) -> {
-                        if (passwordField.getText().trim().equals("")) {
-                            message.setText("You have to set a password");
-                            message.setTextFill(Color.rgb(210, 39, 30));
-                        } else if (loginField.getText().trim().equals("")) {
-                            message.setText("You have to set a login");
-                            message.setTextFill(Color.rgb(210, 39, 30));
-                        } else {
-                            try {
-                                RequestAddUser addRequest = new RequestAddUser(loginField.getText(), passwordField.getText());
-                                requestManager.sendRequest(addRequest);
-                            } catch (Exception e1) {
-                                e1.printStackTrace();
-                            }
-                        }
-
-                });
-
-
+                passwordField.setOnAction((ActionEvent e) -> addUserFunction(message, loginField, passwordField ,dialog));
                 dialogVbox.getChildren().addAll(message, grid);
                 dialog.show();
             }
         };
     }
 
+    private void addUserFunction(Label message, JFXTextField loginField, JFXPasswordField passwordField, Stage dialog) {
+        if (passwordField.getText().trim().equals("")) {
+            message.setText("You have to set a password");
+            message.setTextFill(Color.rgb(210, 39, 30));
+        } else if (loginField.getText().trim().equals("")) {
+            message.setText("You have to set a login");
+            message.setTextFill(Color.rgb(210, 39, 30));
+        } else {
+            try {
+                RequestAddUser addRequest = new RequestAddUser(loginField.getText(), passwordField.getText());
+                requestManager.sendRequest(addRequest);
+                dialog.close();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
 
 
-
-    public void returnAction(ActionEvent actionEvent) {
+    private void returnAction(Object actionEvent) throws Exception{
         try {
-            sceneManager.setScenes("Login"); //TODO: Main.fxml, login is only for test
+            sceneManager.setScenes(LoginController.class); //TODO: Main.fxml, login is only for test
         } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
             exceptionSceneNotFound.printStackTrace();
         }
     }
 
+    @Override
+    public void onCreate() {
+        onLoadTest();
+    }
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onStop() {
+
+    }
 
 
     private static final class UserInfo extends RecursiveTreeObject<UserInfo> {
