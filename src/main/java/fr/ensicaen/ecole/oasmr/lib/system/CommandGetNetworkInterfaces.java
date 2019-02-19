@@ -23,7 +23,7 @@ public class CommandGetNetworkInterfaces extends Command {
             netInfo.put("IPv6", Arrays.toString(net.getIPv6addr()));
             allNetIF.add(netInfo);
         }
-        return allNetIF.toArray();
+        return allNetIF.toArray(new HashMap[allNetIF.size()]);
     }
 
     @Override

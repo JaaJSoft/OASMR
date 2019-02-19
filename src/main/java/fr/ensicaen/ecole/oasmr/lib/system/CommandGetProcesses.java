@@ -30,7 +30,7 @@ public class CommandGetProcesses extends Command {
             procInfo.put("PPID", String.valueOf(p.getParentProcessID()));
             allProcesses.add(procInfo);
         }
-        return allProcesses.toArray();
+        return allProcesses.toArray(new HashMap[allProcesses.size()]);
     }
 
     @Override

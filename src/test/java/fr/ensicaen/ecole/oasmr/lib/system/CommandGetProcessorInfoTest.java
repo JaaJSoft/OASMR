@@ -3,7 +3,6 @@ package fr.ensicaen.ecole.oasmr.lib.system;
 import org.junit.Before;
 import org.junit.Test;
 import oshi.hardware.CentralProcessor;
-import oshi.hardware.HardwareAbstractionLayer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -22,7 +21,7 @@ public class CommandGetProcessorInfoTest {
     @Test
     public void execute() throws Exception {
         int[] cpuInfoFromCommand = (int[]) c.execute();
-        int[] cpuInfo = {
+        int[] cpuInfo = new int[]{
                 processor.getPhysicalPackageCount(),
                 processor.getPhysicalProcessorCount(),
                 processor.getLogicalProcessorCount()
@@ -37,7 +36,7 @@ public class CommandGetProcessorInfoTest {
     public void executeFailure() throws Exception {
         int[] cpuInfoFromCommand = (int[]) c.execute();
         for(int i = 0; i < cpuInfoFromCommand.length; i++){
-            assertEquals(0, cpuInfoFromCommand[i]);
+            assertNotEquals(0, cpuInfoFromCommand[i]);
         }
     }
 
