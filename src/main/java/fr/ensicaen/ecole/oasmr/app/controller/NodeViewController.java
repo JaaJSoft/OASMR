@@ -122,9 +122,8 @@ public class NodeViewController extends View {
         NodeData n = nodesModel.getCurrentNodeData().get(0);
 
         TerminalTab terminal = terminalBuilder.newTerminal();
-        Terminal term = terminal.getTerminal();
-        //terminal.getTerminal().command("ssh -t pierre@127.0.0.1 -p 22 ssh " + n.getSshLogin() + "@" + n.getNodeAddress().toString() + "-p " + n.getSshPort());
-
+        String command = "ssh -t pierre@127.0.0.1 -p 22 ssh " + n.getSshLogin() + "@" + n.getNodeAddress().toString() + "-p " + n.getSshPort();
+        terminal.onTerminalFxReady(() -> terminal.getTerminal().command(command));
         bottomPane.getTabs().add(terminal);
     }
 
