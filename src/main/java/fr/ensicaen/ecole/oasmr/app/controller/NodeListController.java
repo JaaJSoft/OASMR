@@ -17,9 +17,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.VBox;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class NodeListController extends View {
 
@@ -84,7 +89,8 @@ public class NodeListController extends View {
         nodeListView.setItems(nodesModel.getAllNodeData());
         try {
             Tag[] tags = (Tag[]) requestManager.sendRequest(new RequestGetAllTags());
-            filter.getSuggestions().addAll(tags);
+            List<Tag> tagArrayList = Arrays.asList(tags);
+            filter.getSuggestions().addAll(tagArrayList.stream().map(Tag::getName).collect(Collectors.toList()));
         } catch (Exception e) {
             e.printStackTrace();
         }

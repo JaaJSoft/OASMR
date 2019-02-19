@@ -44,9 +44,13 @@ public class MainController extends View {
         }
         try {
             nodeListView = new NodeListController();
+            nodeListView.onCreate();
             nodeView = new NodeViewController();
+            nodeView.onCreate();
             groupView = new GroupViewController();
+            groupView.onCreate();
             defaultView = new DefaultController();
+            defaultView.onCreate();
         } catch (Exception e) {
             e.printStackTrace();
         }

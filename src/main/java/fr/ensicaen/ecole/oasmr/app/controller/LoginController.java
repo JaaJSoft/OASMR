@@ -103,6 +103,7 @@ public class LoginController extends View implements Initializable {
             try {
                 if ((boolean) requestManager.sendRequest(requestAuthentication)) {
                     try {
+
                         sceneManager.setScenes(MainController.class);
                     } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                         exceptionSceneNotFound.printStackTrace();
