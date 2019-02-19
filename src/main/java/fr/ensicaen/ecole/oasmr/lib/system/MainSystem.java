@@ -9,75 +9,50 @@ import oshi.util.Util;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.lang.Thread.sleep;
-
 public class MainSystem {
 
     public static void main(String[] args) {
 
-        try {
+        SystemInfo si = new SystemInfo();
 
-            // Options: ERROR > WARN > INFO > DEBUG > TRACE
+        HardwareAbstractionLayer hal = si.getHardware();
+        OperatingSystem os = si.getOperatingSystem();
 
-            SystemInfo si = new SystemInfo();
+        System.out.println(os);
 
-            HardwareAbstractionLayer hal = si.getHardware();
-            OperatingSystem os = si.getOperatingSystem();
+        printComputerSystem(hal.getComputerSystem());
 
-            System.out.println(os);
+        printProcessor(hal.getProcessor());
 
-            printComputerSystem(hal.getComputerSystem());
-            sleep(10000);
+        printMemory(hal.getMemory());
 
-            printProcessor(hal.getProcessor());
-            sleep(10000);
+        printCpu(hal.getProcessor());
 
-            printMemory(hal.getMemory());
-            sleep(10000);
+        printProcesses(os, hal.getMemory());
 
-            printCpu(hal.getProcessor());
-            sleep(10000);
+        printSensors(hal.getSensors());
 
-            printProcesses(os, hal.getMemory());
-            sleep(10000);
+        printPowerSources(hal.getPowerSources());
 
-            printSensors(hal.getSensors());
-            sleep(10000);
+        printDisks(hal.getDiskStores());
 
-            printPowerSources(hal.getPowerSources());
-            sleep(10000);
+        printFileSystem(os.getFileSystem());
 
-            printDisks(hal.getDiskStores());
-            sleep(10000);
+        printNetworkInterfaces(hal.getNetworkIFs());
 
-            printFileSystem(os.getFileSystem());
-            sleep(10000);
+        printNetworkParameters(os.getNetworkParams());
 
-            printNetworkInterfaces(hal.getNetworkIFs());
-            sleep(10000);
+        // hardware: displays
+        printDisplays(hal.getDisplays());
 
-            printNetworkParameters(os.getNetworkParams());
-            sleep(10000);
+        // hardware: USB devices
+        printUsbDevices(hal.getUsbDevices(true));
 
-            // hardware: displays
-            printDisplays(hal.getDisplays());
-            sleep(10000);
-
-            // hardware: USB devices
-            printUsbDevices(hal.getUsbDevices(true));
-            sleep(10000);
-
-            printSoundCards(hal.getSoundCards());
-            sleep(10000);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        printSoundCards(hal.getSoundCards());
 
     }
 
     private static void printComputerSystem(final ComputerSystem computerSystem) {
-
         System.out.println("manufacturer: " + computerSystem.getManufacturer());
         System.out.println("model: " + computerSystem.getModel());
         System.out.println("serialnumber: " + computerSystem.getSerialNumber());
