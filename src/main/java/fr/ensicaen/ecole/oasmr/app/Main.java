@@ -11,8 +11,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        primaryStage.setTitle("OASMR");
-        primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("img/OASMR.png")));
 
         SceneManager sceneManager = SceneManager.getInstance();
 

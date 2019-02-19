@@ -29,6 +29,8 @@ import java.util.Properties;
 
 public final class Config {
     private final static int DEFAULT_PORT = 40404;
+    private final static int DEFAULT_PORT_SSH = 22;
+
     private static String file = "config.properties";
     private Properties properties;
 
@@ -94,4 +96,19 @@ public final class Config {
         setAndStoreProperty("port", port);
     }
 
+    public int getSSHPort() {
+        return Integer.parseInt(properties.getProperty("ssh_port"));
+    }
+
+    public String getSSHPortInString() {
+        return properties.getProperty("ssh_port", String.valueOf(DEFAULT_PORT_SSH));
+    }
+
+    public void setSSHPort(int ssh_port) {
+        setAndStoreProperty("ssh_port", String.valueOf(ssh_port));
+    }
+
+    public void setSSHPort(String ssh_port) {
+        setAndStoreProperty("ssh_port", ssh_port);
+    }
 }
