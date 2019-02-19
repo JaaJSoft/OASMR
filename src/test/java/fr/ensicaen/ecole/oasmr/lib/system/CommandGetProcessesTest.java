@@ -23,8 +23,8 @@ public class CommandGetProcessesTest {
     @Before
     public void setUp() {
         c = new CommandGetProcesses();
-        os = SystemInfoSingleton.getInstance().getOperatingSystem();
-        mem = SystemInfoSingleton.getInstance().getHardware().getMemory();
+        os = SystemInfoSingleton.getOperatingSystem();
+        mem = SystemInfoSingleton.getHardware().getMemory();
     }
 
     @Test
@@ -48,7 +48,7 @@ public class CommandGetProcessesTest {
     public void executeFailure() throws Exception {
         HashMap[] procsFromCommand = (HashMap[]) c.execute();
         List<OSProcess> procs = Arrays.asList(os.getProcesses(5, OperatingSystem.ProcessSort.CPU));
-        assertNotEquals(procsFromCommand.length, 0);
+        assertNotEquals(0, procsFromCommand.length);
     }
 
 }

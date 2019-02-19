@@ -15,7 +15,7 @@ public class CommandGetUpTimeTest {
     @Before
     public void setUp() {
         c = new CommandGetUptime();
-        hal = SystemInfoSingleton.getInstance().getHardware();
+        hal = SystemInfoSingleton.getHardware();
     }
 
     @Test

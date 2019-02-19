@@ -16,7 +16,7 @@ public class CommandGetProcessorTest {
     @Before
     public void setUp() {
         c = new CommandGetProcessor();
-        hal = SystemInfoSingleton.getInstance().getHardware();
+        hal = SystemInfoSingleton.getHardware();
     }
 
     @Test

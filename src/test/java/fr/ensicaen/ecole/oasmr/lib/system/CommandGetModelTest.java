@@ -15,7 +15,7 @@ public class CommandGetModelTest {
     @Before
     public void setUp() {
         c = new CommandGetModel();
-        hal = SystemInfoSingleton.getInstance().getHardware();
+        hal = SystemInfoSingleton.getHardware();
     }
 
     @Test

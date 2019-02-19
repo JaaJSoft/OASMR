@@ -15,7 +15,7 @@ public class CommandGetCpuLoadTest {
     @Before
     public void setUp() {
         c = new CommandGetCpuLoad();
-        hal = SystemInfoSingleton.getInstance().getHardware();
+        hal = SystemInfoSingleton.getHardware();
     }
 
     @Test

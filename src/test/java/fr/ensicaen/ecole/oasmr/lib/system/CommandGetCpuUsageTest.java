@@ -15,7 +15,7 @@ public class CommandGetCpuUsageTest {
     @Before
     public void setUp() {
         c = new CommandGetCpuUsage();
-        hal = SystemInfoSingleton.getInstance().getHardware();
+        hal = SystemInfoSingleton.getHardware();
     }
 
     @Test
@@ -31,8 +31,8 @@ public class CommandGetCpuUsageTest {
     @Test
     public void executeFailure() throws Exception {
         long[] cpuUsageFromCommand = (long[]) c.execute();
-        for(int i = 0; i < cpuUsageFromCommand.length; i++){
-            assertNotEquals(-1, cpuUsageFromCommand[i]);
+        for (long usage : cpuUsageFromCommand) {
+            assertNotEquals(-1, usage);
         }
     }
 

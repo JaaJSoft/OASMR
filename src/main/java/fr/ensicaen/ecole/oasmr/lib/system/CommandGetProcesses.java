@@ -16,8 +16,8 @@ public class CommandGetProcesses extends Command {
     @Override
     public Serializable execute(Object... params) throws Exception {
         int limit = params.length == 0 ?  5 : (int) params[0];
-        OperatingSystem os = SystemInfoSingleton.getInstance().getOperatingSystem();
-        GlobalMemory mem = SystemInfoSingleton.getInstance().getHardware().getMemory();
+        OperatingSystem os = SystemInfoSingleton.getOperatingSystem();
+        GlobalMemory mem = SystemInfoSingleton.getHardware().getMemory();
         List<OSProcess> procs = Arrays.asList(os.getProcesses(limit, OperatingSystem.ProcessSort.CPU));
         List<HashMap<String, String>> allProcesses = new ArrayList<>();
         for (int i = 0; i < procs.size(); i++) {

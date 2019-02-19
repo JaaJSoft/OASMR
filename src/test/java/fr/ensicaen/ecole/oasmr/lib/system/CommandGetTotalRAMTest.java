@@ -15,7 +15,7 @@ public class CommandGetTotalRAMTest {
     @Before
     public void setUp() {
         c = new CommandGetTotalRAM();
-        hal = SystemInfoSingleton.getInstance().getHardware();
+        hal = SystemInfoSingleton.getHardware();
     }
 
     @Test

@@ -13,7 +13,7 @@ public class CommandGetNetworkInterfaces extends Command {
 
     @Override
     public Serializable execute(Object... params) throws Exception {
-        NetworkIF[] networkInterfaces = SystemInfoSingleton.getInstance().getHardware().getNetworkIFs();
+        NetworkIF[] networkInterfaces = SystemInfoSingleton.getHardware().getNetworkIFs();
         List<HashMap<String, String>> allNetIF = new ArrayList<>();
         for (NetworkIF net : networkInterfaces) {
             HashMap<String, String> netInfo = new HashMap<>();

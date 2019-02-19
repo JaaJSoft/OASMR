@@ -15,7 +15,7 @@ public class CommandGetProcessorInfoTest {
     @Before
     public void setUp() {
         c = new CommandGetProcessorInfo();
-        processor = SystemInfoSingleton.getInstance().getHardware().getProcessor();
+        processor = SystemInfoSingleton.getHardware().getProcessor();
     }
 
     @Test
@@ -35,8 +35,8 @@ public class CommandGetProcessorInfoTest {
     @Test
     public void executeFailure() throws Exception {
         int[] cpuInfoFromCommand = (int[]) c.execute();
-        for(int i = 0; i < cpuInfoFromCommand.length; i++){
-            assertNotEquals(0, cpuInfoFromCommand[i]);
+        for (int info : cpuInfoFromCommand) {
+            assertNotEquals(0, info);
         }
     }
 

@@ -15,7 +15,7 @@ public class CommandGetAvailableRAMTest {
     @Before
     public void setUp() {
         c = new CommandGetAvailableRAM();
-        hal = SystemInfoSingleton.getInstance().getHardware();
+        hal = SystemInfoSingleton.getHardware();
     }
 
     @Test

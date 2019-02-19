@@ -21,7 +21,7 @@ public class CommandGetNetworkInterfacesTest {
     @Before
     public void setUp() {
         c = new CommandGetNetworkInterfaces();
-        networkIFS = SystemInfoSingleton.getInstance().getHardware().getNetworkIFs();
+        networkIFS = SystemInfoSingleton.getHardware().getNetworkIFs();
     }
 
     @Test
