@@ -21,6 +21,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import java.io.Serializable;
 
 public abstract class Request extends Command {
+
     @Override
     public Serializable execute(Object... params) throws Exception {
         return execute((Supervisor) params[0]);

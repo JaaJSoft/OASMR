@@ -15,27 +15,31 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor;
 
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
+import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionServerRunnableNotEnded;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.UserList;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeFlyweightFactory;
 import fr.ensicaen.ecole.oasmr.supervisor.node.ServerRunnableHeartBeatsHandler;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Supervisor {
-    private NodeFlyweightFactory nodeFlyweightFactory;
+    private NodeFlyweightFactory nodeFlyweightFactory = new NodeFlyweightFactory();
     private Server serverHeartBeatsHandler;
     private Server serverRequestHandler;
-    private UserList userList;
+    private UserList userList = new UserList();
+
+    private CommandFinder finder = new CommandFinder("commands");
 
     public Supervisor(int portHeartBeats, int portRequests) throws IOException, ExceptionPortInvalid {
         serverHeartBeatsHandler = new Server(portHeartBeats, new ServerRunnableHeartBeatsHandler(this));
         serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler("Request", this));
-        this.nodeFlyweightFactory = new NodeFlyweightFactory();
-        this.userList = new UserList();
     }
 
     public void start() throws InterruptedException {
@@ -59,8 +63,17 @@ public class Supervisor {
         System.out.print("[" + dateUtil.getFormattedDate() + "]-> RequestHandler loading... ");
         ThreadServerRequestHandler.start();
         System.out.println("Done !");
+        System.out.print("[" + dateUtil.getFormattedDate() + "]-> Command finder loading... ");
+        finder.start();
+        System.out.println("Done !");
         ThreadServerHeartBeatsHandler.join();
         ThreadServerRequestHandler.join();
+        finder.join();
+    }
+
+    public void stop() throws ExceptionServerRunnableNotEnded {
+        serverHeartBeatsHandler.stop();
+        serverRequestHandler.stop();
     }
 
     public NodeFlyweightFactory getNodeFlyweightFactory() {
@@ -69,5 +82,9 @@ public class Supervisor {
 
     public UserList getUserList() {
         return userList;
+    }
+
+    public CommandFinder getCommandFinder() {
+        return finder;
     }
 }

@@ -1,6 +1,6 @@
 package fr.ensicaen.ecole.oasmr.app.beans;
 
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -10,19 +10,19 @@ public class GroupBean {
 
     private String name;
     private int id;
-    private ObservableList<NodeBean> nodeBeanList;
+    private ObservableList<NodeData> nodeDataList;
 
     public GroupBean(String name, int id) {
         this.name = name;
         this.id = id;
-        nodeBeanList = FXCollections.observableArrayList();
+        nodeDataList = FXCollections.observableArrayList();
     }
 
 
-    public GroupBean(String name, int id, List<NodeBean> nodeBeanList) {
+    public GroupBean(String name, int id, List<NodeData> nodeDataList) {
         this.name = name;
         this.id = id;
-        this.nodeBeanList = FXCollections.observableArrayList(nodeBeanList);
+        this.nodeDataList = FXCollections.observableArrayList(nodeDataList);
     }
 
     public int getId() {
@@ -33,12 +33,12 @@ public class GroupBean {
         return name;
     }
 
-    public void addNode(NodeBean nodeBean){
-        nodeBeanList.add(nodeBean);
+    public void addNode(NodeData nodeData){
+        nodeDataList.add(nodeData);
     }
 
-    public ObservableList<NodeBean> getNodes(){
-        return nodeBeanList;
+    public ObservableList<NodeData> getNodes(){
+        return nodeDataList;
     }
 
 }

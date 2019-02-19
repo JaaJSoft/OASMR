@@ -24,20 +24,19 @@ import fr.ensicaen.ecole.oasmr.lib.network.util;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.InetAddress;
 
 public class NodeProxy extends Node {
-    NodeProxy(NodeBean data) {
+    NodeProxy(NodeData data) {
         super(data);
     }
 
+
     @Override
-    public Serializable executeCommand(Command c) throws ExceptionPortInvalid, ExceptionConnectionFailure, ExceptionCannotDisconnect, IOException, ClassNotFoundException {
+    protected Serializable execute(Command c) throws Exception {
         Client client = new Client(this.getNodeAddress(), this.getPort());
         client.connect();
         util.sendSerializable(client.getSocket(), c);
         Serializable s = util.receiveSerializable(client.getSocket());
         client.disconnect();
-        return s;
-    }
+        return s;    }
 }

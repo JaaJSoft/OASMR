@@ -18,3 +18,8 @@
     -fx-background-color: #FF6026;
     -fx-text-fill: white;
 }
+
+.jfx-text-field {
+    -fx-focus-color: #FF6026;
+    -fx-background-color: TRANSPARENT;
+}

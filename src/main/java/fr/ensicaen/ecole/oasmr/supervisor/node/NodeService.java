@@ -30,7 +30,7 @@ public class NodeService {
         InetAddress address = InetAddress.getByName("127.0.0.1");
         int port = 6969;
         InetAddress localhost = InetAddress.getLocalHost();
-        int commandPort = 56789;
+        int commandPort = 56780;
 
         NodeReal localNode = initNode(address, port, localhost, commandPort);
         localNode.start();
@@ -42,7 +42,7 @@ public class NodeService {
         util.sendSerializable(c.getSocket(), commandPort);
         int id = (int) util.receiveSerializable(c.getSocket());
         c.disconnect();
-        return new NodeReal(new NodeBean(id, localAddress + ":" + commandPort, localAddress, commandPort), supervisorAddress, port);
+        return new NodeReal(new NodeData(id, localAddress + ":" + commandPort, localAddress, commandPort), supervisorAddress, port);
     }
 
 }

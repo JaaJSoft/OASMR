@@ -42,7 +42,6 @@ public class ServerRunnableCommandHandler extends ServerRunnable {
         this.commandType = commandType;
         authorizedAddress = new ArrayList<>();
         authorizedCommands = new HashSet<>();
-        System.out.println(Arrays.toString(o));
     }
 
     @Override
@@ -55,7 +54,7 @@ public class ServerRunnableCommandHandler extends ServerRunnable {
             if (!authorizedCommands.contains(command) && !authorizedCommands.isEmpty()) {
                 response = new ExceptionCommandNotAuthorized(command.toString());
             } else {
-                response = command.execute(o);
+                response = command.executeCommand(o);
             }
             util.sendSerializable(clientSocket, response);
             clientSocket.close();

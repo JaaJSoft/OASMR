@@ -71,6 +71,6 @@ task node(type: JavaExec) {
 }
 
 task app(type: JavaExec) {
-    main = 'fr.ensicaen.ecole.oasmr.cli.MainCli' //TODO REPLACE WITH APP MAIN #JULIEN
+    main = 'fr.ensicaen.ecole.oasmr.app.Main' //TODO REPLACE WITH APP MAIN #JULIEN
     classpath 'out/production/classes'
 }

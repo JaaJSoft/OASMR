@@ -1,37 +1,38 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.animation.alert.JFXAlertAnimation;
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXAlert;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXTabPane;
 import com.kodedu.terminalfx.Terminal;
 import com.kodedu.terminalfx.TerminalBuilder;
 import com.kodedu.terminalfx.TerminalTab;
 import com.kodedu.terminalfx.config.TerminalConfig;
 import fr.ensicaen.ecole.oasmr.app.Config;
-import fr.ensicaen.ecole.oasmr.app.view.DataModel;
+import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
+import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.ResourceBundle;
 
-public class NodeViewController implements Initializable {
+public class NodeViewController extends View {
 
     @FXML
     Text nodeName;
@@ -51,44 +52,28 @@ public class NodeViewController implements Initializable {
     @FXML
     JFXTabPane bottomPane;
 
-    private DataModel model;
+    private NodesModel nodesModel;
     private RequestManager requestManager;
     private TerminalBuilder terminalBuilder;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        TerminalConfig darkConfig = new TerminalConfig();
-        darkConfig.setBackgroundColor(Color.rgb(16, 16, 16));
-        darkConfig.setForegroundColor(Color.rgb(240, 240, 240));
-        darkConfig.setCursorColor(Color.rgb(255, 0, 0, 0.5));
-
-        terminalBuilder = new TerminalBuilder(darkConfig);
+    public NodeViewController() throws IOException {
+        super("NodeView");
+        onCreate();
     }
 
-    public void setDataModel(DataModel dataModel) {
-        model = dataModel;
+
+    public void setDataModel(NodesModel nodesModel) {
+        this.nodesModel = nodesModel;
     }
 
     public void setRequestManager(RequestManager rm) {
         requestManager = rm;
     }
 
-    //TODO : fill with good infos
-    public void update() {
-        try {
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(Config.ip), Config.port);
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
-        }
-        updateNodeInfo();
-        updateModuleTab();
-        updateNodeTerm();
-        updateRightInfo();
-    }
 
     private void updateNodeInfo() {
-        nodeName.setText(model.getCurrentNodeBeans().get(0).getName());
-        nodeId.setText(String.valueOf(model.getCurrentNodeBeans().get(0).getId()));
+        nodeName.setText(nodesModel.getCurrentNodeData().get(0).getName());
+        nodeId.setText(String.valueOf(nodesModel.getCurrentNodeData().get(0).getId()));
     }
 
 
@@ -108,7 +93,7 @@ public class NodeViewController implements Initializable {
             try {
                 String response = (String) requestManager.sendRequest(
                         new RequestExecuteCommand(
-                                model.getCurrentNodeBeans().get(0).getId(),
+                                nodesModel.getCurrentNodeData().get(0).getId(),
                                 new CommandEchoString("Test from node")
                         ));
                 System.out.println(response);
@@ -128,17 +113,17 @@ public class NodeViewController implements Initializable {
                 e1.printStackTrace();
             }
         });
+
         t.setContent(jeej);
     }
 
     private void updateNodeTerm() {
         bottomPane.getTabs().clear();
-        NodeBean n = model.getCurrentNodeBeans().get(0);
+        NodeData n = nodesModel.getCurrentNodeData().get(0);
 
         TerminalTab terminal = terminalBuilder.newTerminal();
-        Terminal term = terminal.getTerminal();
-        //terminal.getTerminal().command("ssh -t pierre@127.0.0.1 -p 22 ssh " + n.getSshLogin() + "@" + n.getNodeAddress().toString() + "-p " + n.getSshPort());
-
+        String command = "ssh -t pierre@127.0.0.1 -p 22 ssh " + n.getSshLogin() + "@" + n.getNodeAddress().toString() + "-p " + n.getSshPort();
+        terminal.onTerminalFxReady(() -> terminal.getTerminal().command(command));
         bottomPane.getTabs().add(terminal);
     }
 
@@ -151,4 +136,32 @@ public class NodeViewController implements Initializable {
     }
 
 
+    @Override
+    public void onCreate() {
+        try {
+            Config config = Config.getInstance();
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+            exceptionPortInvalid.printStackTrace();
+        }
+        TerminalConfig darkConfig = new TerminalConfig();
+        darkConfig.setBackgroundColor(Color.rgb(16, 16, 16));
+        darkConfig.setForegroundColor(Color.rgb(240, 240, 240));
+        darkConfig.setCursorColor(Color.rgb(255, 0, 0, 0.5));
+
+        terminalBuilder = new TerminalBuilder(darkConfig);
+    }
+
+    @Override
+    public void onStart() {
+        updateNodeInfo();
+        updateModuleTab();
+        updateNodeTerm();
+        updateRightInfo();
+    }
+
+    @Override
+    public void onStop() {
+
+    }
 }

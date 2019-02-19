@@ -17,14 +17,13 @@ package fr.ensicaen.ecole.oasmr.supervisor.node.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 //TODO OR TAG
 public class RequestGetNodesWithTag extends Request {
@@ -42,7 +41,7 @@ public class RequestGetNodesWithTag extends Request {
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
         return supervisor.getNodeFlyweightFactory().getNodes().parallelStream().map(Node::getData)
-                .filter(n -> n.getTags().containsAll(tags)).toArray(NodeBean[]::new);
+                .filter(n -> n.getTags().containsAll(tags)).toArray(NodeData[]::new);
     }
 
     @Override

@@ -18,8 +18,20 @@ package fr.ensicaen.ecole.oasmr.lib.command;
 import java.io.Serializable;
 
 public abstract class Command implements Serializable {
+    private CommandState state = CommandState.WAITING;
 
-    public abstract Serializable execute(Object... params) throws Exception;
+    public Serializable executeCommand(Object... params) throws Exception {
+        state = CommandState.RUNNING;
+        Serializable response = execute(params);
+        state = CommandState.DONE;
+        return response;
+    }
+
+    protected abstract Serializable execute(Object... params) throws Exception;
 
     public abstract String toString();
+
+    public CommandState getState() {
+        return state;
+    }
 }
