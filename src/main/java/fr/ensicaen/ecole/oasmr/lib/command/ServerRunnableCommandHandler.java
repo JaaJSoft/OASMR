@@ -26,27 +26,24 @@ import java.util.*;
 
 public class ServerRunnableCommandHandler extends ServerRunnable {
     private final Object[] o;
-    private final String commandType;
     private final List<InetAddress> authorizedAddress;
     private final Set<Command> authorizedCommands;
 
-    public ServerRunnableCommandHandler(String commandType, List<InetAddress> authorizedAddress, Set<Command> authorizedCommands, Object... o) {
+    public ServerRunnableCommandHandler(List<InetAddress> authorizedAddress, Set<Command> authorizedCommands, Object... o) {
         this.o = o;
-        this.commandType = commandType;
         this.authorizedAddress = authorizedAddress;
         this.authorizedCommands = authorizedCommands;
     }
 
-    public ServerRunnableCommandHandler(String commandType, Object... o) {
+    public ServerRunnableCommandHandler(Object... o) {
         this.o = o;
-        this.commandType = commandType;
         authorizedAddress = new ArrayList<>();
         authorizedCommands = new HashSet<>();
     }
 
     @Override
     public void run() {
-        System.out.print("[" + dateUtil.getFormattedDate() + "]-> New " + commandType + " from " + clientSocket.getInetAddress() + " : ");
+        System.out.print("[" + dateUtil.getFormattedDate() + "]-> New command from " + clientSocket.getInetAddress() + " : ");
         try {
             Command command = (Command) util.receiveSerializable(clientSocket);
             System.out.println(command);

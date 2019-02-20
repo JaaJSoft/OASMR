@@ -13,26 +13,35 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node.request;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command.event;
 
+import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
-import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.Event;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.net.InetAddress;
+import java.time.LocalDate;
 
-public class RequestGetAllTags extends Request {
+public class EventNewNode extends Event {
+    private InetAddress address;
+    private int port;
+
+    public EventNewNode(InetAddress address, int port) {
+        this.address = address;
+        this.port = port;
+    }
+
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        Set<Node> nodes = supervisor.getNodeFlyweightFactory().getNodes();
-        return nodes.parallelStream().flatMap(e -> e.getTags().stream()).distinct().toArray(Tag[]::new);
+        Node n = supervisor.getNodeFlyweightFactory().getNode(address, port);
+        n.setLastHeartBeat(LocalDate.now());
+        return n.getData();
     }
 
     @Override
     public String toString() {
-        return "Get tags";
+        return "New node " + address + ":" + port;
     }
 }

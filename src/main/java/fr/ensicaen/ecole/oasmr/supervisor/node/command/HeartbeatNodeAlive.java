@@ -16,39 +16,32 @@
 package fr.ensicaen.ecole.oasmr.supervisor.node.command;
 
 import fr.ensicaen.ecole.oasmr.lib.dateUtil;
-import fr.ensicaen.ecole.oasmr.lib.network.Client;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionCannotDisconnect;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.lib.network.util;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.command.CommandNode;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.event.EventHeartBeat;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.time.LocalDate;
 
 public class HeartbeatNodeAlive extends CommandNode {
-    private Client c;
-    private int commandPort;
+    private final InetAddress supervisorAddress;
+    private final int port;
 
-    public HeartbeatNodeAlive(InetAddress supervisorAddress, int port, int commandPort) throws ExceptionPortInvalid {
-        c = new Client(supervisorAddress, port);
-        this.commandPort = commandPort;
+    public HeartbeatNodeAlive(InetAddress supervisorAddress, int port) {
+        this.supervisorAddress = supervisorAddress;
+        this.port = port;
     }
 
-
     @Override
-    public Serializable execute(Node node) {
+    public Serializable execute(Node node) throws Exception {
         try {
-            System.out.println("[" + dateUtil.getFormattedDate() + "]-> New heartbeat to " + c.getIp());
-            c.connect();
-            util.sendSerializable(c.getSocket(), commandPort);
-            int id = (int) util.receiveSerializable(c.getSocket());
-            c.disconnect();
+            RequestManager r = RequestManagerFlyweightFactory.getInstance().getRequestManager(supervisorAddress, port);
+            r.sendRequest(new EventHeartBeat(node.getId()));
             node.setLastHeartBeat(LocalDate.now());
-        } catch (ExceptionConnectionFailure | ExceptionCannotDisconnect | IOException | ClassNotFoundException e) {
+        } catch (ExceptionPortInvalid e) {
             e.printStackTrace();
         }
         return 0;
@@ -56,6 +49,6 @@ public class HeartbeatNodeAlive extends CommandNode {
 
     @Override
     public String toString() {
-        return null;
+        return "HeartBeat";
     }
 }

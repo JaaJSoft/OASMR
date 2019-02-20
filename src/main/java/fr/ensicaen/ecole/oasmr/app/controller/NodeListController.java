@@ -88,6 +88,7 @@ public class NodeListController extends View {
         });
         nodeListView.setItems(nodesModel.getAllNodeData());
         try {
+            filter.getSuggestions().clear();
             Tag[] tags = (Tag[]) requestManager.sendRequest(new RequestGetAllTags());
             List<Tag> tagArrayList = Arrays.asList(tags);
             filter.getSuggestions().addAll(tagArrayList.stream().map(Tag::getName).collect(Collectors.toList()));

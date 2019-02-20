@@ -36,8 +36,8 @@ public class NodeReal extends Node {
         super(data);
         this.supervisorAddress = supervisorAddress;
         this.supervisorPort = supervisorPort;
-        server = new Server(data.getPort(), new ServerRunnableCommandHandler("command", this));
-        heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort, data.getPort()), 5, this);
+        server = new Server(data.getPort(), new ServerRunnableCommandHandler(this));
+        heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort), data.getHeartbeatPeriod(), this);
     }
 
     public void start() throws IOException {
@@ -49,5 +49,10 @@ public class NodeReal extends Node {
     @Override
     protected Serializable execute(Command c) throws Exception {
         return c.executeCommand(this);
+    }
+
+    @Override
+    public NodeData getData() {
+        return data;
     }
 }

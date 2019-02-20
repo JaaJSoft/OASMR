@@ -20,15 +20,18 @@ import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionCannotDisconnect;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.network.util;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.event.EventNewNode;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
 
 public class NodeService {
 
-    public static void main(String[] args) throws IOException, InterruptedException, ExceptionPortInvalid, ClassNotFoundException, ExceptionCannotDisconnect, ExceptionConnectionFailure {
+    public static void main(String[] args) throws Exception {
         InetAddress address = InetAddress.getByName("127.0.0.1");
-        int port = 6969;
+        int port = 40404;
         InetAddress localhost = InetAddress.getLocalHost();
         int commandPort = 56780;
 
@@ -36,13 +39,10 @@ public class NodeService {
         localNode.start();
     }
 
-    private static NodeReal initNode(InetAddress supervisorAddress, int port, InetAddress localAddress, int commandPort) throws IOException, ExceptionPortInvalid, ExceptionConnectionFailure, ExceptionCannotDisconnect, ClassNotFoundException {
-        Client c = new Client(supervisorAddress, port);
-        c.connect();
-        util.sendSerializable(c.getSocket(), commandPort);
-        int id = (int) util.receiveSerializable(c.getSocket());
-        c.disconnect();
-        return new NodeReal(new NodeData(id, localAddress + ":" + commandPort, localAddress, commandPort), supervisorAddress, port);
+    private static NodeReal initNode(InetAddress supervisorAddress, int port, InetAddress localAddress, int commandPort) throws Exception {
+        RequestManager r = RequestManagerFlyweightFactory.getInstance().getRequestManager(supervisorAddress, port);
+        NodeData data = (NodeData) r.sendRequest(new EventNewNode(localAddress, commandPort));
+        return new NodeReal(data, supervisorAddress, port);
     }
 
 }

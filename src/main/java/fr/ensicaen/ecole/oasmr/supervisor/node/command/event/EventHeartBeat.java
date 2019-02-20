@@ -13,26 +13,33 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node.request;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command.event;
 
+import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
-import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.Event;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.net.InetAddress;
+import java.time.LocalDate;
 
-public class RequestGetAllTags extends Request {
+public class EventHeartBeat extends Event {
+    private int id;
+
+    public EventHeartBeat(int id) {
+        this.id = id;
+    }
+
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        Set<Node> nodes = supervisor.getNodeFlyweightFactory().getNodes();
-        return nodes.parallelStream().flatMap(e -> e.getTags().stream()).distinct().toArray(Tag[]::new);
+        Node n = supervisor.getNodeFlyweightFactory().getNode(id);
+        n.setLastHeartBeat(LocalDate.now());
+        return n.getId();
     }
 
     @Override
     public String toString() {
-        return "Get tags";
+        return "New heartbeat from " + id;
     }
 }

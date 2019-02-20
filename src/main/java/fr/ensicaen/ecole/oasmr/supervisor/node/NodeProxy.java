@@ -21,6 +21,7 @@ import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionCannotDisconnect;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.network.util;
+import fr.ensicaen.ecole.oasmr.supervisor.node.request.CommandGetNodeData;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -38,5 +39,6 @@ public class NodeProxy extends Node {
         util.sendSerializable(client.getSocket(), c);
         Serializable s = util.receiveSerializable(client.getSocket());
         client.disconnect();
-        return s;    }
+        return s;
+    }
 }

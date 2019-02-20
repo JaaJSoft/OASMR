@@ -13,26 +13,33 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node.request;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command.event;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
-import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.Event;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-public class RequestGetAllTags extends Request {
+public class EventNodeDataChange extends Event {
+    private Integer id;
+    private NodeData newData;
+
+    public EventNodeDataChange(Integer id, NodeData newData) {
+        this.id = id;
+        this.newData = newData;
+    }
+
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        Set<Node> nodes = supervisor.getNodeFlyweightFactory().getNodes();
-        return nodes.parallelStream().flatMap(e -> e.getTags().stream()).distinct().toArray(Tag[]::new);
+        Node n = supervisor.getNodeFlyweightFactory().getNode(id);
+        n.setData(newData);
+        return n.getId();
     }
 
     @Override
     public String toString() {
-        return "Get tags";
+        return "NodeData change on " + id;
     }
 }

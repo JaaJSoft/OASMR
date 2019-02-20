@@ -15,24 +15,19 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.node.request;
 
-import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
-import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.CommandNode;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-public class RequestGetAllTags extends Request {
+public class CommandGetNodeData extends CommandNode {
     @Override
-    public Serializable execute(Supervisor supervisor) throws Exception {
-        Set<Node> nodes = supervisor.getNodeFlyweightFactory().getNodes();
-        return nodes.parallelStream().flatMap(e -> e.getTags().stream()).distinct().toArray(Tag[]::new);
+    public Serializable execute(Node node) throws Exception {
+        return node.getData();
     }
 
     @Override
     public String toString() {
-        return "Get tags";
+        return "get nodeData";
     }
 }

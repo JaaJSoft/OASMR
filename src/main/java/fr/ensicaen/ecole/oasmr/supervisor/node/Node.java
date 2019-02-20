@@ -25,7 +25,7 @@ import java.util.Set;
 
 public abstract class Node implements Comparable, Serializable {
 
-    protected final NodeData data;
+    protected NodeData data;
 
     private final CommandsHist hist;
 
@@ -102,7 +102,7 @@ public abstract class Node implements Comparable, Serializable {
 
     public void addTag(Tag s) {
         data.addTag(s);
-    }
+    }//TODO MAKE COMMAND
 
     public void addTags(Set<Tag> s) {
         data.addTags(s);
@@ -114,5 +114,9 @@ public abstract class Node implements Comparable, Serializable {
 
     public CommandsHist getHist() {
         return hist;
+    }
+
+    public void setData(NodeData data) {
+        this.data = data;
     }
 }

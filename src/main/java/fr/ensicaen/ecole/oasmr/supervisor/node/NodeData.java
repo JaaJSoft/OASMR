@@ -25,6 +25,7 @@ public class NodeData implements Comparable, Serializable {
     private final Integer id;
     private String name;
     private LocalDate lastHeartBeat;
+    private Integer heartbeatPeriod;
     private InetAddress nodeAddress;
     protected int port;
 
@@ -32,17 +33,19 @@ public class NodeData implements Comparable, Serializable {
     private int sshPort = 22;
     private final Set<Tag> tags = new HashSet<>();
 
-    public NodeData(Integer id, String name, InetAddress nodeAddress, int port) {
+    public NodeData(Integer id, String name, Integer heartbeatPeriod, InetAddress nodeAddress, int port) {
         this.id = id;
         this.name = name;
+        this.heartbeatPeriod = heartbeatPeriod;
         this.nodeAddress = nodeAddress;
         this.port = port;
         tags.add(new Tag("ALL"));
     }
 
-    public NodeData(Integer id, String name, InetAddress nodeAddress, int port, String sshLogin, int sshPort) {
+    public NodeData(Integer id, String name, Integer heartbeatPeriod, InetAddress nodeAddress, int port, String sshLogin, int sshPort) {
         this.id = id;
         this.name = name;
+        this.heartbeatPeriod = heartbeatPeriod;
         this.nodeAddress = nodeAddress;
         this.port = port;
         this.sshLogin = sshLogin;
@@ -137,5 +140,9 @@ public class NodeData implements Comparable, Serializable {
 
     public void setSshLogin(String sshLogin) {
         this.sshLogin = sshLogin;
+    }
+
+    public Integer getHeartbeatPeriod() {
+        return heartbeatPeriod;
     }
 }
