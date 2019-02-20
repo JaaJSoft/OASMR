@@ -57,7 +57,7 @@ public class Supervisor {
 
     public void stop() throws ExceptionServerRunnableNotEnded {
         serverRequestHandler.stop();
-        finder.stop();//TODO FIX THAT
+        finder.interrupt();
     }
 
     public NodeFlyweightFactory getNodeFlyweightFactory() {
