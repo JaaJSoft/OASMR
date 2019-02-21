@@ -13,7 +13,7 @@ public class ModifyUserTest {
 
     @Before
     public void setUp() throws Exception {
-        s = new Supervisor(5221, 5852);
+        s = new Supervisor(5852);
         new RequestAddUser("JOOJ", "ahhh").execute(s);
         new RequestAddUser("JAAJ", "ahhha").execute(s);
     }

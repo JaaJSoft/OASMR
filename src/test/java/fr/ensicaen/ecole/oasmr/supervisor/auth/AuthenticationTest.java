@@ -11,7 +11,7 @@ public class AuthenticationTest {
 
     @Before
     public void setUp() throws Exception {
-        s = new Supervisor(5221, 5852);
+        s = new Supervisor(5852);
         new RequestAddUser("Jooj", "ah").execute(s);
         new RequestAddUser("jefa", "ah").execute(s);
 

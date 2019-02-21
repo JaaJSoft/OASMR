@@ -15,16 +15,10 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.node;
 
-import fr.ensicaen.ecole.oasmr.lib.network.Client;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionCannotDisconnect;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.lib.network.util;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.event.EventNewNode;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 
-import java.io.IOException;
 import java.net.InetAddress;
 
 public class NodeService {
@@ -41,7 +35,7 @@ public class NodeService {
 
     private static NodeReal initNode(InetAddress supervisorAddress, int port, InetAddress localAddress, int commandPort) throws Exception {
         RequestManager r = RequestManagerFlyweightFactory.getInstance().getRequestManager(supervisorAddress, port);
-        NodeData data = (NodeData) r.sendRequest(new EventNewNode(localAddress, commandPort));
+        NodeData data = (NodeData) r.sendRequest(new EventNewNode(localAddress, commandPort, System.getProperty("user.name"), 22));
         return new NodeReal(data, supervisorAddress, port);
     }
 

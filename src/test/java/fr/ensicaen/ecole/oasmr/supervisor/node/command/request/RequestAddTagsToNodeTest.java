@@ -13,7 +13,7 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node.request;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
@@ -33,7 +33,7 @@ public class RequestAddTagsToNodeTest {
 
     @Before
     public void setUp() throws Exception {
-        s = new Supervisor(5221, 5852);
+        s = new Supervisor(5852);
         n = s.getNodeFlyweightFactory().getNode(InetAddress.getByName("127.02.20.5"), 5869);
     }
 

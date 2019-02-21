@@ -16,7 +16,7 @@
 package fr.ensicaen.ecole.oasmr.cli;
 
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
-import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNode;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestGetNode;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;

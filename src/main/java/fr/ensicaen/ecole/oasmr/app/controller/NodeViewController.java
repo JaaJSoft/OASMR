@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTabPane;
-import com.kodedu.terminalfx.Terminal;
 import com.kodedu.terminalfx.TerminalBuilder;
 import com.kodedu.terminalfx.TerminalTab;
 import com.kodedu.terminalfx.config.TerminalConfig;
@@ -15,7 +14,8 @@ import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
-import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestExecuteCommand;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
+import fr.ensicaen.ecole.oasmr.supervisor.request.CommandGetSSHLogin;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.fxml.FXML;
@@ -31,6 +31,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class NodeViewController extends View {
 
@@ -118,13 +120,22 @@ public class NodeViewController extends View {
     }
 
     private void updateNodeTerm() {
+        Config config = Config.getInstance();
+        Future<String> username = (Future<String>) requestManager.aSyncSendRequest(new CommandGetSSHLogin());
+
         bottomPane.getTabs().clear();
         NodeData n = nodesModel.getCurrentNodeData().get(0);
 
         TerminalTab terminal = terminalBuilder.newTerminal();
-        String command = "ssh -t pierre@127.0.0.1 -p 22 ssh " + n.getSshLogin() + "@" + n.getNodeAddress().toString() + "-p " + n.getSshPort();
-        terminal.onTerminalFxReady(() -> terminal.getTerminal().command(command));
+        try {
+            String user = username.get();
+            String command = "ssh -t " + user + "@" + config.getIP() + " -p " + config.getSSHPort() + " ssh " + n.getSshLogin() + "@" + n.getNodeAddress().getHostAddress() + " -p " + n.getSshPort() + "\n";
+            terminal.onTerminalFxReady(() -> terminal.getTerminal().command(command));
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
         bottomPane.getTabs().add(terminal);
+
     }
 
     private void updateRightInfo() {

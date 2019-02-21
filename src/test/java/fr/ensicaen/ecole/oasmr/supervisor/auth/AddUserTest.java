@@ -11,7 +11,7 @@ public class AddUserTest {
 
     @Before
     public void setUp() throws Exception {
-        s = new Supervisor(5221, 5852);
+        s = new Supervisor(5852);
         new RequestAddUser("Oui", "aeaf").execute(s);
     }
 

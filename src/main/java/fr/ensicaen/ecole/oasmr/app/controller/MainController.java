@@ -5,7 +5,7 @@ import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
-import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNodes;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestGetNodes;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.collections.ListChangeListener;

@@ -13,34 +13,28 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node.request;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command.request;
 
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
-import java.util.Set;
 
-public class RequestAddTagsToNode extends Request {
-    private final Integer id;
-    private final Set<Tag> t;
+public class RequestGetCommandsHistoryFromNode extends Request {
+    private final Integer idNode;
 
-    public RequestAddTagsToNode(Integer id, Set<Tag> tags) {
-        this.id = id;
-        t = tags;
+    public RequestGetCommandsHistoryFromNode(Integer idNode) {
+        this.idNode = idNode;
     }
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        Node n = supervisor.getNodeFlyweightFactory().getNode(id);
-        n.addTags(t);
-        return 0;
+        return supervisor.getNodeFlyweightFactory().getNode(idNode).getHist().getCommands().toArray(new Command[0]);
     }
 
     @Override
     public String toString() {
-        return "add tags to " + id;
+        return "get command hist";
     }
 }

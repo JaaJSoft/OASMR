@@ -13,37 +13,41 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node.request;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
-import fr.ensicaen.ecole.oasmr.supervisor.node.exception.ExceptionNodeNotFound;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
+import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.net.InetAddress;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class RequestNodeUpdateNameTest {
+public class RequestGetAllTagsTest {
     private Supervisor s;
-    private Node node1;
+    private Set<Tag> tagSet;
 
     @Before
     public void setUp() throws Exception {
-        s = new Supervisor(5221, 5852);
-        node1 = s.getNodeFlyweightFactory().getNode(InetAddress.getByName("192.169.9.2"), 56674);
-
+        tagSet = new HashSet<>();
+        tagSet.add(new Tag("jeej"));
+        tagSet.add(new Tag("test"));
+        s = new Supervisor(4242);
+        InetAddress a = InetAddress.getByName("48.28.25.2");
+        Node node = s.getNodeFlyweightFactory().getNode(a, 85);
+        new RequestAddTagsToNode(node.getId(), tagSet).execute(s);
+        Node node2 = s.getNodeFlyweightFactory().getNode(a, 85);
+        new RequestAddTagsToNode(node2.getId(), tagSet).execute(s);
     }
 
     @Test
-    public void executeUpdateName() throws Exception {
-        new RequestNodeUpdateName(node1.getId(), "jeej").execute(s);
-        assertEquals("jeej", node1.getName());
+    public void executeGetAllTag() throws Exception {
+        Tag[] tags = (Tag[]) new RequestGetAllTags().execute(s);
+        assertArrayEquals(tags, tagSet.toArray());
     }
 
-    @Test(expected = ExceptionNodeNotFound.class)
-    public void executeGetNodeNotFound() throws Exception {
-        new RequestNodeUpdateName(5647474, "heeh").execute(s);
-    }
 }

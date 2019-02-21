@@ -5,7 +5,6 @@ import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.*;
 
 import java.io.Serializable;
 
@@ -16,7 +15,7 @@ public class GroupedCommandTest {
 
     @Before
     public void setUp() throws Exception {
-        supervisor = new Supervisor(5696, 45757);
+        supervisor = new Supervisor(45757);
     }
 
     @After

@@ -13,40 +13,33 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node.command.event;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.command.Event;
+import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
+import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.time.LocalDate;
 
-public class EventNewNode extends Event {
-    private InetAddress address;
-    private int port;
-    private String login;
-    private int ssh_port;
+public class RequestAddTagToNode extends Request {
+    private final Integer id;
+    private final Tag t;
 
-    public EventNewNode(InetAddress address, int port, String login, int ssh_port) {
-        this.address = address;
-        this.port = port;
-        this.login = login;
-        this.ssh_port = ssh_port;
+    public RequestAddTagToNode(Integer id, Tag tag) {
+        this.id = id;
+        t = tag;
     }
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        Node n = supervisor.getNodeFlyweightFactory().getNode(address, port);
-        n.setLastHeartBeat(LocalDate.now());
-        n.getData().setSshLogin(login);
-        n.getData().setSshPort(ssh_port);
-        return n.getData();
+        Node n = supervisor.getNodeFlyweightFactory().getNode(id);
+        n.addTag(t);
+        return 0;
     }
 
     @Override
     public String toString() {
-        return "New node " + address + ":" + port;
+        return "add tag " + t + "to " + id;
     }
 }

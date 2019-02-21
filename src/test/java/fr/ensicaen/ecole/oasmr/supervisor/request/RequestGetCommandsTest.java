@@ -6,7 +6,6 @@ import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.CommandAptAutoRemove;
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +17,7 @@ public class RequestGetCommandsTest {
 
     @Before
     public void setUp() throws Exception {
-        s = new Supervisor(5696, 45757);
+        s = new Supervisor(45757);
         s.getCommandFinder().addCommand(CommandEchoString.class);
     }
 

@@ -13,28 +13,21 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node.request;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command;
 
-import fr.ensicaen.ecole.oasmr.lib.command.Command;
-import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
-import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
+import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.CommandNode;
 
 import java.io.Serializable;
 
-public class RequestGetCommandsHistoryFromNode extends Request {
-    private final Integer idNode;
-
-    public RequestGetCommandsHistoryFromNode(Integer idNode) {
-        this.idNode = idNode;
-    }
-
+public class CommandGetNodeData extends CommandNode {
     @Override
-    public Serializable execute(Supervisor supervisor) throws Exception {
-        return supervisor.getNodeFlyweightFactory().getNode(idNode).getHist().getCommands().toArray(new Command[0]);
+    public Serializable execute(Node node) throws Exception {
+        return node.getData();
     }
 
     @Override
     public String toString() {
-        return "get command hist";
+        return "get nodeData";
     }
 }

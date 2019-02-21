@@ -97,7 +97,7 @@ public final class Config {
     }
 
     public int getSSHPort() {
-        return Integer.parseInt(properties.getProperty("ssh_port"));
+        return Integer.parseInt(properties.getProperty("ssh_port", String.valueOf(DEFAULT_PORT_SSH)));
     }
 
     public String getSSHPortInString() {

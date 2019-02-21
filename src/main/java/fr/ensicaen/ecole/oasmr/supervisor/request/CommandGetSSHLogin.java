@@ -13,26 +13,20 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node.request;
+package fr.ensicaen.ecole.oasmr.supervisor.request;
 
-import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
-import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
-import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-public class RequestGetAllTags extends Request {
+public class CommandGetSSHLogin extends Command {
     @Override
-    public Serializable execute(Supervisor supervisor) throws Exception {
-        Set<Node> nodes = supervisor.getNodeFlyweightFactory().getNodes();
-        return nodes.parallelStream().flatMap(e -> e.getTags().stream()).distinct().toArray(Tag[]::new);
+    protected Serializable execute(Object... params) throws Exception {
+        return System.getProperty("user.name");
     }
 
     @Override
     public String toString() {
-        return "Get tags";
+        return "get username";
     }
 }

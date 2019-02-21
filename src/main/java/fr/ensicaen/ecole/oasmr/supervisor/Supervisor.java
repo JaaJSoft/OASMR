@@ -32,7 +32,7 @@ public class Supervisor {
 
     private CommandFinder finder = new CommandFinder("commands");
 
-    public Supervisor(int portHeartBeats, int portRequests) throws IOException, ExceptionPortInvalid {
+    public Supervisor(int portRequests) throws IOException, ExceptionPortInvalid {
         serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler(this));
     }
 

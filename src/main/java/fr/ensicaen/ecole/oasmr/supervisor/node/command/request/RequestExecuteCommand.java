@@ -13,27 +13,31 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command.request;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
-import fr.ensicaen.ecole.oasmr.lib.network.Client;
-import fr.ensicaen.ecole.oasmr.lib.network.util;
+import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
+import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
 
-public class NodeProxy extends Node {
-    NodeProxy(NodeData data) {
-        super(data);
-    }
+public class RequestExecuteCommand extends Request {
+    private final Command command;
+    private final Integer id;
 
+    public RequestExecuteCommand(Integer id, Command command) {
+        this.command = command;
+        this.id = id;
+    }
 
     @Override
-    protected Serializable execute(Command c) throws Exception {
-        Client client = new Client(this.getNodeAddress(), this.getPort());
-        client.connect();
-        util.sendSerializable(client.getSocket(), c);
-        Serializable s = util.receiveSerializable(client.getSocket());
-        client.disconnect();
-        return s;
+    public Serializable execute(Supervisor supervisor) throws Exception {
+        return supervisor.getNodeFlyweightFactory().getNode(id).executeCommand(command);
     }
+
+    @Override
+    public String toString() {
+        return "execute : " + command;
+    }
+
 }

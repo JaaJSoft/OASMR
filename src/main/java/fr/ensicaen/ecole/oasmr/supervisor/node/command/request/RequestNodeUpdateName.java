@@ -13,27 +13,30 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node.request;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
 
-public class RequestGetNode extends Request {
+public class RequestNodeUpdateName extends Request {
     private final Integer id;
+    private final String newName;
 
-    public RequestGetNode(Integer id) {
+    public RequestNodeUpdateName(Integer id, String newName) {
         this.id = id;
+        this.newName = newName;
     }
 
     @Override
-    public Serializable execute(Supervisor supervisor) throws Exception {
-        return supervisor.getNodeFlyweightFactory().getNode(id).getData();
+    public Serializable execute(Supervisor supervisor) throws Exception {//TODO update real node
+        supervisor.getNodeFlyweightFactory().getNode(id).setName(newName);
+        return 0;
     }
 
     @Override
     public String toString() {
-        return "get node " + id;
+        return null;
     }
 }

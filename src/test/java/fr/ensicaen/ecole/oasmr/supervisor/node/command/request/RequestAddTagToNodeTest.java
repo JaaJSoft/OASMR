@@ -13,7 +13,7 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.node.request;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
@@ -22,35 +22,26 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class RequestGetAllTagsTest {
+public class RequestAddTagToNodeTest {
+    private Node n;
     private Supervisor s;
-    private Set<Tag> tagSet;
 
     @Before
     public void setUp() throws Exception {
-        tagSet = new HashSet<>();
-        tagSet.add(new Tag("jeej"));
-        tagSet.add(new Tag("test"));
-        s = new Supervisor(42424, 4242);
-        InetAddress a = InetAddress.getByName("48.28.25.2");
-        Node node = s.getNodeFlyweightFactory().getNode(a, 85);
-        new RequestAddTagsToNode(node.getId(), tagSet).execute(s);
-        Node node2 = s.getNodeFlyweightFactory().getNode(a, 85);
-        new RequestAddTagsToNode(node2.getId(), tagSet).execute(s);
+        s = new Supervisor(5852);
+        n = s.getNodeFlyweightFactory().getNode(InetAddress.getByName("127.02.20.5"), 5869);
     }
 
     @Test
-    public void executeGetAllTag() throws Exception {
-        Tag[] tags = (Tag[]) new RequestGetAllTags().execute(s);
-        assertArrayEquals(tags, tagSet.toArray());
+    public void executeAddTagToNode() throws Exception {
+        Set<Tag> old = new HashSet<>(n.getTags());
+        new RequestAddTagToNode(n.getId(), new Tag("jeej")).execute(s);
+        Set<Tag> newTag = n.getTags();
+        assertEquals(old.size() + 1, newTag.size());
     }
-
 }
