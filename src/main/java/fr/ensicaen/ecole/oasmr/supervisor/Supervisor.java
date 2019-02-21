@@ -45,7 +45,7 @@ public class Supervisor {
             }
         });
 
-        System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandHandler loading... ");
+        System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandHandler (" + serverRequestHandler.getPort() + ") loading... ");
         ThreadServerRequestHandler.start();
         System.out.println("Done !");
         System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandFinder loading... ");
