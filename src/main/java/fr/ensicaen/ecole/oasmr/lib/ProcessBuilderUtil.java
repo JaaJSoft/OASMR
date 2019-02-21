@@ -48,6 +48,4 @@ public class ProcessBuilderUtil {
         BufferedReader output = getOutputStream(p);
         return StreamToString(output);
     }
-
-
 }

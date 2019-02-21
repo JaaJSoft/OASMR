@@ -39,6 +39,6 @@ public class CommandPipCheck extends Command {
 
     @Override
     public String toString() {
-        return "pip" + " " + "check";
+        return "pip " + "check";
     }
 }

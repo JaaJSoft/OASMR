@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class CommandPipFreeze extends Command {
 
-    private String options;
+    private final String options;
 
     public CommandPipFreeze() {
         this.options = "";
@@ -24,19 +24,7 @@ public class CommandPipFreeze extends Command {
     public Serializable execute(Object... params) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("pip", "freeze", options);
         try {
-            Process p = processBuilder.start();
-            p.waitFor();
-            int ret = p.exitValue();
-            switch (ret) {
-                case 0:
-                    //System.out.println(ProcessBuilderUtil.getOutput(p));
-                    return ProcessBuilderUtil.getOutput(p);
-
-                default:
-                    throw new PipException(ProcessBuilderUtil.getOutputError(p));
-
-            }
-
+            return PipUtil.executeDefault(processBuilder);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return e;
@@ -45,6 +33,6 @@ public class CommandPipFreeze extends Command {
 
     @Override
     public String toString() {
-        return "pip" + " " + "freeze" + " " + options;
+        return "pip " + "freeze " + options;
     }
 }

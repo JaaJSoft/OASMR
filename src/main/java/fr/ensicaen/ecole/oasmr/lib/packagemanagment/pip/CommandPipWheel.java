@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class CommandPipWheel extends Command {
 
-    private String packageName;
+    private final String packageName;
 
     public CommandPipWheel(String packageName) { this.packageName = packageName; }
 
@@ -18,19 +18,7 @@ public class CommandPipWheel extends Command {
     public Serializable execute(Object... params) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("pip", "wheel", packageName);
         try {
-            Process p = processBuilder.start();
-            p.waitFor();
-            int ret = p.exitValue();
-            switch (ret) {
-                case 0:
-                    //System.out.println(ProcessBuilderUtil.getOutput(p));
-                    return ProcessBuilderUtil.getOutput(p);
-
-                default:
-                    throw new PipException(ProcessBuilderUtil.getOutputError(p));
-
-            }
-
+            return PipUtil.executeDefault(processBuilder);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return e;
@@ -39,6 +27,6 @@ public class CommandPipWheel extends Command {
 
     @Override
     public String toString() {
-        return "pip" + " " + "wheel"  + " " + packageName;
+        return "pip " + "wheel " + packageName;
     }
 }

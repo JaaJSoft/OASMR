@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class CommandPipHash extends Command {
 
-    private String file;
+    private final String file;
 
     public CommandPipHash(String file) { this.file = file; }
 
@@ -18,19 +18,7 @@ public class CommandPipHash extends Command {
     public Serializable execute(Object... params) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("pip", "hash", file);
         try {
-            Process p = processBuilder.start();
-            p.waitFor();
-            int ret = p.exitValue();
-            switch (ret) {
-                case 0:
-                    //System.out.println(ProcessBuilderUtil.getOutput(p));
-                    return ProcessBuilderUtil.getOutput(p);
-
-                default:
-                    throw new PipException(ProcessBuilderUtil.getOutputError(p));
-
-            }
-
+            return PipUtil.executeDefault(processBuilder);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return e;
@@ -39,6 +27,6 @@ public class CommandPipHash extends Command {
 
     @Override
     public String toString() {
-        return "pip" + " " + "hash" + " " + file;
+        return "pip " + "hash " + file;
     }
 }
