@@ -24,10 +24,20 @@ import java.net.InetAddress;
 public class NodeService {
 
     public static void main(String[] args) throws Exception {
-        InetAddress address = InetAddress.getByName("127.0.0.1");
-        int port = 40404;
+
+        InetAddress address;
+        int port;
+        int commandPort;
+        if (args.length == 3) {
+            address = InetAddress.getByName(args[0]);
+            port = Integer.parseInt(args[1]);
+            commandPort = Integer.parseInt(args[2]);
+        } else {
+            address = InetAddress.getByName("127.0.0.1");
+            port = 40404;
+            commandPort = 56780;
+        }
         InetAddress localhost = InetAddress.getLocalHost();
-        int commandPort = 56780;
 
         NodeReal localNode = initNode(address, port, localhost, commandPort);
         localNode.start();

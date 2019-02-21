@@ -15,22 +15,10 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor;
 
-import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-
-import java.io.IOException;
 import java.util.Arrays;
 
-public class SupervisorMain {
-
-    public static void main(String[] args) throws IOException, ExceptionPortInvalid, CloneNotSupportedException, InterruptedException {
-        Supervisor s;
-        if (args.length == 1) {
-            s = new Supervisor(Integer.parseInt(args[0]));
-        } else {
-            s = new Supervisor(40404);
-        }
-        s.getCommandFinder().addCommand(CommandEchoString.class);
-        s.start();
+public class Test {
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(args));
     }
 }
