@@ -29,8 +29,8 @@ import java.net.InetAddress;
 public class NodeReal extends Node {
     private Server server;
     private Heart heart;
-    private InetAddress supervisorAddress;
-    private int supervisorPort;
+    private final InetAddress supervisorAddress;
+    private final int supervisorPort;
 
     NodeReal(NodeData data, InetAddress supervisorAddress, int supervisorPort) throws IOException, ExceptionPortInvalid {
         super(data);
