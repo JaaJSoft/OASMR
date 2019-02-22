@@ -37,7 +37,7 @@ public class NodeService {
             port = 40404;
             commandPort = 56780;
         }
-        InetAddress localhost = InetAddress.getLocalHost();
+        InetAddress localhost = InetAddress.getByName(InetAddress.getLocalHost().getHostAddress());
 
         NodeReal localNode = initNode(address, port, localhost, commandPort);
         localNode.start();
