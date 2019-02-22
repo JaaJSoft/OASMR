@@ -17,7 +17,7 @@ plugins {
     id 'java'
 }
 
-group 'fr.ensicaen.ecole'
+group 'fr.ensicaen.ecole.oasmr'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
@@ -36,7 +36,7 @@ repositories {
     maven {
         url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
-    
+
 }
 
 dependencies {
@@ -53,27 +53,27 @@ dependencies {
     compile group: 'com.github.oshi', name: 'oshi-core', version: '3.13.0'
 }
 
-task cli(type: JavaExec) {
+task cli(type: JavaExec, dependsOn: classes) {
     main = 'fr.ensicaen.ecole.oasmr.cli.MainCli'
-    classpath 'out/production/classes'
+    classpath 'build/classes/java/main'
 }
 
-task supervisor(type: JavaExec) {
+task supervisor(type: JavaExec, dependsOn: classes) {
     main = 'fr.ensicaen.ecole.oasmr.supervisor.SupervisorMain'
-    classpath 'out/production/classes'
+    classpath 'build/classes/java/main'
 }
 
-task node(type: JavaExec) {
+task node(type: JavaExec, dependsOn: classes) {
     main = 'fr.ensicaen.ecole.oasmr.node.NodeService'
-    classpath 'out/production/classes'
+    classpath 'build/classes/java/main'
 }
 
-task app(type: JavaExec) {
+task app(type: JavaExec, dependsOn: classes) {
     main = 'fr.ensicaen.ecole.oasmr.app.Main'
-    classpath 'out/production/classes'
+    classpath 'build/classes/java/main'
 }
 
-task testArg(type: JavaExec){
+task testArg(type: JavaExec) {
     main = 'fr.ensicaen.ecole.oasmr.supervisor.Test'
-    classpath 'out/production/classes'
+    classpath 'build/classes/java/main'
 }
