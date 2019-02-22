@@ -65,16 +65,18 @@ public class NodeListController extends View {
 
     @Override
     public void onCreate() {
+
+    }
+
+    @Override
+    public void onStart() {
         try {
             Config config = Config.getInstance();
             requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
         } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
             exceptionPortInvalid.printStackTrace();
         }
-    }
 
-    @Override
-    public void onStart() {
         nodeListView.getItems().clear();
         nodeListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         nodeListView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);

@@ -29,6 +29,7 @@ public abstract class View {
     protected String fxml;
     protected int width;
     protected int height;
+
     private String path = "/fr/ensicaen/ecole/oasmr/app/";
 
     public View(String fxml, int width, int height) throws IOException {

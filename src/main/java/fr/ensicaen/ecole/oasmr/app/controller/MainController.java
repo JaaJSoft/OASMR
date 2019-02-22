@@ -37,12 +37,6 @@ public class MainController extends View {
     @Override
     public void onCreate() {
         try {
-            Config config = Config.getInstance();
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
-        }
-        try {
             nodeListView = new NodeListController();
             nodeListView.onCreate();
             nodeView = new NodeViewController();
@@ -58,6 +52,13 @@ public class MainController extends View {
 
     @Override
     public void onStart() {
+        try {
+            Config config = Config.getInstance();
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+            exceptionPortInvalid.printStackTrace();
+        }
+
         try {
             mainPane.getItems().clear();
             mainPane.setDividerPositions(0.2);

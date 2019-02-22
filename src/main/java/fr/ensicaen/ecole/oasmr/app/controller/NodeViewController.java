@@ -135,7 +135,6 @@ public class NodeViewController extends View {
             e.printStackTrace();
         }
         bottomPane.getTabs().add(terminal);
-
     }
 
     private void updateRightInfo() {

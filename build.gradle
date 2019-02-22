@@ -64,7 +64,7 @@ task supervisor(type: JavaExec, dependsOn: classes) {
 }
 
 task node(type: JavaExec, dependsOn: classes) {
-    main = 'fr.ensicaen.ecole.oasmr.node.NodeService'
+    main = 'fr.ensicaen.ecole.oasmr.supervisor.node.NodeService'
     classpath 'build/classes/java/main'
 }
 
