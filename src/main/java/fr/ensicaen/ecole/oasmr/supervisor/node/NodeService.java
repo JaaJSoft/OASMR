@@ -12,12 +12,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package fr.ensicaen.ecole.oasmr.supervisor.node;
 
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.event.EventNewNode;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+
+import java.net.DatagramSocket;
 
 import java.net.InetAddress;
 
@@ -37,10 +38,14 @@ public class NodeService {
             port = 40404;
             commandPort = 56780;
         }
-        InetAddress localhost = InetAddress.getByName(InetAddress.getLocalHost().getHostAddress());
 
-        NodeReal localNode = initNode(address, port, localhost, commandPort);
-        localNode.start();
+        String ip;
+        try (final DatagramSocket socket = new DatagramSocket()) {
+            socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+            ip = socket.getLocalAddress().getHostAddress();
+            NodeReal localNode = initNode(address, port, InetAddress.getByName(ip), commandPort);
+            localNode.start();
+        }
     }
 
     private static NodeReal initNode(InetAddress supervisorAddress, int port, InetAddress localAddress, int commandPort) throws Exception {
