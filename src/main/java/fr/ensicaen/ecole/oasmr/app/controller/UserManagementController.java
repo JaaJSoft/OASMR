@@ -4,6 +4,7 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
 import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.sun.jna.platform.win32.Netapi32Util;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.View;
@@ -21,6 +22,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,6 +33,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTreeTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -88,14 +91,9 @@ public class UserManagementController extends View implements Initializable{
         }
     }
 
-
     public void applyChanges(ActionEvent actionEvent) {
 
-
     }
-
-
-
 
     private void onLoadTest() {
 
@@ -147,10 +145,13 @@ public class UserManagementController extends View implements Initializable{
             }
         });
 
-        final TreeTableColumn<UserInfo, Boolean> column = new TreeTableColumn<>();
+        final TreeTableColumn<UserInfo, Boolean> column = new TreeTableColumn<>("admin");
         column.setCellFactory(CheckBoxTreeTableCell.forTreeTableColumn(column));
         column.setCellValueFactory(param -> param.getValue().getValue().admin);
 
+
+        final TreeTableColumn<UserInfo, JFXButton> deleteCol = new TreeTableColumn<>("delete User");
+        deleteCol.setCellValueFactory(param -> (ObservableValue<JFXButton>) param.getValue().getValue().delete);
 
         ObservableList<UserInfo> users = FXCollections.observableArrayList();
 
@@ -225,6 +226,9 @@ public class UserManagementController extends View implements Initializable{
                 grid.getChildren().add(passwordField);
                 JFXButton addBtn = new JFXButton("Add");
                 GridPane.setConstraints(addBtn, 1,2);
+                addBtn.setStyle("    -jfx-button-type: RAISED;\n" +
+                        "    -fx-background-color: #FF6026;\n" +
+                        "    -fx-text-fill: white;");
                 grid.getChildren().add(addBtn);
                 addBtn.setOnAction((ActionEvent e) -> addUserFunction(message, loginField, passwordField, dialog));
                 Scene dialogScene = new Scene(dialogVbox, 300, 200);
@@ -286,19 +290,28 @@ public class UserManagementController extends View implements Initializable{
 
         UserInfo(String login) {
             this.login = new SimpleStringProperty(login);
-            this.delete = new JFXButton("");
+            this.delete = new JFXButton("Delete");
+            delete.setStyle("    -jfx-button-type: RAISED;\n" +
+                    "    -fx-background-color: #FF6026;\n" +
+                    "    -fx-text-fill: white;");
             this.admin = new SimpleBooleanProperty(false);
         }
 
         UserInfo(User u) {
             this.login = new SimpleStringProperty(u.getLogin());
-            this.delete = new JFXButton("");
+            this.delete = new JFXButton("Delete");
+            delete.setStyle("    -jfx-button-type: RAISED;\n" +
+                    "    -fx-background-color: #FF6026;\n" +
+                    "    -fx-text-fill: white;");
             this.admin = new SimpleBooleanProperty(u.isAdmin());
         }
 
         UserInfo(String login, boolean isAdmin) {
             this.login = new SimpleStringProperty(login);
-            this.delete = new JFXButton("");
+            this.delete = new JFXButton("Delete");
+            delete.setStyle("    -jfx-button-type: RAISED;\n" +
+                    "    -fx-background-color: #FF6026;\n" +
+                    "    -fx-text-fill: white;");
             this.admin = new SimpleBooleanProperty(isAdmin);
 
         }
