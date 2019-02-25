@@ -21,8 +21,14 @@ public abstract class ServerRunnable implements Runnable, Cloneable {
 
     protected Socket clientSocket;
 
+    protected String key;
+
     public void setClientSocket(Socket clientSocket) {
         this.clientSocket = clientSocket;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public Socket getClientSocket() {
@@ -33,4 +39,5 @@ public abstract class ServerRunnable implements Runnable, Cloneable {
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
 }
