@@ -72,8 +72,3 @@ task app(type: JavaExec, dependsOn: classes) {
     main = 'fr.ensicaen.ecole.oasmr.app.Main'
     classpath 'build/classes/java/main'
 }
-
-task testArg(type: JavaExec) {
-    main = 'fr.ensicaen.ecole.oasmr.supervisor.Test'
-    classpath 'build/classes/java/main'
-}

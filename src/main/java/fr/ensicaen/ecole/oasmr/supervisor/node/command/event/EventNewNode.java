@@ -21,7 +21,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.node.command.Event;
 
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class EventNewNode extends Event {
     private InetAddress address;
@@ -39,9 +39,9 @@ public class EventNewNode extends Event {
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
         Node n = supervisor.getNodeFlyweightFactory().getNode(address, port);
-        n.setLastHeartBeat(LocalDate.now());
-        n.getData().setSshLogin(login);
-        n.getData().setSshPort(ssh_port);
+        n.setLastHeartBeat(LocalDateTime.now());
+        n.setSSHLogin(login);
+        n.setSSHPort(ssh_port);
         return n.getData();
     }
 
