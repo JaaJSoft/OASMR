@@ -14,19 +14,19 @@ public class CommandListFiles extends Command {
     /**
      * The directory path name to list.
      */
-    private String directoryPathname;
+    private String directoryPathName;
 
     /**
      *
-     * @param directoryPathname The directory path name to list.
+     * @param directoryPathName The directory path name to list.
      */
-    public CommandListFiles(String directoryPathname) {
-        this.directoryPathname = directoryPathname;
+    public CommandListFiles(String directoryPathName) {
+        this.directoryPathName = directoryPathName;
     }
 
     @Override
     protected Serializable execute(Object... params) throws Exception {
-        File file = new File(directoryPathname);
+        File file = new File(directoryPathName);
 
         return file.list();
     }

@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class CommandMakeDiretory extends Command {
 
     /**
-     * The directory absolute path name to be created.
+     * The directory path name to be created.
      */
     private String directoryPathName;
 

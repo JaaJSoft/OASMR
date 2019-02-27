@@ -10,8 +10,15 @@ import java.io.Serializable;
  */
 public class CommandCreateFile extends Command {
 
+    /**
+     * The file path name to create.
+     */
     private String filePathName;
 
+    /**
+     *
+     * @param filePathName The file path name to create.
+     */
     public CommandCreateFile(String filePathName) {
         this.filePathName = filePathName;
     }

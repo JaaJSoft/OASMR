@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class CommandRenameFile extends Command {
 
     /**
-     * The file name absolute path to be renamed
+     * The file name path to be renamed
      */
     private String fileNamePathToBeRenamed;
 
@@ -20,6 +20,11 @@ public class CommandRenameFile extends Command {
      */
     private String newFileName;
 
+    /**
+     *
+     * @param fileNamePathToBeRenamed The file name path to be renamed.
+     * @param newFileName The new file name, without the path.
+     */
     public CommandRenameFile(String fileNamePathToBeRenamed, String newFileName) {
         this.fileNamePathToBeRenamed = fileNamePathToBeRenamed;
         this.newFileName = newFileName;

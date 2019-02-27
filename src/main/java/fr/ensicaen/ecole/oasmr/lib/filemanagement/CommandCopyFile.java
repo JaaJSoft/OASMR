@@ -7,24 +7,24 @@ import java.io.FileWriter;
 import java.io.Serializable;
 
 /**
- * A command that copy a file
+ * A command that copy a file.
  */
 public class CommandCopyFile extends Command {
 
     /**
-     *
+     * The source file path name to copy.
      */
     private String sourceFilePathName;
 
     /**
-     *
+     * The destination file path name to copy.
      */
     private String destinationFilePathName;
 
     /**
      *
-     * @param sourceFilePathName
-     * @param destinationFilePathName
+     * @param sourceFilePathName The source file path name to copy.
+     * @param destinationFilePathName The destination file path name to copy.
      */
     public CommandCopyFile(String sourceFilePathName, String destinationFilePathName) {
         this.sourceFilePathName = sourceFilePathName;
