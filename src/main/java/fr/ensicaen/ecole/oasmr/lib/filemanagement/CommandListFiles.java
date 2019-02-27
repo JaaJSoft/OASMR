@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Lists all the files of a directory.
  * @TODO Add a filter
  */
-public class CommandList extends Command {
+public class CommandListFiles extends Command {
 
     /**
      * The directory path name to list.
@@ -20,7 +20,7 @@ public class CommandList extends Command {
      *
      * @param directoryPathname The directory path name to list.
      */
-    public CommandList(String directoryPathname) {
+    public CommandListFiles(String directoryPathname) {
         this.directoryPathname = directoryPathname;
     }
 

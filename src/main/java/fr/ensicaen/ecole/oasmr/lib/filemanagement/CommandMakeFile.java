@@ -8,11 +8,11 @@ import java.io.Serializable;
 /**
  * Creates a non directory file.
  */
-public class CommandTouch extends Command {
+public class CommandMakeFile extends Command {
 
     private String filePathName;
 
-    public CommandTouch(String filePathName) {
+    public CommandMakeFile(String filePathName) {
         this.filePathName = filePathName;
     }
 

@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * A command that renames a file
  */
-public class CommandRename extends Command {
+public class CommandRenameFile extends Command {
 
     /**
      * The file name absolute path to be renamed
@@ -20,7 +20,7 @@ public class CommandRename extends Command {
      */
     private String newFileName;
 
-    public CommandRename(String fileNamePathToBeRenamed, String newFileName) {
+    public CommandRenameFile(String fileNamePathToBeRenamed, String newFileName) {
         this.fileNamePathToBeRenamed = fileNamePathToBeRenamed;
         this.newFileName = newFileName;
     }

@@ -7,13 +7,13 @@ import oshi.util.FileUtil;
 import java.io.File;
 import java.io.Serializable;
 
-public class CommandMove extends Command {
+public class CommandMoveFile extends Command {
 
     private String fileNamePathToBeMoved;
 
     private String destinationPath;
 
-    public CommandMove(String fileNamePathToBeMoved, String destinationPath) {
+    public CommandMoveFile(String fileNamePathToBeMoved, String destinationPath) {
         this.fileNamePathToBeMoved = fileNamePathToBeMoved;
         this.destinationPath = destinationPath;
     }

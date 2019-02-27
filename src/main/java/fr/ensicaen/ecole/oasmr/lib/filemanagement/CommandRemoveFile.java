@@ -9,14 +9,14 @@ import java.io.Serializable;
 /**
  * A command that removes a file
  */
-public class CommandRemove extends Command {
+public class CommandRemoveFile extends Command {
 
     /**
      * The name of absolute path of the file to be removed.
      */
     private String fileNamePathToBeRemoved;
 
-    public CommandRemove(String fileNamePathToBeRemoved) {
+    public CommandRemoveFile(String fileNamePathToBeRemoved) {
         this.fileNamePathToBeRemoved = fileNamePathToBeRemoved;
     }
 

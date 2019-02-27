@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * A command that copy a file
  */
-public class CommandCopy extends Command {
+public class CommandCopyFile extends Command {
 
     /**
      *
@@ -26,7 +26,7 @@ public class CommandCopy extends Command {
      * @param sourceFilePathName
      * @param destinationFilePathName
      */
-    public CommandCopy(String sourceFilePathName, String destinationFilePathName) {
+    public CommandCopyFile(String sourceFilePathName, String destinationFilePathName) {
         this.sourceFilePathName = sourceFilePathName;
         this.destinationFilePathName = destinationFilePathName;
     }
