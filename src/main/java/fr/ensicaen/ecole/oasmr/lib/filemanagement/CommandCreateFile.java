@@ -8,11 +8,11 @@ import java.io.Serializable;
 /**
  * Creates a non directory file.
  */
-public class CommandMakeFile extends Command {
+public class CommandCreateFile extends Command {
 
     private String filePathName;
 
-    public CommandMakeFile(String filePathName) {
+    public CommandCreateFile(String filePathName) {
         this.filePathName = filePathName;
     }
 
