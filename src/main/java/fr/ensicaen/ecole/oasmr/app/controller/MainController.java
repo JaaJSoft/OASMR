@@ -38,13 +38,15 @@ public class MainController extends View {
     public void onCreate() {
         try {
             nodeListView = new NodeListController();
-            nodeListView.onCreate();
+            addSubView(nodeListView);
             nodeView = new NodeViewController();
             nodeView.onCreate();
+            //addSubView(nodeView);
             groupView = new GroupViewController();
             groupView.onCreate();
+            //addSubView(groupView);
             defaultView = new DefaultController();
-            defaultView.onCreate();
+            addSubView(defaultView);
         } catch (Exception e) {
             e.printStackTrace();
         }

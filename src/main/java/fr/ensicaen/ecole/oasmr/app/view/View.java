@@ -16,19 +16,23 @@
 package fr.ensicaen.ecole.oasmr.app.view;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class View {
 
     protected Scene scene;
-    protected Parent root;
+    protected Node root;
     protected String fxml;
     protected int width;
     protected int height;
+    protected List<View> subView;
 
     private String path = "/fr/ensicaen/ecole/oasmr/app/";
 
@@ -40,6 +44,7 @@ public abstract class View {
         fxmlLoader.setLocation(getClass().getResource(path + fxml + ".fxml"));
         fxmlLoader.setController(this);
         root = fxmlLoader.load();
+        subView = new ArrayList<>();
     }
 
     public View(String fxml) throws IOException {
@@ -50,30 +55,41 @@ public abstract class View {
         fxmlLoader.setLocation(getClass().getResource(path + fxml + ".fxml"));
         fxmlLoader.setController(this);
         root = fxmlLoader.load();
+        subView = new ArrayList<>();
     }
-
 
     /**
      * Called when the scene is add in the scene manager
      */
     public abstract void onCreate();
 
+
     /**
      * Called at every SceneManager::setScene()
      */
-    public abstract void onStart();
+    protected abstract void onStart();
+
+    /**
+     * Update all sub view before
+     */
+    public void onStartView(){
+        onStart();
+        for (View v : subView) {
+            v.onStart();
+        }
+    }
 
     public abstract void onStop();
 
     public Scene getScene() {
         if(scene == null){
-            return new Scene(root, width, height);
+            return new Scene((Parent) root, width, height);
         }else{
             return scene;
         }
     }
 
-    public Parent getRoot() {
+    public Node getRoot() {
         return root;
     }
 
@@ -87,6 +103,11 @@ public abstract class View {
 
     public int getHeight() {
         return height;
+    }
+
+    public void addSubView(View v){
+        v.onCreate();
+        subView.add(v);
     }
 
     @Override

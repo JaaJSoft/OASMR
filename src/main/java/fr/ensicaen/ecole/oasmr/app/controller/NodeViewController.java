@@ -164,6 +164,7 @@ public class NodeViewController extends View {
 
     @Override
     public void onStart() {
+        /*TODO : Transform in subView*/
         updateNodeInfo();
         updateModuleTab();
         updateNodeTerm();
