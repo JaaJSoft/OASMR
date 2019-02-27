@@ -75,7 +75,7 @@ public abstract class View {
     public void onStartView(){
         onStart();
         for (View v : subView) {
-            v.onStart();
+            v.onStartView();
         }
     }
 
@@ -106,7 +106,6 @@ public abstract class View {
     }
 
     public void addSubView(View v){
-        v.onCreate();
         subView.add(v);
     }
 

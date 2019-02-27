@@ -50,7 +50,7 @@ public class NodeListController extends View {
         super("NodeList");
     }
 
-    public void setDataModel(NodesModel nodesModel) {
+    public void setNodesModel(NodesModel nodesModel) {
         this.nodesModel = nodesModel;
     }
 
@@ -60,7 +60,7 @@ public class NodeListController extends View {
 
 
     public void refreshNodes(ActionEvent actionEvent) throws Exception {
-        mainController.onStart();
+        mainController.onStartView();
     }
 
     @Override

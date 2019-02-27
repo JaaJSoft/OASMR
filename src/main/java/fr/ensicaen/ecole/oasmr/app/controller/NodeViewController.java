@@ -64,7 +64,7 @@ public class NodeViewController extends View {
     }
 
 
-    public void setDataModel(NodesModel nodesModel) {
+    public void setNodesModel(NodesModel nodesModel) {
         this.nodesModel = nodesModel;
     }
 
@@ -148,6 +148,21 @@ public class NodeViewController extends View {
 
     @Override
     public void onCreate() {
+
+    }
+
+    @Override
+    public void onStart() {
+
+        if (nodesModel.getSelectedAmount() > 1) {
+
+        } else if (nodesModel.getSelectedAmount() == 1) {
+
+        } else {
+
+        }
+
+/*
         try {
             Config config = Config.getInstance();
             requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
@@ -160,15 +175,13 @@ public class NodeViewController extends View {
         darkConfig.setCursorColor(Color.rgb(255, 0, 0, 0.5));
 
         terminalBuilder = new TerminalBuilder(darkConfig);
-    }
 
-    @Override
-    public void onStart() {
-        /*TODO : Transform in subView*/
         updateNodeInfo();
         updateModuleTab();
         updateNodeTerm();
         updateRightInfo();
+
+        */
     }
 
     @Override

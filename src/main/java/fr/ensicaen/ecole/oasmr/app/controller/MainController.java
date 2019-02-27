@@ -26,8 +26,6 @@ public class MainController extends View {
 
     private NodeListController nodeListView;
     private NodeViewController nodeView;
-    private GroupViewController groupView;
-    private DefaultController defaultView;
 
 
     public MainController(int width, int height) throws IOException {
@@ -40,13 +38,10 @@ public class MainController extends View {
             nodeListView = new NodeListController();
             addSubView(nodeListView);
             nodeView = new NodeViewController();
-            nodeView.onCreate();
-            //addSubView(nodeView);
-            groupView = new GroupViewController();
-            groupView.onCreate();
-            //addSubView(groupView);
-            defaultView = new DefaultController();
-            addSubView(defaultView);
+            addSubView(nodeView);
+
+            mainPane.setDividerPositions(0.2);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,28 +57,14 @@ public class MainController extends View {
         }
 
         try {
-            mainPane.getItems().clear();
-            mainPane.setDividerPositions(0.2);
             NodeData[] nodeList = (NodeData[]) requestManager.sendRequest(new RequestGetNodes());
             nodesModel = new NodesModel(nodeList);
-            mainPane.getItems().add(0, nodeListView.getRoot());
-            mainPane.getItems().add(1, defaultView.getRoot());
             nodesModel.getCurrentNodeData().addListener((ListChangeListener.Change<? extends NodeData> c) -> {
-                if (nodesModel.getSelectedAmount() > 1) {
-                    groupView.onStart();
-                    mainPane.getItems().set(1, groupView.getRoot());
-                } else if (nodesModel.getSelectedAmount() == 1) {
-                    nodeView.onStart();
-                    mainPane.getItems().set(1, nodeView.getRoot());
-                } else {
-                    mainPane.getItems().set(1, defaultView.getRoot());
-                }
+               nodeView.onStartView();
             });
-            nodeView.setDataModel(nodesModel);
+            nodeView.setNodesModel(nodesModel);
             nodeListView.setMainController(this);
-            nodeListView.setDataModel(nodesModel);
-            groupView.setDataModel(nodesModel);
-            nodeListView.onStart();
+            nodeListView.setNodesModel(nodesModel);
         } catch (Exception e) {
             e.printStackTrace();
         }
