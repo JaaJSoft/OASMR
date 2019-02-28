@@ -23,14 +23,16 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-public class LoginController extends View implements Initializable {
+public class LoginController extends View {
 
     private SceneManager sceneManager;
     private RequestManager requestManager;
     private Properties p;
+
     @FXML
     Text loginError;
 
@@ -51,19 +53,6 @@ public class LoginController extends View implements Initializable {
 
     public LoginController(int width, int height) throws IOException {
         super("Login", width, height);
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        loginConnect.setDefaultButton(true);
-        loginConnect.setOnAction(actionEvent -> {
-            try {
-                connect(actionEvent);
-            } catch (UnknownHostException | ExceptionPortInvalid e) {
-                e.printStackTrace(); //TODO print an error on screen
-            }
-        });
-        sceneManager = SceneManager.getInstance();
     }
 
     private boolean checkInput() { //TODO CHECK PORT NOT VALID
@@ -98,11 +87,15 @@ public class LoginController extends View implements Initializable {
             requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(IPServer.getText()), Integer.parseInt(portNumber.getText()));
 
             RequestAddUser r = new RequestAddUser("admin", "jeej");
-            RequestSetAdmin ra = new RequestSetAdmin("login", true);
+            RequestSetAdmin ra = new RequestSetAdmin("admin", true);
             try {
                 requestManager.sendRequest(r);
-                requestManager.sendRequest(ra);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+            try {
+                requestManager.sendRequest(ra);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -127,7 +120,15 @@ public class LoginController extends View implements Initializable {
 
     @Override
     public void onCreate() {
-
+        loginConnect.setDefaultButton(true);
+        loginConnect.setOnAction(actionEvent -> {
+            try {
+                connect(actionEvent);
+            } catch (UnknownHostException | ExceptionPortInvalid e) {
+                e.printStackTrace(); //TODO print an error on screen
+            }
+        });
+        sceneManager = SceneManager.getInstance();
     }
 
     @Override
