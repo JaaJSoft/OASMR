@@ -26,6 +26,8 @@ import com.kodedu.terminalfx.config.TerminalConfig;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
+import fr.ensicaen.ecole.oasmr.lib.FXClassInitializer;
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
@@ -107,30 +109,35 @@ public class NodeViewController extends View {
         JFXButton jeej = new JFXButton("echo on node");
         jeej.setStyle("-jfx-button-type: RAISED;-fx-background-color: #FF6026; -fx-text-fill: white;");
         jeej.setOnAction(e -> {
-            try {
-                String response = (String) requestManager.sendRequest(
-                        new RequestExecuteCommand(
-                                nodesModel.getCurrentNodeData().get(0).getId(),
-                                new CommandEchoString("Test from node")
-                        ));
-                System.out.println(response);
-                Stage stage = (Stage) mainVBox.getScene().getWindow();
-                JFXDialogLayout layout = new JFXDialogLayout();
-                layout.setHeading(new Label("Response"));
-                layout.setBody(new Label(response));
-                JFXAlert alert = new JFXAlert<>(stage);
-                alert.setOverlayClose(true);
-                alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
-                alert.setContent(layout);
-                alert.initModality(Modality.NONE);
+            Stage stage = (Stage) mainVBox.getScene().getWindow();
 
-                alert.show();
+            new FXClassInitializer(stage, CommandEchoString.class).initFromClass(newObject -> {
+                Command c = (Command) newObject;
+                String response = null;
+                try {
+                    response = (String) requestManager.sendRequest(
+                            new RequestExecuteCommand(nodesModel.getCurrentNodeData().get(0).getId(), c));
+                    System.out.println(response);
 
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+                    JFXDialogLayout layout = new JFXDialogLayout();
+                    layout.setHeading(new Label("Response"));
+                    layout.setBody(new Label(response));
+
+                    JFXAlert alert = new JFXAlert<>(stage);
+                    alert.setOverlayClose(true);
+                    alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
+                    alert.setContent(layout);
+                    alert.initModality(Modality.NONE);
+
+                    JFXButton button = new JFXButton("close");
+                    button.setOnAction(event -> alert.close());
+                    layout.setActions(button);
+                    alert.show();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            });
         });
-
         t.setContent(jeej);
     }
 

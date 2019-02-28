@@ -26,6 +26,7 @@ public abstract class View {
 
     protected Scene scene;
     protected Parent root;
+
     protected String fxml;
     protected int width;
     protected int height;
@@ -67,7 +68,8 @@ public abstract class View {
 
     public Scene getScene() {
         if(scene == null){
-            return new Scene(root, width, height);
+            scene = new Scene(root, width, height);
+            return scene;
         }else{
             return scene;
         }

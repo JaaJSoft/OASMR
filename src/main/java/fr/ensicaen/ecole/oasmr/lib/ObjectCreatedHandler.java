@@ -15,20 +15,7 @@
 
 package fr.ensicaen.ecole.oasmr.lib;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.List;
+public interface ObjectCreatedHandler {
 
-public class ParamsFromClass {
-
-    public static List<Parameter[]> getParamsFromClass(Class c) {
-        Constructor[] constructors = c.getConstructors();
-        List<Parameter[]> parameters = new ArrayList<>(constructors.length);
-        for (Constructor constructor : constructors) {
-            Parameter[] constructorParameters = constructor.getParameters();
-            parameters.add(constructorParameters);
-        }
-        return parameters;
-    }
+    public void objectCreatedHandler(Object newObject);
 }

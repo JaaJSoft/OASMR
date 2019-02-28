@@ -18,13 +18,10 @@ package fr.ensicaen.ecole.oasmr.lib;
 import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-import fr.ensicaen.ecole.oasmr.lib.ParamsFromClass;
-
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class ParamsFromClassTest {
 
