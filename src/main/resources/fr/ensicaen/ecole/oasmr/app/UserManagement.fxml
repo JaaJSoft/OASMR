@@ -22,14 +22,14 @@
 
         <HBox alignment="CENTER">
 
-            <!--<JFXButton fx:id="modifyUser" ripplerFill="#e8dcdc" text="Modify an user">
+            <JFXButton fx:id="adminBtn" ripplerFill="#e8dcdc" text="Set/Unset admin">
                 <VBox.margin>
                     <Insets top="20" />
                 </VBox.margin>
                 <HBox.margin>
                     <Insets right="20" />
                 </HBox.margin>
-            </JFXButton>-->
+            </JFXButton>
             <JFXButton fx:id="addUser" ripplerFill="#e8dcdc" text="Add a new user">
                 <VBox.margin>
                     <Insets top="20"/>

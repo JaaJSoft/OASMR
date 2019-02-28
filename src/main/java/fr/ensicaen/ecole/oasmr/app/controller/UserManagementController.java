@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class UserManagementController extends View implements Initializable{
+public class UserManagementController extends View{
     private SceneManager sceneManager;
     private RequestManager requestManager;
     private List<String> userList;
@@ -63,20 +63,14 @@ public class UserManagementController extends View implements Initializable{
     @FXML
     VBox userTableVBox;
 
+    @FXML
+    JFXButton adminBtn;
+
     public UserManagementController(int width, int height) throws IOException {
         super("UserManagement", width, height);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
 
-        try {
-            Config config = Config.getInstance();
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
-        }
-    }
 
     public void applyChanges(ActionEvent actionEvent) {
 
@@ -127,14 +121,19 @@ public class UserManagementController extends View implements Initializable{
                 try {
                     requestManager.sendRequest(new RequestModifyUserLogin(old, t.getNewValue()));
                 } catch (Exception e) {
+                    t.getTreeTableView()
+                            .getTreeItem(t.getTreeTablePosition()
+                                    .getRow())
+                            .getValue().login.set(old);
                     e.printStackTrace();
                 }
             }
         });
 
-        final TreeTableColumn<UserInfo, Boolean> column = new TreeTableColumn<>("admin");
-        column.setCellFactory(CheckBoxTreeTableCell.forTreeTableColumn(column));
-        column.setCellValueFactory(param -> param.getValue().getValue().admin);
+        final TreeTableColumn<UserInfo, Boolean> adminCol = new TreeTableColumn<>("admin");
+        adminCol.setCellFactory(CheckBoxTreeTableCell.forTreeTableColumn(adminCol));
+        adminCol.setCellValueFactory(param -> param.getValue().getValue().admin);
+
 
 
         final TreeTableColumn<UserInfo, JFXButton> deleteCol = new TreeTableColumn<>("delete User");
@@ -152,13 +151,6 @@ public class UserManagementController extends View implements Initializable{
             users.add(new UserInfo(user, admin));
         }
 
-        //test
-
-        users.add(new UserInfo("Oui", true));
-
-        //test end
-
-
         for (UserInfo u : users){
             System.out.println(u);
         }
@@ -168,7 +160,8 @@ public class UserManagementController extends View implements Initializable{
         JFXTreeTableView userTable = new JFXTreeTableView(root);
         userTable.setShowRoot(false);
         userTable.setEditable(true);
-        userTable.getColumns().setAll(userCol, column);
+        adminCol.setEditable(false);
+        userTable.getColumns().setAll(userCol, adminCol);
 
         userTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         userTable.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -187,7 +180,26 @@ public class UserManagementController extends View implements Initializable{
                     }
                 }
             }
-            //reload table when users are delete...
+            onLoadTest();
+        });
+
+
+        adminBtn.setOnAction(event ->{
+            for (Object u : userTable.getSelectionModel().getSelectedItems()){
+                System.out.println(u);
+                if (u instanceof TreeItem) {
+                    if (((TreeItem)u).getValue() instanceof UserInfo) {
+
+                        RequestSetAdmin requestSetAdmin = new RequestSetAdmin(((UserInfo)((TreeItem)u).getValue()).getLogin(), !((UserInfo)((TreeItem)u).getValue()).getAdmin().getValue());
+                        try {
+                            requestManager.sendRequest(requestSetAdmin);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            onLoadTest();
         });
 
         userTableVBox.getChildren().add(userTable);
@@ -269,7 +281,7 @@ public class UserManagementController extends View implements Initializable{
                     RequestSetAdmin requestSetAdmin = new RequestSetAdmin(loginField.getText(), true);
                     requestManager.sendRequest(requestSetAdmin);
                 }
-
+                onLoadTest();
                 dialog.close();
 
             } catch (Exception e1) {
@@ -289,11 +301,17 @@ public class UserManagementController extends View implements Initializable{
 
     @Override
     public void onCreate() {
-        onLoadTest();
+        try {
+            Config config = Config.getInstance();
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+            exceptionPortInvalid.printStackTrace();
+        }
     }
 
     @Override
     public void onStart() {
+        onLoadTest();
 
     }
 
