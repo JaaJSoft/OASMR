@@ -21,14 +21,15 @@
         </padding>
 
         <HBox alignment="CENTER">
-            <JFXButton fx:id="modifyUser" onAction="#applyChanges" ripplerFill="#e8dcdc" text="Modify an user">
+
+            <!--<JFXButton fx:id="modifyUser" ripplerFill="#e8dcdc" text="Modify an user">
                 <VBox.margin>
                     <Insets top="20" />
                 </VBox.margin>
                 <HBox.margin>
                     <Insets right="20" />
                 </HBox.margin>
-            </JFXButton>
+            </JFXButton>-->
             <JFXButton fx:id="addUser" ripplerFill="#e8dcdc" text="Add a new user">
                 <VBox.margin>
                     <Insets top="20"/>
@@ -37,14 +38,15 @@
                     <Insets right="20" />
                 </HBox.margin>
             </JFXButton>
-            <JFXButton fx:id="deleteUser" onAction="#applyChanges" ripplerFill="#e8dcdc" text="Delete an user">
+            <JFXButton fx:id="deleteUser" ripplerFill="#e8dcdc" text="Delete an user">
                 <VBox.margin>
                     <Insets top="20"/>
                 </VBox.margin>
             </JFXButton>
         </HBox>
 
-        <JFXTextField fx:id="userLogin" promptText="UserName">
+
+        <!--<JFXTextField fx:id="userLogin" promptText="UserName">
             <VBox.margin>
                 <Insets bottom="20.0"/>
             </VBox.margin>
@@ -53,9 +55,9 @@
             <VBox.margin>
                 <Insets bottom="20.0"/>
             </VBox.margin>
-        </JFXPasswordField>
+        </JFXPasswordField>-->
 
-        <JFXButton fx:id="applyChangesButton" onAction="#applyChanges" ripplerFill="#e8dcdc" text="Changes">
+        <JFXButton fx:id="applyChangesButton" ripplerFill="#e8dcdc" text="Changes">
             <VBox.margin>
                 <Insets top="20"/>
             </VBox.margin>

@@ -4,17 +4,13 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
 import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.sun.jna.platform.win32.Netapi32Util;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.User;
-import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAddUser;
-import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestGetAdmin;
-import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestGetLoginList;
-import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestModifyUserLogin;
+import fr.ensicaen.ecole.oasmr.supervisor.auth.request.*;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.beans.binding.Bindings;
@@ -40,13 +36,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class UserManagementController extends View implements Initializable{
@@ -63,15 +59,6 @@ public class UserManagementController extends View implements Initializable{
 
     @FXML
     JFXButton addUser;
-
-    @FXML
-    JFXButton applyChangesButton;
-
-    @FXML
-    JFXTextField userLogin;
-
-    @FXML
-    JFXPasswordField userPassword;
 
     @FXML
     VBox userTableVBox;
@@ -183,6 +170,26 @@ public class UserManagementController extends View implements Initializable{
         userTable.setEditable(true);
         userTable.getColumns().setAll(userCol, column);
 
+        userTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        userTable.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        deleteUser.setOnAction(event ->{
+            for (Object u : userTable.getSelectionModel().getSelectedItems()){
+                System.out.println(u);
+                if (u instanceof TreeItem) {
+                    if (((TreeItem)u).getValue() instanceof UserInfo) {
+                        RequestDeleteUser deleteRequest = new RequestDeleteUser(((UserInfo)((TreeItem)u).getValue()).getLogin());
+                        try {
+                            requestManager.sendRequest(deleteRequest);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            //reload table when users are delete...
+        });
+
         userTableVBox.getChildren().add(userTable);
 
         JFXTextField filterField = new JFXTextField();
@@ -214,6 +221,8 @@ public class UserManagementController extends View implements Initializable{
                 VBox dialogVbox = new VBox(20);
                 Text login = new Text("Enter a login:");
                 Text password = new Text("Enter a password:");
+                CheckBox adminCB = new CheckBox();
+                Text adminLabel = new Text("is Admin?");
                 GridPane.setConstraints(login,0,0);
                 grid.getChildren().add(login);
                 JFXTextField loginField = new JFXTextField();
@@ -225,22 +234,26 @@ public class UserManagementController extends View implements Initializable{
                 GridPane.setConstraints(passwordField, 1,1);
                 grid.getChildren().add(passwordField);
                 JFXButton addBtn = new JFXButton("Add");
-                GridPane.setConstraints(addBtn, 1,2);
+                GridPane.setConstraints(adminLabel, 0,2);
+                grid.getChildren().add(adminLabel);
+                GridPane.setConstraints(adminCB, 1,2);
+                grid.getChildren().add(adminCB);
+                GridPane.setConstraints(addBtn, 1,3);
                 addBtn.setStyle("    -jfx-button-type: RAISED;\n" +
                         "    -fx-background-color: #FF6026;\n" +
                         "    -fx-text-fill: white;");
                 grid.getChildren().add(addBtn);
-                addBtn.setOnAction((ActionEvent e) -> addUserFunction(message, loginField, passwordField, dialog));
+                addBtn.setOnAction((ActionEvent e) -> addUserFunction(message, loginField, passwordField, dialog, adminCB));
                 Scene dialogScene = new Scene(dialogVbox, 300, 200);
                 dialog.setScene(dialogScene);
-                passwordField.setOnAction((ActionEvent e) -> addUserFunction(message, loginField, passwordField ,dialog));
+                passwordField.setOnAction((ActionEvent e) -> addUserFunction(message, loginField, passwordField ,dialog, adminCB));
                 dialogVbox.getChildren().addAll(message, grid);
                 dialog.show();
             }
         };
     }
 
-    private void addUserFunction(Label message, JFXTextField loginField, JFXPasswordField passwordField, Stage dialog) {
+    private void addUserFunction(Label message, JFXTextField loginField, JFXPasswordField passwordField, Stage dialog, CheckBox cb) {
         if (passwordField.getText().trim().equals("")) {
             message.setText("You have to set a password");
             message.setTextFill(Color.rgb(210, 39, 30));
@@ -251,7 +264,14 @@ public class UserManagementController extends View implements Initializable{
             try {
                 RequestAddUser addRequest = new RequestAddUser(loginField.getText(), passwordField.getText());
                 requestManager.sendRequest(addRequest);
+
+                if (cb.isSelected()){
+                    RequestSetAdmin requestSetAdmin = new RequestSetAdmin(loginField.getText(), true);
+                    requestManager.sendRequest(requestSetAdmin);
+                }
+
                 dialog.close();
+
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -261,7 +281,7 @@ public class UserManagementController extends View implements Initializable{
 
     private void returnAction(Object actionEvent) throws Exception{
         try {
-            sceneManager.setScenes(LoginController.class); //TODO: Main.fxml, login is only for test
+            sceneManager.setScenes(MainController.class);
         } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
             exceptionSceneNotFound.printStackTrace();
         }
@@ -316,8 +336,24 @@ public class UserManagementController extends View implements Initializable{
 
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            UserInfo userInfo = (UserInfo) o;
+            return Objects.equals(login, userInfo.login);
+        }
+
         BooleanProperty getAdmin() {
             return admin;
+        }
+
+        public String getLogin() {
+            return login.get();
+        }
+
+        public StringProperty loginProperty() {
+            return login;
         }
 
         @Override
