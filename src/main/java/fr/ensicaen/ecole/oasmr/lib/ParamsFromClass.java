@@ -16,26 +16,22 @@
 package fr.ensicaen.ecole.oasmr.lib;
 
 import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
-import org.junit.Before;
-import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
-public class CommandEchoStringTest {
-    private CommandEchoString c;
-
-    @Before
-    public void setUp() {
-        c = new CommandEchoString("jeej");
-    }
-
-    @Test
-    public void execute() throws Exception {
-        assertEquals("jeej\n", c.execute());
-    }
-
-    @Test
-    public void executeFailure() throws Exception {
-        assertNotEquals("mmmmm", c.execute());
+public class ParamsFromClass {
+    public static List<Parameter[]> getParamsFromClass(Class c) {
+        Constructor[] constructors = c.getConstructors();
+        List<Parameter[]> parameters = new ArrayList<>(constructors.length);
+        for (Constructor constructor : constructors) {
+            Parameter[] constructorParameters = constructor.getParameters();
+            parameters.add(constructorParameters);
+        }
+        return parameters;
     }
 }

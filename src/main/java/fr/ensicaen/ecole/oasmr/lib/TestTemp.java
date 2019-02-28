@@ -13,7 +13,15 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.app.view.exception;
+package fr.ensicaen.ecole.oasmr.lib;
 
-public class ExceptionFXMLNotFound extends Exception {
+import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
+
+import static fr.ensicaen.ecole.oasmr.lib.ParamsFromClass.getParamsFromClass;
+
+public class TestTemp {
+
+    public static void main(String[] args) {
+        getParamsFromClass(CommandEchoString.class);
+    }
 }
