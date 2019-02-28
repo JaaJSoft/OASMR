@@ -27,7 +27,7 @@ public class NodeData implements Comparable, Serializable {
     private LocalDateTime lastHeartBeat;
     private Integer heartbeatPeriod;
     private InetAddress nodeAddress;
-    protected int port;
+    private int port;
 
     private String sshLogin = "root";
     private int sshPort = 22;

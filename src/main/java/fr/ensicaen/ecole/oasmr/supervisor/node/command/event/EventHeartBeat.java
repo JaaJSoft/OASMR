@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class EventHeartBeat extends Event {
-    private int id;
+    private final int id;
 
     public EventHeartBeat(int id) {
         this.id = id;

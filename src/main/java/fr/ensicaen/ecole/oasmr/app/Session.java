@@ -18,7 +18,7 @@ package fr.ensicaen.ecole.oasmr.app;
 import java.util.Properties;
 
 public class Session {
-    private static Properties session = new Properties();
+    private static final Properties session = new Properties();
 
     private Session() {
 

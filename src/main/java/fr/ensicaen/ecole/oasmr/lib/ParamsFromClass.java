@@ -15,13 +15,9 @@
 
 package fr.ensicaen.ecole.oasmr.lib;
 
-import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ParamsFromClass {

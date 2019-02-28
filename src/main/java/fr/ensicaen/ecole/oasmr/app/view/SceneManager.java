@@ -18,14 +18,11 @@ package fr.ensicaen.ecole.oasmr.app.view;
 import fr.ensicaen.ecole.oasmr.app.Main;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneAlrdeadyExists;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class SceneManager {

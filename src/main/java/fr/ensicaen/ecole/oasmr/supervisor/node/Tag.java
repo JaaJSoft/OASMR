@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Tag implements Serializable {
-    private String name;
+    private final String name;
 
     public Tag(String name) {
         this.name = name;

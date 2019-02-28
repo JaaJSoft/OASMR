@@ -42,9 +42,7 @@ public class NodesModel {
     }
 
     public void removeCurrentNodes(NodeData nodeData){
-        if(currentNodeData.contains(nodeData)){
-            currentNodeData.remove(nodeData);
-        }
+        currentNodeData.remove(nodeData);
     }
 
     public void refreshNodeBeanList(NodeData[] nodeList){

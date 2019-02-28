@@ -24,10 +24,10 @@ import java.net.InetAddress;
 import java.time.LocalDateTime;
 
 public class EventNewNode extends Event {
-    private InetAddress address;
-    private int port;
-    private String login;
-    private int ssh_port;
+    private final InetAddress address;
+    private final int port;
+    private final String login;
+    private final int ssh_port;
 
     public EventNewNode(InetAddress address, int port, String login, int ssh_port) {
         this.address = address;

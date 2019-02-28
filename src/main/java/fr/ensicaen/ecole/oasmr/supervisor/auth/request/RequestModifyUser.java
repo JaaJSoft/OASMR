@@ -17,16 +17,15 @@ package fr.ensicaen.ecole.oasmr.supervisor.auth.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.User;
-import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionUserUnknown;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
 
 public class RequestModifyUser extends Request {
-    private String login;
-    private String password;
-    private String newLogin;
-    private String newPassword;
+    private final String login;
+    private final String password;
+    private final String newLogin;
+    private final String newPassword;
 
     public RequestModifyUser(String login, String password, String newLogin, String newPassword) {
         this.login = login;

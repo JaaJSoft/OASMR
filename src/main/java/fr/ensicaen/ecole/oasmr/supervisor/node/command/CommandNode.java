@@ -22,10 +22,10 @@ import java.io.Serializable;
 
 public abstract class CommandNode extends Command {
     @Override
-    public Serializable execute(Object... params) throws Exception {
+    protected Serializable execute(Object... params) throws Exception {
         return execute((Node) params[0]);
     }
 
-    public abstract Serializable execute(Node node) throws Exception;
+    protected abstract Serializable execute(Node node) throws Exception;
 
 }

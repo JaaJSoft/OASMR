@@ -22,10 +22,10 @@ import java.io.Serializable;
 
 public abstract class Event extends Command {
     @Override
-    public Serializable execute(Object... params) throws Exception {
+    protected Serializable execute(Object... params) throws Exception {
         return execute((Supervisor) params[0]);
     }
 
-    public abstract Serializable execute(Supervisor supervisor) throws Exception;
+    protected abstract Serializable execute(Supervisor supervisor) throws Exception;
 
 }

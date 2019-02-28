@@ -19,7 +19,6 @@ import fr.ensicaen.ecole.oasmr.app.controller.LoginController;
 import fr.ensicaen.ecole.oasmr.app.controller.MainController;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import javafx.application.Application;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {

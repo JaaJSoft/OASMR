@@ -16,8 +16,6 @@
 package fr.ensicaen.ecole.oasmr.lib;
 
 import java.io.*;
-import java.util.HashSet;
-import java.util.Optional;
 import java.util.Properties;
 
 public class PropertiesFactory {

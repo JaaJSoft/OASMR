@@ -26,11 +26,11 @@ import fr.ensicaen.ecole.oasmr.supervisor.node.NodeFlyweightFactory;
 import java.io.IOException;
 
 public class Supervisor {
-    private NodeFlyweightFactory nodeFlyweightFactory = new NodeFlyweightFactory();
+    private final NodeFlyweightFactory nodeFlyweightFactory = new NodeFlyweightFactory();
     private Server serverRequestHandler;
-    private UserList userList = new UserList();
+    private final UserList userList = new UserList();
 
-    private CommandFinder finder = new CommandFinder("commands");
+    private final CommandFinder finder = new CommandFinder("commands");
 
     public Supervisor(int portRequests) throws IOException, ExceptionPortInvalid {
         serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler(this));

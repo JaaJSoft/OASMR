@@ -18,7 +18,7 @@ package fr.ensicaen.ecole.oasmr.lib.packagemanagment.pip;
 import fr.ensicaen.ecole.oasmr.lib.ProcessBuilderUtil;
 import fr.ensicaen.ecole.oasmr.lib.packagemanagment.pip.exceptions.PipException;
 
-public class PipUtil {
+class PipUtil {
 
     public static String executeDefault(ProcessBuilder p) throws Exception {
         Process process = p.start();
