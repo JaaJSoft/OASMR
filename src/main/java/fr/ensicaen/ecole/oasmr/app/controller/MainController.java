@@ -39,9 +39,9 @@ public class MainController extends View {
             addSubView(nodeListView);
             nodeView = new NodeViewController();
             addSubView(nodeView);
-
             mainPane.setDividerPositions(0.2);
-
+            mainPane.getItems().add(nodeListView.getRoot());
+            mainPane.getItems().add(nodeView.getRoot());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,7 +60,7 @@ public class MainController extends View {
             NodeData[] nodeList = (NodeData[]) requestManager.sendRequest(new RequestGetNodes());
             nodesModel = new NodesModel(nodeList);
             nodesModel.getCurrentNodeData().addListener((ListChangeListener.Change<? extends NodeData> c) -> {
-               nodeView.onStartView();
+               nodeView.onLoad();
             });
             nodeView.setNodesModel(nodesModel);
             nodeListView.setMainController(this);

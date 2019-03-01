@@ -64,7 +64,7 @@ public class SceneManager {
         if (activeView != null)
             activeView.onStop();
         View v = getView(klazz);
-        v.onStartView();
+        v.onLoad();
         activeView = v;
         primaryStage.setScene(v.getScene());
     }

@@ -59,23 +59,24 @@ public abstract class View {
     }
 
     /**
-     * Called when the scene is add in the scene manager
+     * Called when the scene is add in the scene manager or in another view
      */
     public abstract void onCreate();
 
 
     /**
-     * Called at every SceneManager::setScene()
+     * Start the view
      */
     protected abstract void onStart();
 
     /**
+     * Called at every SceneManager::setScene()
      * Update all sub view before
      */
-    public void onStartView(){
+    public void onLoad(){
         onStart();
         for (View v : subView) {
-            v.onStartView();
+            v.onLoad();
         }
     }
 

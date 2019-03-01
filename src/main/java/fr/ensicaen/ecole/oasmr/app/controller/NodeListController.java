@@ -59,9 +59,9 @@ public class NodeListController extends View {
     }
 
 
-    public void refreshNodes(ActionEvent actionEvent) throws Exception {
-        mainController.onStartView();
-    }
+    /*public void refreshNodes(ActionEvent actionEvent) throws Exception {
+        mainController.onLoad();
+    }*/
 
     @Override
     public void onCreate() {
