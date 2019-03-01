@@ -19,22 +19,25 @@ import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.*;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FXClassInitializer {
     private final Stage stage;
     private final Class klazz;
     private final List<JFXTextField> textFields = new ArrayList<>();
-
+    private int selectedIndex = 0;
     public FXClassInitializer(Stage stage, Class klazz) {
         this.stage = stage;
         this.klazz = klazz;
@@ -42,10 +45,38 @@ public class FXClassInitializer {
 
     public void initFromClass(ObjectCreatedHandler handler) {
         List<Parameter[]> parameters = ParamsFromClass.getParamsFromClass(klazz);
-
         JFXDialogLayout content = new JFXDialogLayout();
         content.setHeading(new Label(klazz.getSimpleName()));
-        content.setBody(generateInputFromParameters(parameters.get(0)));
+        if (parameters.size() == 1) {
+            content.setBody(generateInputFromParameters(parameters.get(0)));
+        } else {
+            VBox vBox = new VBox();
+            JFXComboBox<Parameter[]> comboBox = new JFXComboBox<>();
+            for (Parameter[] params : parameters) {
+                comboBox.getItems().add(params);
+            }
+            comboBox.setConverter(new StringConverter<Parameter[]>() {
+                @Override
+                public String toString(Parameter[] parameters) {
+                    return Arrays.toString(parameters);
+                }
+
+                @Override
+                public Parameter[] fromString(String s) {
+                    return new Parameter[0];
+                }
+            });
+            vBox.getChildren().add(comboBox);
+            vBox.getChildren().add(new Label("\n"));
+
+            comboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldvalue, newvalue) -> {
+                if (oldvalue != null)
+                    vBox.getChildren().remove(vBox.getChildren().size() - 1);
+                vBox.getChildren().add(generateInputFromParameters(newvalue));
+                selectedIndex = parameters.indexOf(newvalue);
+            });
+            content.setBody(vBox);
+        }
 
         JFXAlert alert = new JFXAlert(stage);
         alert.setOverlayClose(true);
@@ -62,7 +93,7 @@ public class FXClassInitializer {
             alert.close();
             Object[] inputs = textFields.stream().map(TextInputControl::getText).toArray();
             try {
-                Object o = klazz.getConstructors()[0].newInstance(inputs);
+                Object o = klazz.getConstructors()[selectedIndex].newInstance(inputs);
                 handler.objectCreatedHandler(o);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
@@ -75,6 +106,7 @@ public class FXClassInitializer {
 
     private Node generateInputFromParameters(Parameter[] parameters) {
         VBox vBox = new VBox();
+        textFields.clear();
         for (Parameter p : parameters) {
             HBox hBox = new HBox();
             String name = p.getName();
@@ -84,6 +116,7 @@ public class FXClassInitializer {
             hBox.getChildren().add(textField);
             vBox.getChildren().add(hBox);
         }
+        vBox.setSpacing(20);
         return vBox;
     }
 

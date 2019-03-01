@@ -27,9 +27,12 @@ import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.FXClassInitializer;
-import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr .lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.CommandAptAutoRemove;
+import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.CommandAptSearch;
+import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.CommandAptShow;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.CommandGetSSHLogin;
@@ -111,7 +114,7 @@ public class NodeViewController extends View {
         jeej.setOnAction(e -> {
             Stage stage = (Stage) mainVBox.getScene().getWindow();
 
-            new FXClassInitializer(stage, CommandEchoString.class).initFromClass(newObject -> {
+            new FXClassInitializer(stage, CommandAptShow.class).initFromClass(newObject -> {
                 Command c = (Command) newObject;
                 String response = null;
                 try {
