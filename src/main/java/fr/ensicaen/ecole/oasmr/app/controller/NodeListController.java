@@ -42,26 +42,18 @@ public class NodeListController extends View {
     @FXML
     JFXListView nodeListView;
 
+    private Config config;
     private NodesModel nodesModel;
     private RequestManager requestManager;
     private MainController mainController;
 
     public NodeListController() throws IOException {
         super("NodeList");
+        refreshBtn.setOnAction(e -> {
+            mainController.onLoad();
+        });
+        onCreate();
     }
-
-    public void setNodesModel(NodesModel nodesModel) {
-        this.nodesModel = nodesModel;
-    }
-
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
-
-
-    /*public void refreshNodes(ActionEvent actionEvent) throws Exception {
-        mainController.onLoad();
-    }*/
 
     @Override
     public void onCreate() {
@@ -70,8 +62,9 @@ public class NodeListController extends View {
 
     @Override
     public void onStart() {
+
         try {
-            Config config = Config.getInstance();
+            config = Config.getInstance();
             requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
         } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
             exceptionPortInvalid.printStackTrace();
@@ -102,4 +95,13 @@ public class NodeListController extends View {
     public void onStop() {
 
     }
+
+    public void setNodesModel(NodesModel nodesModel) {
+        this.nodesModel = nodesModel;
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
 }

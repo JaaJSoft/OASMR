@@ -42,6 +42,10 @@ public class MainController extends View {
             mainPane.setDividerPositions(0.2);
             mainPane.getItems().add(nodeListView.getRoot());
             mainPane.getItems().add(nodeView.getRoot());
+            nodeListView.setMainController(this);
+            nodesModel = new NodesModel();
+            nodeView.setNodesModel(nodesModel);
+            nodeListView.setNodesModel(nodesModel);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,13 +62,10 @@ public class MainController extends View {
 
         try {
             NodeData[] nodeList = (NodeData[]) requestManager.sendRequest(new RequestGetNodes());
-            nodesModel = new NodesModel(nodeList);
+            nodesModel.refreshNodeBeanList(nodeList);
             nodesModel.getCurrentNodeData().addListener((ListChangeListener.Change<? extends NodeData> c) -> {
                nodeView.onLoad();
             });
-            nodeView.setNodesModel(nodesModel);
-            nodeListView.setMainController(this);
-            nodeListView.setNodesModel(nodesModel);
         } catch (Exception e) {
             e.printStackTrace();
         }
