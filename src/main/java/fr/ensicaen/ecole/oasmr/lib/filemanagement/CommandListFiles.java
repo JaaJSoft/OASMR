@@ -23,7 +23,6 @@ import java.io.Serializable;
 
 /**
  * Lists all the files of a directory.
- * @TODO Add a filter
  */
 public class CommandListFiles extends Command {
 
