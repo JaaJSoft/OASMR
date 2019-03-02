@@ -18,6 +18,7 @@ package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.Serializable;
 
 /**
@@ -32,18 +33,36 @@ public class CommandListFiles extends Command {
     private String directoryPathName;
 
     /**
+     * A filter
+     */
+    private FilenameFilter filter;
+
+    /**
      *
      * @param directoryPathName The directory path name to list.
      */
     public CommandListFiles(String directoryPathName) {
         this.directoryPathName = directoryPathName;
+        this.filter = null;
+    }
+
+    /**
+     *
+     * @param directoryPathName The directory path name to list.
+     * @param filter a filter
+     */
+    public CommandListFiles(String directoryPathName, FilenameFilter filter) {
+        this.directoryPathName = directoryPathName;
+        this.filter = filter;
     }
 
     @Override
     protected Serializable execute(Object... params) throws Exception {
         File file = new File(directoryPathName);
 
-        return file.list();
+        if (filter == null)
+            return file.list();
+        return file.list(filter);
     }
 
     @Override
