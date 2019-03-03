@@ -41,19 +41,20 @@ public class NodeViewController extends View {
     VBox mainVBox;
 
     @FXML
-    SplitPane vSlitPane;
+    SplitPane vSplitPane;
 
     @FXML
-    SplitPane hSlitPane;
+    SplitPane hSplitPane;
 
     private RequestManager requestManager = null;
     private Config config;
     private NodesModel nodesModel;
-    private TerminalBuilder terminalBuilder;
 
-    private NodeInfoController nodeInfoView;
-    private NodeCommandModuleController nodeModuleView;
-    private NodeTerminalController nodeTermView;
+    private View nodeInfoView;
+    private View nodeModuleView;
+    private View nodeTermView;
+    private View nodeSystemInfo;
+
 
     public NodeViewController(View parent) throws IOException {
         super("NodeView", parent);
@@ -70,11 +71,15 @@ public class NodeViewController extends View {
             addSubView(nodeModuleView);
             nodeTermView = new NodeTerminalController(this);
             addSubView(nodeTermView);
+            nodeSystemInfo = new NodeSystemInfoController(this);
+            addSubView(nodeSystemInfo);
             mainVBox.getChildren().add(nodeInfoView.getRoot());
             mainVBox.getChildren().add(new Separator());
             mainVBox.getChildren().add(nodeModuleView.getRoot());
-            vSlitPane.getItems().add(nodeTermView.getRoot());
-            vSlitPane.setDividerPositions(0.7);
+            vSplitPane.getItems().add(nodeTermView.getRoot());
+            vSplitPane.setDividerPositions(0.75);
+            hSplitPane.getItems().add(nodeSystemInfo.getRoot());
+            hSplitPane.setDividerPositions(0.75);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -95,7 +100,7 @@ public class NodeViewController extends View {
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else {
-
+            //TODO : Configure view for node
         }
     }
 

@@ -6,14 +6,13 @@
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <center>
-        <SplitPane fx:id="hSplitPane" dividerPositions="0.75" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <SplitPane fx:id="hSplitPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <items>
-                <SplitPane fx:id="vSlitPane" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                <SplitPane fx:id="vSplitPane" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                     <items>
                         <VBox fx:id="mainVBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" />
                     </items>
                 </SplitPane>
-                <VBox fx:id="rightVBox" prefHeight="398.0" prefWidth="149.0" />
             </items>
         </SplitPane>
     </center>
