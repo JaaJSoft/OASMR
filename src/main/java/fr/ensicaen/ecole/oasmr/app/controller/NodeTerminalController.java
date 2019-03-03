@@ -31,18 +31,20 @@ public class NodeTerminalController extends View {
     private NodesModel nodesModel;
     private TerminalBuilder terminalBuilder;
 
-    public NodeTerminalController() throws IOException {
-        super("NodeTerminal");
+    public NodeTerminalController(View parent) throws IOException {
+        super("NodeTerminal", parent);
         onCreate();
     }
 
     @Override
     public void onCreate() {
+        nodesModel = NodesModel.getInstance();
         TerminalConfig darkConfig = new TerminalConfig();
         darkConfig.setBackgroundColor(Color.rgb(16, 16, 16));
         darkConfig.setForegroundColor(Color.rgb(240, 240, 240));
         darkConfig.setCursorColor(Color.rgb(255, 0, 0, 0.5));
         terminalBuilder = new TerminalBuilder(darkConfig);
+        nodeTermTabPane.setMaxSize(Double.MAX_VALUE,Double.MAX_VALUE);
     }
 
     @Override
@@ -83,10 +85,6 @@ public class NodeTerminalController extends View {
     @Override
     public void onStop() {
 
-    }
-
-    public void setNodesModel(NodesModel nodesModel){
-        this.nodesModel = nodesModel;
     }
 
 }

@@ -10,10 +10,10 @@ import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestGetAllTags;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestGetNodes;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.VBox;
@@ -42,22 +42,32 @@ public class NodeListController extends View {
     @FXML
     JFXListView nodeListView;
 
+    private RequestManager requestManager;
+
     private Config config;
     private NodesModel nodesModel;
-    private RequestManager requestManager;
-    private MainController mainController;
 
-    public NodeListController() throws IOException {
-        super("NodeList");
-        refreshBtn.setOnAction(e -> {
-            mainController.onLoad();
-        });
+    public NodeListController(View parent) throws IOException {
+        super("NodeList", parent);
         onCreate();
     }
 
     @Override
     public void onCreate() {
-
+        nodesModel = NodesModel.getInstance();
+        refreshBtn.setOnAction(e -> {
+            parent.onLoad();
+        });
+        nodeListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        nodeListView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        nodeListView.setOnMouseClicked(event -> {
+            //TODO : Change to avoid clearing everytime
+            ObservableList<NodeData> l = nodeListView.getSelectionModel().getSelectedItems();
+            nodesModel.getCurrentNodeData().clear();
+            for (NodeData node : l) {
+                nodesModel.addCurrentNodes(node);
+            }
+        });
     }
 
     @Override
@@ -70,16 +80,13 @@ public class NodeListController extends View {
             exceptionPortInvalid.printStackTrace();
         }
 
-        nodeListView.getItems().clear();
-        nodeListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        nodeListView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        nodeListView.setOnMouseClicked(event -> {
-            ObservableList<NodeData> l = nodeListView.getSelectionModel().getSelectedItems();
-            nodesModel.getCurrentNodeData().clear();
-            for (NodeData node : l) {
-                nodesModel.addCurrentNodes(node);
-            }
-        });
+        try {
+            NodeData[] nodeList = (NodeData[]) requestManager.sendRequest(new RequestGetNodes());
+            nodesModel.update(nodeList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        nodeListView.getItems().removeAll();
         nodeListView.setItems(nodesModel.getAllNodeData());
         try {
             filter.getSuggestions().clear();
@@ -94,14 +101,6 @@ public class NodeListController extends View {
     @Override
     public void onStop() {
 
-    }
-
-    public void setNodesModel(NodesModel nodesModel) {
-        this.nodesModel = nodesModel;
-    }
-
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
     }
 
 }

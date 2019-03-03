@@ -32,14 +32,15 @@ public class NodeCommandModuleController extends View {
     private RequestManager requestManager;
     private NodesModel nodesModel;
 
-    public NodeCommandModuleController() throws IOException {
-        super("NodeCommandModule");
+    public NodeCommandModuleController(View parent) throws IOException {
+        super("NodeCommandModule", parent);
         onCreate();
     }
 
     @Override
     public void onCreate() {
-
+        nodesModel = NodesModel.getInstance();
+        nodeCommandTabPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     }
 
     @Override

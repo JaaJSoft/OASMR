@@ -28,14 +28,14 @@ public class NodeInfoController extends View {
     private RequestManager requestManager;
     private NodesModel nodesModel;
 
-    public NodeInfoController() throws IOException {
-        super("NodeInfo");
+    public NodeInfoController(View parent) throws IOException {
+        super("NodeInfo", parent);
         onCreate();
     }
 
     @Override
     public void onCreate() {
-
+        nodesModel = NodesModel.getInstance();
     }
 
     @Override
@@ -87,10 +87,6 @@ public class NodeInfoController extends View {
     @Override
     public void onStop() {
 
-    }
-
-    public void setNodesModel(NodesModel nodesModel){
-        this.nodesModel = nodesModel;
     }
 
 }

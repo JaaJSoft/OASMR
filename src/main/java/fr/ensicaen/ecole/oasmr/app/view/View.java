@@ -33,6 +33,7 @@ public abstract class View {
     protected int width;
     protected int height;
     protected List<View> subView;
+    protected View parent = null;
 
     private String path = "/fr/ensicaen/ecole/oasmr/app/";
 
@@ -47,10 +48,11 @@ public abstract class View {
         subView = new ArrayList<>();
     }
 
-    public View(String fxml) throws IOException {
+    public View(String fxml, View parent) throws IOException {
         this.fxml = fxml;
         this.width = 0;
         this.height = 0;
+        this.parent = parent;
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource(path + fxml + ".fxml"));
         fxmlLoader.setController(this);
@@ -104,6 +106,10 @@ public abstract class View {
 
     public int getHeight() {
         return height;
+    }
+
+    public View getParent(){
+        return parent;
     }
 
     public void addSubView(View v){

@@ -6,17 +6,21 @@ import javafx.collections.ObservableList;
 
 public class NodesModel {
 
+    private static NodesModel instance = null;
+
     private ObservableList<NodeData> allNodeData;
 
     private ObservableList<NodeData> currentNodeData;
 
-    public NodesModel() {
-        this.allNodeData = FXCollections.observableArrayList();
-        this.currentNodeData = FXCollections.observableArrayList();
+    public static NodesModel getInstance(){
+        if(instance == null){
+            instance = new NodesModel();
+        }
+        return instance;
     }
 
-    public NodesModel(NodeData[] nodeList) {
-        this.allNodeData = FXCollections.observableArrayList(nodeList);
+    private NodesModel() {
+        this.allNodeData = FXCollections.observableArrayList();
         this.currentNodeData = FXCollections.observableArrayList();
     }
 
@@ -30,9 +34,9 @@ public class NodesModel {
         currentNodeData.remove(nodeData);
     }
 
-    public void refreshNodeBeanList(NodeData[] nodeList){
-        allNodeData.clear();
+    public void update(NodeData[] nodeList){
         currentNodeData.clear();
+        allNodeData.clear();
         allNodeData.addAll(nodeList);
     }
 
@@ -46,6 +50,10 @@ public class NodesModel {
 
     public int getSelectedAmount(){
         return currentNodeData.size();
+    }
+
+    public int getTotalAmount(){
+        return allNodeData.size();
     }
 
 }

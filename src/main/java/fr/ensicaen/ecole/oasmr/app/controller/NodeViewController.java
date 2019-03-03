@@ -21,6 +21,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -37,49 +38,43 @@ import java.util.concurrent.Future;
 public class NodeViewController extends View {
 
     @FXML
-    Text nodeName;
-
-    @FXML
-    Text nodeId;
-
-    @FXML
-    JFXTabPane moduleTabPane;
-
-    @FXML
-    VBox rightVBox;
-
-    @FXML
     VBox mainVBox;
 
     @FXML
-    JFXTabPane bottomPane;
+    SplitPane vSlitPane;
 
+    @FXML
+    SplitPane hSlitPane;
+
+    private RequestManager requestManager = null;
     private Config config;
     private NodesModel nodesModel;
-    private RequestManager requestManager;
     private TerminalBuilder terminalBuilder;
 
     private NodeInfoController nodeInfoView;
     private NodeCommandModuleController nodeModuleView;
     private NodeTerminalController nodeTermView;
 
-    public NodeViewController() throws IOException {
-        super("NodeView");
+    public NodeViewController(View parent) throws IOException {
+        super("NodeView", parent);
         onCreate();
     }
 
     @Override
     public void onCreate() {
         try {
-            nodeInfoView = new NodeInfoController();
+            nodesModel = NodesModel.getInstance();
+            nodeInfoView = new NodeInfoController(this);
             addSubView(nodeInfoView);
-            nodeModuleView = new NodeCommandModuleController();
+            nodeModuleView = new NodeCommandModuleController(this);
             addSubView(nodeModuleView);
-            nodeTermView = new NodeTerminalController();
+            nodeTermView = new NodeTerminalController(this);
             addSubView(nodeTermView);
             mainVBox.getChildren().add(nodeInfoView.getRoot());
             mainVBox.getChildren().add(new Separator());
             mainVBox.getChildren().add(nodeModuleView.getRoot());
+            vSlitPane.getItems().add(nodeTermView.getRoot());
+            vSlitPane.setDividerPositions(0.7);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,34 +83,25 @@ public class NodeViewController extends View {
     @Override
     public void onStart() {
 
-        try {
-            config = Config.getInstance();
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
+        if(requestManager == null){
+            try {
+                config = Config.getInstance();
+                requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+            } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+                exceptionPortInvalid.printStackTrace();
+            }
         }
 
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
-        } else if (nodesModel.getSelectedAmount() == 1) {
-            //TODO : Configure view for node
         } else {
-            //TODO : Configure view for nothing selected
+            //TODO : Configure view for node
         }
-
-        nodeInfoView.setNodesModel(nodesModel);
-        nodeModuleView.setNodesModel(nodesModel);
-        nodeTermView.setNodesModel(nodesModel);
-
     }
 
     @Override
     public void onStop() {
 
-    }
-
-    public void setNodesModel(NodesModel nodesModel) {
-        this.nodesModel = nodesModel;
     }
 
 }
