@@ -1,39 +1,19 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
-import com.jfoenix.animation.alert.JFXAlertAnimation;
-import com.jfoenix.controls.JFXAlert;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXTabPane;
-import com.kodedu.terminalfx.TerminalBuilder;
-import com.kodedu.terminalfx.TerminalTab;
-import com.kodedu.terminalfx.config.TerminalConfig;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
-import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
-import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
-import fr.ensicaen.ecole.oasmr.supervisor.request.CommandGetSSHLogin;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+
 
 public class NodeViewController extends View {
 
@@ -79,7 +59,7 @@ public class NodeViewController extends View {
             vSplitPane.getItems().add(nodeTermView.getRoot());
             vSplitPane.setDividerPositions(0.75);
             hSplitPane.getItems().add(nodeSystemInfo.getRoot());
-            hSplitPane.setDividerPositions(0.75);
+            hSplitPane.setDividerPositions(0.8);
         } catch (IOException e) {
             e.printStackTrace();
         }

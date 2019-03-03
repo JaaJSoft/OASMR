@@ -6,6 +6,7 @@ import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.system.CommandGetModel;
+import fr.ensicaen.ecole.oasmr.lib.system.CommandGetProcessor;
 import fr.ensicaen.ecole.oasmr.lib.system.CommandGetSystem;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
@@ -87,6 +88,14 @@ public class NodeInfoController extends View {
                         ));
                 nodeInfoVbox.getChildren().add(
                         new Label("System : " + system)
+                );
+                String cpu = (String) requestManager.sendRequest(
+                        new RequestExecuteCommand(
+                                nodesModel.getCurrentNodeData().get(0).getId(),
+                                new CommandGetProcessor()
+                        ));
+                nodeInfoVbox.getChildren().add(
+                        new Label("Processor : " + cpu)
                 );
             } catch (Exception e) {
                 e.printStackTrace();
