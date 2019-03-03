@@ -28,8 +28,8 @@ public class NodeCommandModuleController extends View {
     @FXML
     JFXTabPane nodeCommandTabPane;
 
+    private RequestManager requestManager = null;
     private Config config;
-    private RequestManager requestManager;
     private NodesModel nodesModel;
 
     public NodeCommandModuleController(View parent) throws IOException {
@@ -46,12 +46,15 @@ public class NodeCommandModuleController extends View {
     @Override
     protected void onStart() {
 
-        try {
-            config = Config.getInstance();
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
+        if(requestManager == null){
+            try {
+                config = Config.getInstance();
+                requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+            } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+                exceptionPortInvalid.printStackTrace();
+            }
         }
+
 
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
@@ -75,7 +78,7 @@ public class NodeCommandModuleController extends View {
                                     new CommandEchoString("Test from node")
                             ));
                     System.out.println(response);
-                    Stage stage = (Stage) getScene().getWindow();
+                    Stage stage = (Stage) nodeCommandTabPane.getScene().getWindow();
                     JFXDialogLayout layout = new JFXDialogLayout();
                     layout.setHeading(new Label("Response"));
                     layout.setBody(new Label(response));
@@ -92,21 +95,13 @@ public class NodeCommandModuleController extends View {
                 }
             });
             t.setContent(jeej);
-        } else {
-            //TODO : Configure view for nothing selected
         }
-
-
 
     }
 
     @Override
     public void onStop() {
 
-    }
-
-    public void setNodesModel(NodesModel nodesModel){
-        this.nodesModel = nodesModel;
     }
 
 }

@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXChipView?>
+<?import com.jfoenix.controls.JFXListView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
@@ -9,22 +10,20 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import com.jfoenix.controls.JFXListView?>
-<?import javafx.scene.control.Label?>
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <VBox fx:id="vbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="vbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" spacing="10.0" BorderPane.alignment="CENTER">
          <ImageView fitHeight="76.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@img/OASMR.png" />
             </image>
             <VBox.margin>
-               <Insets bottom="5.0" top="5.0" />
+               <Insets top="5.0" />
             </VBox.margin>
          </ImageView>
-         <JFXChipView fx:id="filter" prefHeight="26.0">
+         <JFXChipView fx:id="filter" prefHeight="20.0">
             <VBox.margin>
-               <Insets top="10.0" />
+               <Insets />
             </VBox.margin>
          </JFXChipView>
          <Separator prefWidth="200.0">
@@ -41,7 +40,11 @@
                </JFXListView>
             </children>
          </VBox>
-         <JFXButton fx:id="refreshBtn" mnemonicParsing="false" text="Refresh" />
+         <JFXButton fx:id="refreshBtn" buttonType="RAISED" ripplerFill="#e8dcdc" stylesheets="@css/style.css" text="Refresh">
+            <VBox.margin>
+               <Insets top="20" />
+            </VBox.margin>
+         </JFXButton>
       </VBox>
    </center>
 </BorderPane>

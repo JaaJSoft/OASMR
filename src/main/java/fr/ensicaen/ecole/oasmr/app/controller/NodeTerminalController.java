@@ -26,7 +26,7 @@ public class NodeTerminalController extends View {
     @FXML
     JFXTabPane nodeTermTabPane;
 
-    private RequestManager requestManager;
+    private RequestManager requestManager = null;
     private Config config;
     private NodesModel nodesModel;
     private TerminalBuilder terminalBuilder;
@@ -49,23 +49,22 @@ public class NodeTerminalController extends View {
 
     @Override
     protected void onStart() {
-
-        try {
-            config = Config.getInstance();
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
+        if(requestManager == null){
+            try {
+                config = Config.getInstance();
+                requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+            } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+                exceptionPortInvalid.printStackTrace();
+            }
         }
 
-        if (nodesModel.getSelectedAmount() > 1) {
-            //TODO : Configure view for group
-        } else if (nodesModel.getSelectedAmount() == 1) {
+        for(NodeData n : nodesModel.getCurrentNodeData()){
             Future<String> username = (Future<String>) requestManager.aSyncSendRequest(new CommandGetSSHLogin());
 
             nodeTermTabPane.getTabs().clear();
-            NodeData n = nodesModel.getCurrentNodeData().get(0);
 
             TerminalTab terminal = terminalBuilder.newTerminal();
+            terminal.setText(n.getNodeAddress().toString());
             try {
                 String user = username.get();
                 String command = "ssh -t " + user + "@" + config.getIP() + " -p " + config.getSSHPort() + " ssh " + n.getSshLogin() + "@" + n.getNodeAddress().getHostAddress() + " -p " + n.getSshPort() + "\n";
@@ -74,8 +73,6 @@ public class NodeTerminalController extends View {
                 e.printStackTrace();
             }
             nodeTermTabPane.getTabs().add(terminal);
-        } else {
-            //TODO : Configure view for nothing selected
         }
 
 

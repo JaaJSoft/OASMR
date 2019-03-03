@@ -24,8 +24,8 @@ public class NodeInfoController extends View {
     @FXML
     VBox nodeInfoVbox;
 
+    private RequestManager requestManager = null;
     private Config config;
-    private RequestManager requestManager;
     private NodesModel nodesModel;
 
     public NodeInfoController(View parent) throws IOException {
@@ -41,15 +41,27 @@ public class NodeInfoController extends View {
     @Override
     protected void onStart() {
 
-        try {
-            config = Config.getInstance();
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
+        if(requestManager == null){
+            try {
+                config = Config.getInstance();
+                requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+            } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+                exceptionPortInvalid.printStackTrace();
+            }
         }
 
+
         if (nodesModel.getSelectedAmount() > 1) {
-            //TODO : Configure view for group
+            //TODO : Differences between tag and multiselection
+            nodeInfoVbox.getChildren().clear();
+            nodeInfoVbox.getChildren().add(
+                    new Label("Group of nodes")
+            );
+            for(NodeData n : nodesModel.getCurrentNodeData()){
+                nodeInfoVbox.getChildren().add(
+                        new Label(n.getName())
+                );
+            }
         } else if (nodesModel.getSelectedAmount() == 1) {
             NodeData node = nodesModel.getCurrentNodeData().get(0);
             nodeInfoVbox.getChildren().clear();
@@ -79,8 +91,6 @@ public class NodeInfoController extends View {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            //TODO : Configure view for nothing selected
         }
     }
 

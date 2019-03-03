@@ -95,7 +95,7 @@ public class NodeViewController extends View {
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else {
-            //TODO : Configure view for node
+
         }
     }
 

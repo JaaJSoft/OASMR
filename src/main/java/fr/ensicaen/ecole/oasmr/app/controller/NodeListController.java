@@ -42,7 +42,7 @@ public class NodeListController extends View {
     @FXML
     JFXListView nodeListView;
 
-    private RequestManager requestManager;
+    private RequestManager requestManager = null;
 
     private Config config;
     private NodesModel nodesModel;
@@ -61,7 +61,6 @@ public class NodeListController extends View {
         nodeListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         nodeListView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         nodeListView.setOnMouseClicked(event -> {
-            //TODO : Change to avoid clearing everytime
             ObservableList<NodeData> l = nodeListView.getSelectionModel().getSelectedItems();
             nodesModel.getCurrentNodeData().clear();
             for (NodeData node : l) {
@@ -73,11 +72,13 @@ public class NodeListController extends View {
     @Override
     public void onStart() {
 
-        try {
-            config = Config.getInstance();
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
+        if(requestManager == null){
+            try {
+                config = Config.getInstance();
+                requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+            } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+                exceptionPortInvalid.printStackTrace();
+            }
         }
 
         try {
