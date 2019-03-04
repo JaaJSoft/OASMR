@@ -63,7 +63,7 @@ public class CommandFinder extends Thread {
         scanDirectory(new File(directory));
     }
 
-    void scanDirectory(File f) {
+    private void scanDirectory(File f) {
         commands.clear();
         requests.clear();
         File[] files = f.listFiles();

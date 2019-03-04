@@ -30,7 +30,7 @@ public class RequestNodeUpdateName extends Request {
     }
 
     @Override
-    public Serializable execute(Supervisor supervisor) throws Exception {//TODO update real node
+    public Serializable execute(Supervisor supervisor) throws Exception {
         supervisor.getNodeFlyweightFactory().getNode(id).setName(newName);
         return 0;
     }

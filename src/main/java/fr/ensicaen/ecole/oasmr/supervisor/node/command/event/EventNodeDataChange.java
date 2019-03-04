@@ -23,8 +23,8 @@ import fr.ensicaen.ecole.oasmr.supervisor.node.command.Event;
 import java.io.Serializable;
 
 public class EventNodeDataChange extends Event {
-    private Integer id;
-    private NodeData newData;
+    private final Integer id;
+    private final NodeData newData;
 
     public EventNodeDataChange(Integer id, NodeData newData) {
         this.id = id;

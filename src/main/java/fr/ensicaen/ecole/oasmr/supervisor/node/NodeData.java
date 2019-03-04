@@ -17,17 +17,17 @@ package fr.ensicaen.ecole.oasmr.supervisor.node;
 
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 public class NodeData implements Comparable, Serializable {
     private final Integer id;
     private String name;
-    private LocalDate lastHeartBeat;
+    private LocalDateTime lastHeartBeat;
     private Integer heartbeatPeriod;
     private InetAddress nodeAddress;
-    protected int port;
+    private int port;
 
     private String sshLogin = "root";
     private int sshPort = 22;
@@ -94,7 +94,7 @@ public class NodeData implements Comparable, Serializable {
         this.sshPort = sshPort;
     }
 
-    public LocalDate getLastHeartBeat() {
+    public LocalDateTime getLastHeartBeat() {
         return lastHeartBeat;
     }
 
@@ -114,7 +114,7 @@ public class NodeData implements Comparable, Serializable {
         this.name = name;
     }
 
-    public void setLastHeartBeat(LocalDate lastHeartBeat) {
+    public void setLastHeartBeat(LocalDateTime lastHeartBeat) {
         this.lastHeartBeat = lastHeartBeat;
     }
 

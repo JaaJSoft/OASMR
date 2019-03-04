@@ -17,14 +17,13 @@ package fr.ensicaen.ecole.oasmr.supervisor.auth.request;
 
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.User;
-import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionUserUnknown;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.Serializable;
 
 public class RequestDeleteUser extends Request {
-    private String login;
-    private String password;
+    private final String login;
+    private final String password;
 
     public RequestDeleteUser(String login, String password) {
         this.login = login;

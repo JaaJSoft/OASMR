@@ -86,10 +86,9 @@ public abstract class View {
 
     public Scene getScene() {
         if(scene == null){
-            return new Scene((Parent) root, width, height);
-        }else{
-            return scene;
+            scene = new Scene((Parent) root, width, height);
         }
+        return scene;
     }
 
     public Node getRoot() {

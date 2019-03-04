@@ -13,12 +13,28 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor;
+package fr.ensicaen.ecole.oasmr.supervisor.node.command;
 
-import java.util.Arrays;
+import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 
-public class Test {
-    public static void main(String[] args) {
-        System.out.println(Arrays.toString(args));
+import java.io.Serializable;
+
+public class CommandNodeUpdateData extends CommandNode {
+    private final NodeData newData;
+
+    public CommandNodeUpdateData(NodeData newData) {
+        this.newData = newData;
+    }
+
+    @Override
+    public Serializable execute(Node node) throws Exception {
+        node.setData(newData);
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "update nodeData";
     }
 }

@@ -13,7 +13,21 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.app.view.exception;
+package fr.ensicaen.ecole.oasmr.lib;
 
-public class ExceptionFXMLNotFound extends Exception {
+import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
+import org.junit.Test;
+
+import java.lang.reflect.Parameter;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
+public class ParamsFromClassTest {
+
+    @Test
+    public void getParamsFromClassTest() {
+        List<Parameter[]> params = ParamsFromClass.getParamsFromClass(CommandEchoString.class);
+        assertEquals("message", params.get(0)[0].getName());
+    }
 }

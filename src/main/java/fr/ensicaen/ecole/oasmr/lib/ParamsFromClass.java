@@ -13,23 +13,22 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor;
+package fr.ensicaen.ecole.oasmr.lib;
 
-import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.io.IOException;
+public class ParamsFromClass {
 
-public class SupervisorMain {
-
-    public static void main(String[] args) throws IOException, ExceptionPortInvalid, CloneNotSupportedException, InterruptedException {
-        Supervisor s;
-        if (args.length == 1) {
-            s = new Supervisor(Integer.parseInt(args[0]));
-        } else {
-            s = new Supervisor(40404);
+    public static List<Parameter[]> getParamsFromClass(Class c) {
+        Constructor[] constructors = c.getConstructors();
+        List<Parameter[]> parameters = new ArrayList<>(constructors.length);
+        for (Constructor constructor : constructors) {
+            Parameter[] constructorParameters = constructor.getParameters();
+            parameters.add(constructorParameters);
         }
-        s.getCommandFinder().addCommand(CommandEchoString.class);
-        s.start();
+        return parameters;
     }
 }

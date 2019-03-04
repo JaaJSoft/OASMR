@@ -13,7 +13,9 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.app.view.exception;
+package fr.ensicaen.ecole.oasmr.lib;
 
-public class ExceptionFXMLNotFound extends Exception {
+public interface ObjectCreatedHandler {
+
+    public void objectCreatedHandler(Object newObject);
 }

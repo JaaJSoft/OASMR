@@ -27,6 +27,10 @@ public class CommandEchoString extends Command {
         this.message = message;
     }
 
+    public CommandEchoString(String message, String message2) {
+        this.message = message;
+    }
+
     @Override
     public Serializable execute(Object... params) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("echo", message);

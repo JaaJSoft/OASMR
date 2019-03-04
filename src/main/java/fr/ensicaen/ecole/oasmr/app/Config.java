@@ -18,12 +18,9 @@ package fr.ensicaen.ecole.oasmr.app;
 import fr.ensicaen.ecole.oasmr.lib.PropertiesFactory;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
@@ -31,10 +28,10 @@ public final class Config {
     private final static int DEFAULT_PORT = 40404;
     private final static int DEFAULT_PORT_SSH = 22;
 
-    private static String file = "config.properties";
+    private static final String file = "config.properties";
     private Properties properties;
 
-    private static Config ourInstance = new Config();
+    private static final Config ourInstance = new Config();
 
     public static Config getInstance() {
         return ourInstance;
