@@ -21,13 +21,17 @@ import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.lib.system.CommandGetCpuLoad;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Stop;
-
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -41,6 +45,7 @@ public class NodeCpuInfoController extends View {
     private Config config;
     private NodesModel nodesModel;
     private Tile cpuGraph;
+    private Timeline scheduleTask;
 
     public NodeCpuInfoController(View parent) throws IOException {
         super("NodeCpuInfo", parent);
@@ -50,6 +55,15 @@ public class NodeCpuInfoController extends View {
     @Override
     public void onCreate() {
         nodesModel = NodesModel.getInstance();
+        scheduleTask = new Timeline(
+                new KeyFrame(Duration.seconds(5), e -> {
+                    try {
+                        cpuGraph.setValue((double) requestManager.sendRequest(new CommandGetCpuLoad()) * 100);
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }));
+        scheduleTask.setCycleCount(Timeline.INDEFINITE);
         cpuGraph = TileBuilder.create()
                 .skinType(Tile.SkinType.GAUGE_SPARK_LINE)
                 .title("Cpu Usage")
@@ -73,10 +87,13 @@ public class NodeCpuInfoController extends View {
                 .prefSize(150,150)
                 .build();
         cpuInfoVBox.getChildren().add(cpuGraph);
+
     }
 
     @Override
     protected void onStart() {
+
+        scheduleTask.stop();
 
         if(requestManager == null){
             try {
@@ -87,7 +104,7 @@ public class NodeCpuInfoController extends View {
             }
         }
 
-        //TODO : Configure Graph and update with heartbeat
+        scheduleTask.play();
 
     }
 
