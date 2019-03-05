@@ -36,14 +36,14 @@
                <Insets top="5.0" />
             </VBox.margin>
          </ImageView>
-         <JFXChipView fx:id="filter" prefHeight="20.0">
+         <JFXChipView fx:id="filter">
             <VBox.margin>
-               <Insets />
+               <Insets left="5.0" right="5.0" />
             </VBox.margin>
          </JFXChipView>
          <Separator prefWidth="200.0">
             <VBox.margin>
-               <Insets top="10.0" />
+               <Insets />
             </VBox.margin>
          </Separator>
          <VBox fx:id="vboxList" alignment="TOP_CENTER" BorderPane.alignment="CENTER">

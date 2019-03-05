@@ -33,6 +33,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Stop;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -75,6 +76,7 @@ public class NodeRamInfoController extends View {
                 .skinType(Tile.SkinType.CIRCULAR_PROGRESS)
                 .prefSize(150,150)
                 .title("RAM usage")
+                .valueVisible(false)
                 .build();
         ramVBox.getChildren().add(ramGraph);
     }
