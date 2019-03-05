@@ -1,3 +1,18 @@
+/*
+ *  Copyright (c) 2019. CCC-Development-Team
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import eu.hansolo.tilesfx.Tile;
@@ -6,13 +21,17 @@ import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.lib.system.CommandGetCpuLoad;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Stop;
-
+import javafx.util.Duration;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -26,6 +45,7 @@ public class NodeCpuInfoController extends View {
     private Config config;
     private NodesModel nodesModel;
     private Tile cpuGraph;
+    private Timeline scheduleTask;
 
     public NodeCpuInfoController(View parent) throws IOException {
         super("NodeCpuInfo", parent);
@@ -35,11 +55,23 @@ public class NodeCpuInfoController extends View {
     @Override
     public void onCreate() {
         nodesModel = NodesModel.getInstance();
+        scheduleTask = new Timeline(
+                new KeyFrame(Duration.seconds(5), e -> {
+                    try {
+                        cpuGraph.setValue((double) requestManager.sendRequest(
+                                new RequestExecuteCommand(
+                                        nodesModel.getCurrentNodeData().get(0).getId(),
+                                        new CommandGetCpuLoad()
+                                )) * 100 );
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }));
+        scheduleTask.setCycleCount(Timeline.INDEFINITE);
         cpuGraph = TileBuilder.create()
                 .skinType(Tile.SkinType.GAUGE_SPARK_LINE)
                 .title("Cpu Usage")
                 .animated(true)
-                .textVisible(false)
                 .averagingPeriod(25)
                 .barColor(Tile.YELLOW_ORANGE)
                 .barBackgroundColor(Color.rgb(255, 0, 0, 0.1))
@@ -58,6 +90,7 @@ public class NodeCpuInfoController extends View {
                 .prefSize(150,150)
                 .build();
         cpuInfoVBox.getChildren().add(cpuGraph);
+
     }
 
     @Override
@@ -72,12 +105,17 @@ public class NodeCpuInfoController extends View {
             }
         }
 
-        //TODO : Configure Graph and update with heartbeat
+        scheduleTask.stop();
+
+        if(nodesModel.getSelectedAmount() == 1){
+            scheduleTask.play();
+
+        }
 
     }
 
     @Override
     public void onStop() {
-
+        scheduleTask.stop();
     }
 }
