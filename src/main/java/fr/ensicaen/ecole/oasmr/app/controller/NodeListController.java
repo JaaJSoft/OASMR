@@ -31,6 +31,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
