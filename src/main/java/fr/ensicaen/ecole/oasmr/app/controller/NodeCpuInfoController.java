@@ -22,6 +22,7 @@ import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.system.CommandGetCpuLoad;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.animation.KeyFrame;
@@ -30,7 +31,6 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Stop;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -58,7 +58,11 @@ public class NodeCpuInfoController extends View {
         scheduleTask = new Timeline(
                 new KeyFrame(Duration.seconds(5), e -> {
                     try {
-                        cpuGraph.setValue((double) requestManager.sendRequest(new CommandGetCpuLoad()) * 100);
+                        cpuGraph.setValue((double) requestManager.sendRequest(
+                                new RequestExecuteCommand(
+                                        nodesModel.getCurrentNodeData().get(0).getId(),
+                                        new CommandGetCpuLoad()
+                                )) * 100 );
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
@@ -68,7 +72,6 @@ public class NodeCpuInfoController extends View {
                 .skinType(Tile.SkinType.GAUGE_SPARK_LINE)
                 .title("Cpu Usage")
                 .animated(true)
-                .textVisible(false)
                 .averagingPeriod(25)
                 .barColor(Tile.YELLOW_ORANGE)
                 .barBackgroundColor(Color.rgb(255, 0, 0, 0.1))
@@ -93,8 +96,6 @@ public class NodeCpuInfoController extends View {
     @Override
     protected void onStart() {
 
-        scheduleTask.stop();
-
         if(requestManager == null){
             try {
                 config = Config.getInstance();
@@ -104,12 +105,17 @@ public class NodeCpuInfoController extends View {
             }
         }
 
-        scheduleTask.play();
+        scheduleTask.stop();
+
+        if(nodesModel.getSelectedAmount() == 1){
+            scheduleTask.play();
+
+        }
 
     }
 
     @Override
     public void onStop() {
-
+        scheduleTask.stop();
     }
 }
