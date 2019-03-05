@@ -28,7 +28,6 @@
          <menus>
             <Menu mnemonicParsing="false" text="File">
               <items>
-                <MenuItem mnemonicParsing="false" text="Settings" />
                   <MenuItem mnemonicParsing="false" text="Exit">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="A" control="ANY" meta="UP" shift="UP" shortcut="UP" />
@@ -40,6 +39,12 @@
             <Menu mnemonicParsing="false" text="Help">
               <items>
                 <MenuItem mnemonicParsing="false" text="About" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Config">
+              <items>
+                  <MenuItem fx:id="menuUserAdmin" mnemonicParsing="false" text="User management" />
+                  <MenuItem fx:id="menuConfig" mnemonicParsing="false" text="Parameters" />
               </items>
             </Menu>
          </menus></MenuBar>

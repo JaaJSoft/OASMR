@@ -22,7 +22,6 @@ import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
-import fr.ensicaen.ecole.oasmr.lib.PropertiesFactory;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAddUser;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAuthentication;
@@ -31,21 +30,17 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
-public class LoginController extends View implements Initializable {
+public class LoginController extends View {
 
     private SceneManager sceneManager;
     private RequestManager requestManager;
-    private Properties p;
 
     @FXML
     Text loginError;
@@ -104,12 +99,8 @@ public class LoginController extends View implements Initializable {
             RequestSetAdmin ra = new RequestSetAdmin("admin", true);
             try {
                 requestManager.sendRequest(r);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
                 requestManager.sendRequest(ra);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

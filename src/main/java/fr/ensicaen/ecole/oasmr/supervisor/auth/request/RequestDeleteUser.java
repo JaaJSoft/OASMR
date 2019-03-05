@@ -25,7 +25,7 @@ import java.io.Serializable;
 public class RequestDeleteUser extends Request {
     private final String login;
 
-    public RequestDeleteUser(String login, String password) {
+    public RequestDeleteUser(String login) {
         this.login = login;
     }
 

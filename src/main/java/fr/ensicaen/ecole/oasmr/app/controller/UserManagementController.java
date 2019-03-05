@@ -101,13 +101,7 @@ public class UserManagementController extends View{
             }
 
             addUser.setOnAction(addUser(new Stage()));
-            returnPrev.setOnAction(actionEvent -> {
-                try {
-                    returnAction(actionEvent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+            returnPrev.setOnAction(this::returnAction);
 
             JFXTreeTableColumn<UserInfo, String> userCol = new JFXTreeTableColumn<>("Login");
             userCol.setPrefWidth(300);
@@ -380,7 +374,7 @@ public class UserManagementController extends View{
     }
 
 
-    private void returnAction(Object actionEvent) throws Exception{
+    private void returnAction(Object actionEvent) {
         try {
             sceneManager.setScenes(MainController.class);
         } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
@@ -390,6 +384,7 @@ public class UserManagementController extends View{
 
     @Override
     public void onCreate() {
+        sceneManager = SceneManager.getInstance();
         try {
             Config config = Config.getInstance();
             requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());

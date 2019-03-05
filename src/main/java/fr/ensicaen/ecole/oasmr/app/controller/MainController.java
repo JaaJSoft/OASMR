@@ -15,26 +15,43 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller;
 
+import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
+import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.View;
+import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
+import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 
 public class MainController extends View {
 
     @FXML
     SplitPane mainPane;
+    @FXML
+    MenuItem menuUserAdmin;
+
+    @FXML
+    MenuItem menuConfig;
 
     private NodesModel nodesModel;
 
     private View defaultView;
     private View nodeListView;
     private View nodeView;
+    private SceneManager sceneManager;
+    private RequestManager requestManager;
+    private Config config;
 
     public MainController(int width, int height) throws IOException {
         super("Main", width, height);
@@ -42,6 +59,7 @@ public class MainController extends View {
 
     @Override
     public void onCreate() {
+        sceneManager = SceneManager.getInstance();
         try {
             nodeListView = new NodeListController(this);
             addSubView(nodeListView);
@@ -57,6 +75,14 @@ public class MainController extends View {
             nodesModel.getCurrentNodeData().addListener((ListChangeListener.Change<? extends NodeData> c) -> {
                 onStart();
             });
+
+            menuUserAdmin.setOnAction(actionEvent -> {
+                try {
+                    sceneManager.setScenes(UserManagementController.class);
+                } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
+                    exceptionSceneNotFound.printStackTrace();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,6 +90,13 @@ public class MainController extends View {
 
     @Override
     public void onStart() {
+
+        try {
+            config = Config.getInstance();
+            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+            exceptionPortInvalid.printStackTrace();
+        }
         if (nodesModel.getSelectedAmount() > 0) {
             mainPane.getItems().set(1, nodeView.getRoot());
             nodeView.onLoad();
