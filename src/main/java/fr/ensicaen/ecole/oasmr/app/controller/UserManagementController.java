@@ -298,8 +298,6 @@ public class UserManagementController extends View{
         }
     }
 
-
-
     private EventHandler<ActionEvent>  addUser(Stage primaryStage) {
         return new EventHandler<ActionEvent>() {
             @Override

@@ -60,12 +60,13 @@ public class CommandFinder extends Thread {
     }
 
     public void scan() {
+        commands.clear();
+        requests.clear();
         scanDirectory(new File(directory));
+        System.out.println(commands);
     }
 
     private void scanDirectory(File f) {
-        commands.clear();
-        requests.clear();
         File[] files = f.listFiles();
         if (files != null) {
             for (File subFile : files) {
@@ -87,7 +88,6 @@ public class CommandFinder extends Thread {
                 jarfile = jarInputStream.getNextJarEntry();
                 if (jarfile != null) {
                     if (jarfile.getName().endsWith(".class")) {
-
                         String classname = jarfile.getName().replace('/', '.').substring(0, jarfile.getName().length() - 6);
                         try {
                             Class c = Class.forName(classname);
@@ -96,7 +96,8 @@ public class CommandFinder extends Thread {
                             } else if (Command.class.isAssignableFrom(c)) {
                                 commands.add(c);
                             }
-                        } catch (Throwable e) {
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
                             System.out.println("WARNING: failed to instantiate " + classname + " from " + jarfile.getName());
                         }
                     }
@@ -106,8 +107,7 @@ public class CommandFinder extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*System.out.println(commands);
-        System.out.println(requests);*/
+
     }
 
     public Set<Class<? extends Command>> getCommands() {
