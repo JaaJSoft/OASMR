@@ -67,19 +67,23 @@ public class UserManagementController extends View{
     @FXML
     JFXButton adminBtn;
 
+    @FXML
+    JFXButton searchBtn;
+
+    @FXML
+    JFXTextField searchUsers;
+
     public UserManagementController(int width, int height) throws IOException {
         super("UserManagement", width, height);
     }
 
-
-
-    public void applyChanges(ActionEvent actionEvent) {
-
+    private void onLoadTest(){
+        onLoadTest("");
     }
 
-    private void onLoadTest() {
+    private void onLoadTest(String userSearch) {
 
-        currentUserLogin = "admin";
+        currentUserLogin = "admin";//TODO: recup l'user, a terme on utilisera un autre moyen...
         RequestGetAdmin requestGetAdmin = new RequestGetAdmin(currentUserLogin);
         Boolean isCurrentAdmin = false;
         try {
@@ -99,6 +103,17 @@ public class UserManagementController extends View{
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            /*
+            if (!userSearch.trim().equals("")) {
+                for (String userSearched : userList) {
+                    if (!userSearched.contains(userSearch)) {
+                        userList.remove(userSearched);
+                    }
+                }
+            }*/
+
+            //searchBtn.setOnAction(reseach());
 
             addUser.setOnAction(addUser(new Stage()));
             returnPrev.setOnAction(actionEvent -> {
@@ -269,6 +284,13 @@ public class UserManagementController extends View{
         }
     }
 
+    /*
+    private EventHandler<ActionEvent> reseach() {
+
+        onLoadTest(searchUsers.getText());
+        return null;
+    }*/
+
     private void modifyUserFunction(Label message, JFXTextField loginField, JFXPasswordField oldPasswordField,JFXPasswordField passwordField) {
 
         if (!loginField.getText().trim().equals("")) {
@@ -397,6 +419,8 @@ public class UserManagementController extends View{
             exceptionPortInvalid.printStackTrace();
         }
     }
+
+
 
     @Override
     public void onStart() {

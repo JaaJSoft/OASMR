@@ -19,7 +19,10 @@
         <padding>
             <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
         </padding>
-
+<HBox alignment="TOP_RIGHT">
+    <JFXTextField promptText="Search" fx:id="searchUsers">    </JFXTextField>
+    <JFXButton fx:id="searchBtn">Search</JFXButton>
+</HBox>
         <HBox alignment="CENTER">
 
             <JFXButton fx:id="adminBtn" ripplerFill="#e8dcdc" text="Set/Unset admin">
