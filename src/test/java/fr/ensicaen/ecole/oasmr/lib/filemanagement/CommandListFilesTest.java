@@ -17,6 +17,9 @@ package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class CommandListFilesTest extends AbstractFileTest {
@@ -26,7 +29,8 @@ public class CommandListFilesTest extends AbstractFileTest {
         CommandListFiles commandListFiles = new CommandListFiles(directoryName1);
 
         String[] res = (String[])commandListFiles.executeCommand();
-
-        assertEquals(this.listFilesDir1, res);
+        Arrays.sort(res);
+        Arrays.sort(this.listFilesDir1);
+        assertArrayEquals(this.listFilesDir1, res);
     }
 }
