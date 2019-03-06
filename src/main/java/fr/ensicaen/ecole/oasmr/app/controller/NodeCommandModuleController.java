@@ -79,12 +79,18 @@ public class NodeCommandModuleController extends View {
         } else if (nodesModel.getSelectedAmount() == 1) {
             nodeCommandTabPane.getTabs().clear();
             Tab t = new Tab();
-            t.setText("Module 1");
+            t.setText("Commands");
             t.setContent(new Label("Insert module core"));
             Tab t2 = new Tab();
-            t2.setText("Module 2");
+            t2.setText("Commands Logs");
             t2.setContent(new Label("Insert module core"));
-            nodeCommandTabPane.getTabs().addAll(t, t2);
+            Tab t3 = new Tab();
+            t3.setText("Tasks manager");
+            t3.setContent(new Label("Insert module core"));
+            Tab t4 = new Tab();
+            t4.setText("Tags");
+            t4.setContent(new Label("Insert module core"));
+            nodeCommandTabPane.getTabs().addAll(t, t2, t3, t4);
 
             FlowPane flowPane = new FlowPane();
             flowPane.setPadding(new Insets(10));
@@ -92,7 +98,6 @@ public class NodeCommandModuleController extends View {
             flowPane.setHgap(8);
             try {
                 Set<Class<? extends Command>> commands = (Set<Class<? extends Command>>) requestManager.sendRequest(new RequestGetCommands());
-                System.out.println(commands);
                 for (Class<? extends Command> command : commands) {
                     JFXButton jeej = initButtonFromClass(command);
                     flowPane.getChildren().add(jeej);

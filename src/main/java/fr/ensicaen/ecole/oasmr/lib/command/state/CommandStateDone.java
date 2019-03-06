@@ -13,12 +13,19 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib.command;
+package fr.ensicaen.ecole.oasmr.lib.command.state;
 
-public enum CommandState {
+import java.io.Serializable;
 
-    WAITING,//WAITING FOR EXECUTION
-    RUNNING,
-    DONE,
-    ERROR,
+public class CommandStateDone implements CommandState {
+    private final Serializable result;
+
+    public CommandStateDone(Serializable result) {
+        this.result = result;
+    }
+
+    @Override
+    public String getStateOutput() {
+        return result.toString();
+    }
 }
