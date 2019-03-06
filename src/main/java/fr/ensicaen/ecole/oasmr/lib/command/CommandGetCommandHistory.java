@@ -16,19 +16,16 @@
 package fr.ensicaen.ecole.oasmr.lib.command;
 
 import java.io.Serializable;
-import java.util.Collection;
 
-public abstract class CommandExecutor {
-    private CommandsHist commandsHist = new CommandsHist();
-
-    public Serializable executeCommand(Command command) throws Exception {
-        commandsHist.addCommand(command);
-        return execute(command);
+public class CommandGetCommandHistory extends Command {
+    @Override
+    protected Serializable execute(Object... params) throws Exception {
+        CommandExecutor c = (CommandExecutor) params[0];
+        return c.getCommandsHistory().toArray(new Command[1]);
     }
 
-    protected abstract Serializable execute(Command c) throws Exception;
-
-    public Collection<Command> getCommandsHistory() {
-        return commandsHist.getCommands();
+    @Override
+    public String toString() {
+        return "get history";
     }
 }

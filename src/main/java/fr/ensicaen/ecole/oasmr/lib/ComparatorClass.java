@@ -13,22 +13,14 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib.command;
+package fr.ensicaen.ecole.oasmr.lib;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Comparator;
 
-public abstract class CommandExecutor {
-    private CommandsHist commandsHist = new CommandsHist();
-
-    public Serializable executeCommand(Command command) throws Exception {
-        commandsHist.addCommand(command);
-        return execute(command);
-    }
-
-    protected abstract Serializable execute(Command c) throws Exception;
-
-    public Collection<Command> getCommandsHistory() {
-        return commandsHist.getCommands();
+public class ComparatorClass implements Serializable, Comparator<Class> {
+    @Override
+    public int compare(Class aClass, Class t1) {
+        return aClass.getName().compareTo(t1.getName());
     }
 }
