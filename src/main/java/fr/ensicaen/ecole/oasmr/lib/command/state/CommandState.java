@@ -15,7 +15,9 @@
 
 package fr.ensicaen.ecole.oasmr.lib.command.state;
 
-public interface CommandState {
+import java.io.Serializable;
+
+public interface CommandState extends Serializable {
 
     String getStateOutput();
 }
