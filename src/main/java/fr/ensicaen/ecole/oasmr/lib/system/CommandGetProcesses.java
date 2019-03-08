@@ -35,8 +35,7 @@ public class CommandGetProcesses extends Command {
         GlobalMemory mem = SystemInfoSingleton.getHardware().getMemory();
         List<OSProcess> procs = Arrays.asList(os.getProcesses(limit, OperatingSystem.ProcessSort.CPU));
         List<HashMap<String, String>> allProcesses = new ArrayList<>();
-        for (int i = 0; i < procs.size(); i++) {
-            OSProcess p = procs.get(i);
+        for (OSProcess p : procs) {
             HashMap<String, String> procInfo = new HashMap<>();
             procInfo.put("PID", String.valueOf(p.getProcessID()));
             procInfo.put("CPU", String.valueOf((100d * (p.getKernelTime() + p.getUserTime()) / p.getUpTime())));

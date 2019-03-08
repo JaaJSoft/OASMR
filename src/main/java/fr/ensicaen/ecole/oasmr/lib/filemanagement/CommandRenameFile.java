@@ -28,12 +28,12 @@ public class CommandRenameFile extends Command {
     /**
      * The file name path to be renamed
      */
-    private String fileNamePathToBeRenamed;
+    private final String fileNamePathToBeRenamed;
 
     /**
      * The new name of the file
      */
-    private String newFileName;
+    private final String newFileName;
 
     /**
      *

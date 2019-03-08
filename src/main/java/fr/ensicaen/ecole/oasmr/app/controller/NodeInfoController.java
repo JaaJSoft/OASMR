@@ -18,7 +18,6 @@ package fr.ensicaen.ecole.oasmr.app.controller;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
-import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.system.CommandGetModel;
 import fr.ensicaen.ecole.oasmr.lib.system.CommandGetProcessor;

@@ -29,7 +29,7 @@ public class CommandRemoveFile extends Command {
     /**
      * The name of the path of the file to be removed.
      */
-    private String fileNamePathToBeRemoved;
+    private final String fileNamePathToBeRemoved;
 
     /**
      *

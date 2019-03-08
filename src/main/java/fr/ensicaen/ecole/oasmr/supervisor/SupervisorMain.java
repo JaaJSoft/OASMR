@@ -22,7 +22,7 @@ import java.io.IOException;
 
 public class SupervisorMain {
 
-    public static void main(String[] args) throws IOException, ExceptionPortInvalid, CloneNotSupportedException, InterruptedException {
+    public static void main(String[] args) throws IOException, ExceptionPortInvalid, InterruptedException {
         Supervisor s;
         if (args.length == 1) {
             s = new Supervisor(Integer.parseInt(args[0]));

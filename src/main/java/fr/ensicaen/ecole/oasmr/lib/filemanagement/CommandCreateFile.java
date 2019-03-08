@@ -28,7 +28,7 @@ public class CommandCreateFile extends Command {
     /**
      * The file path name to create.
      */
-    private String filePathName;
+    private final String filePathName;
 
     /**
      *

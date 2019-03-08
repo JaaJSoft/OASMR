@@ -28,12 +28,12 @@ public class CommandCopyFile extends Command {
     /**
      * The source file path name to copy.
      */
-    private String sourceFilePathName;
+    private final String sourceFilePathName;
 
     /**
      * The destination file path name to copy.
      */
-    private String destinationFilePathName;
+    private final String destinationFilePathName;
 
     /**
      *
@@ -47,23 +47,12 @@ public class CommandCopyFile extends Command {
 
     @Override
     protected Serializable execute(Object... params) throws Exception {
-        FileReader in = null;
-        FileWriter out = null;
 
-        try {
-            in = new FileReader(sourceFilePathName);
-            out = new FileWriter(destinationFilePathName);
+        try (FileReader in = new FileReader(sourceFilePathName); FileWriter out = new FileWriter(destinationFilePathName)) {
 
             int c;
             while ((c = in.read()) != -1) {
                 out.write(c);
-            }
-        }finally {
-            if (in != null) {
-                in.close();
-            }
-            if (out != null) {
-                out.close();
             }
         }
 

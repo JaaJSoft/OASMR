@@ -19,7 +19,6 @@ import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.*;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -86,9 +85,7 @@ public class FXClassInitializer {
 
         JFXButton create = new JFXButton("Ok");
         JFXButton close = new JFXButton("Close");
-        close.setOnAction(actionEvent -> {
-            alert.close();
-        });
+        close.setOnAction(actionEvent -> alert.close());
         create.setOnAction(actionEvent -> {
             alert.close();
             Object[] inputs = textFields.stream().map(TextInputControl::getText).toArray();
@@ -122,6 +119,7 @@ public class FXClassInitializer {
 
     private Node getNodeFrom(Class klazz) {
         JFXTextField textFieldString = new JFXTextField();// TODO handle other type than string & validator
+        //textFieldString.setValidators();
         return textFieldString;
     }
 }

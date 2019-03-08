@@ -22,7 +22,6 @@ import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.FXClassInitializer;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
-import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestGetCommands;
@@ -118,7 +117,7 @@ public class NodeCommandModuleController extends View {
 
             new FXClassInitializer(stage, command).initFromClass(newObject -> {
                 Command c = (Command) newObject;
-                String response = null;
+                String response;
                 try {
                     response = (String) requestManager.sendRequest(
                             new RequestExecuteCommand(nodesModel.getCurrentNodeData().get(0).getId(), c));

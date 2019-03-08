@@ -21,8 +21,6 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.jar.JarEntry;

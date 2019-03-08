@@ -17,5 +17,5 @@ package fr.ensicaen.ecole.oasmr.lib;
 
 public interface ObjectCreatedHandler {
 
-    public void objectCreatedHandler(Object newObject);
+    void objectCreatedHandler(Object newObject);
 }

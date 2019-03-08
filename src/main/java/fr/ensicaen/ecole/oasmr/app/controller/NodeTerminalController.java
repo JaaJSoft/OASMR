@@ -16,7 +16,6 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.controls.JFXTabPane;
-import com.kodedu.terminalfx.Terminal;
 import com.kodedu.terminalfx.TerminalBuilder;
 import com.kodedu.terminalfx.TerminalTab;
 import com.kodedu.terminalfx.config.TerminalConfig;
@@ -47,7 +46,7 @@ public class NodeTerminalController extends View {
     private Config config;
     private NodesModel nodesModel;
     private TerminalBuilder terminalBuilder;
-    private HashMap<Integer, TerminalTab> flyweightTerminal = new HashMap<>();
+    private final HashMap<Integer, TerminalTab> flyweightTerminal = new HashMap<>();
 
     public NodeTerminalController(View parent) throws IOException {
         super("NodeTerminal", parent);

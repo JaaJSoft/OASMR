@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 public abstract class CommandExecutor {
-    private CommandsHist commandsHist = new CommandsHist();
+    private final CommandsHist commandsHist = new CommandsHist();
 
     public Serializable executeCommand(Command command) throws Exception {
         commandsHist.addCommand(command);

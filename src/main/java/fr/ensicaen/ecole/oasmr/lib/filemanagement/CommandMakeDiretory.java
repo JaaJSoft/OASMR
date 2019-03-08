@@ -28,7 +28,7 @@ public class CommandMakeDiretory extends Command {
     /**
      * The directory path name to be created.
      */
-    private String directoryPathName;
+    private final String directoryPathName;
 
     /**
      *

@@ -22,12 +22,14 @@ import picocli.CommandLine;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "list")
-public class ListCli implements Callable {
+class ListCli implements Callable {
 
     @CommandLine.ParentCommand
+    private
     MainCli main;
 
     @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "display a help message")
+    private
     boolean help = false;
 
     @Override

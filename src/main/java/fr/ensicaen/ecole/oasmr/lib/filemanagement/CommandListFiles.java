@@ -29,12 +29,12 @@ public class CommandListFiles extends Command {
     /**
      * The directory path name to list.
      */
-    private String directoryPathName;
+    private final String directoryPathName;
 
     /**
      * A filter
      */
-    private FilenameFilter filter;
+    private final FilenameFilter filter;
 
     /**
      *
