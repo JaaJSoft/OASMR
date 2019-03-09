@@ -67,8 +67,8 @@ public class UserManagementController extends View{
     @FXML
     JFXButton adminBtn;
 
-    public UserManagementController(int width, int height) throws IOException {
-        super("UserManagement", width, height);
+    public UserManagementController() throws IOException {
+        super("UserManagement");
     }
 
 
@@ -374,7 +374,7 @@ public class UserManagementController extends View{
 
     private void returnAction(Object actionEvent) {
         try {
-            sceneManager.setScenes(MainController.class);
+            sceneManager.setScenes(MainController.class, 1500, 800);
         } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
             exceptionSceneNotFound.printStackTrace();
         }

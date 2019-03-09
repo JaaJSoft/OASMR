@@ -30,17 +30,13 @@ public abstract class View {
     protected Scene scene;
     protected Node root;
     protected String fxml;
-    protected int width;
-    protected int height;
     protected List<View> subView;
     protected View parent = null;
 
     private String path = "/fr/ensicaen/ecole/oasmr/app/";
 
-    public View(String fxml, int width, int height) throws IOException {
+    public View(String fxml) throws IOException {
         this.fxml = fxml;
-        this.width = width;
-        this.height = height;
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource(path + fxml + ".fxml"));
         fxmlLoader.setController(this);
@@ -50,8 +46,6 @@ public abstract class View {
 
     public View(String fxml, View parent) throws IOException {
         this.fxml = fxml;
-        this.width = 0;
-        this.height = 0;
         this.parent = parent;
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource(path + fxml + ".fxml"));
@@ -86,7 +80,7 @@ public abstract class View {
 
     public Scene getScene() {
         if(scene == null){
-            scene = new Scene((Parent) root, width, height);
+            scene = new Scene((Parent) root);
         }
         return scene;
     }
@@ -97,14 +91,6 @@ public abstract class View {
 
     public String getFxml() {
         return fxml;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
     }
 
     public View getParent(){
@@ -125,6 +111,6 @@ public abstract class View {
 
     @Override
     public int hashCode() {
-        return Objects.hash(fxml, width, height);
+        return Objects.hash(fxml);
     }
 }

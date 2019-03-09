@@ -53,8 +53,8 @@ public class MainController extends View {
     private RequestManager requestManager;
     private Config config;
 
-    public MainController(int width, int height) throws IOException {
-        super("Main", width, height);
+    public MainController() throws IOException {
+        super("Main");
     }
 
     @Override
@@ -78,7 +78,7 @@ public class MainController extends View {
 
             menuUserAdmin.setOnAction(actionEvent -> {
                 try {
-                    sceneManager.setScenes(UserManagementController.class);
+                    sceneManager.setScenes(UserManagementController.class, 1500, 800);
                 } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                     exceptionSceneNotFound.printStackTrace();
                 }

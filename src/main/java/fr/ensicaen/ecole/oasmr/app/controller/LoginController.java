@@ -60,8 +60,8 @@ public class LoginController extends View {
     @FXML
     JFXTextField portNumber;
 
-    public LoginController(int width, int height) throws IOException {
-        super("Login", width, height);
+    public LoginController() throws IOException {
+        super("Login");
     }
 
     private boolean checkInput() { //TODO CHECK PORT NOT VALID
@@ -109,7 +109,7 @@ public class LoginController extends View {
             try {
                 if ((boolean) requestManager.sendRequest(requestAuthentication)) {
                     try {
-                        sceneManager.setScenes(MainController.class);
+                        sceneManager.setScenes(MainController.class, 1500, 800);
                     } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                         exceptionSceneNotFound.printStackTrace();
                     }

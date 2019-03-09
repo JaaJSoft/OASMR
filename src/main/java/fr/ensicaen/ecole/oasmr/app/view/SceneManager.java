@@ -72,15 +72,16 @@ public class SceneManager {
 
     }
 
-    public void setScenes(Class<? extends View> klazz) throws ExceptionSceneNotFound {
+    public void setScenes(Class<? extends View> klazz, int width, int height) throws ExceptionSceneNotFound {
         if (activeView != null)
             activeView.onStop();
         View v = getView(klazz);
+        primaryStage.setWidth(width);
+        primaryStage.setHeight(height);
         v.onLoad();
         activeView = v;
         primaryStage.setScene(v.getScene());
     }
-
 
     public void show() {
         primaryStage.show();

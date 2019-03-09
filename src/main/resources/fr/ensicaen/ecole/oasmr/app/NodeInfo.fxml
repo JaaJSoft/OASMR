@@ -2,7 +2,6 @@
 
 <?import javafx.scene.layout.VBox?>
 
-
 <!--
   ~  Copyright (c) 2019. CCC-Development-Team
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,4 +17,5 @@
   ~  limitations under the License.
   -->
 
-<VBox fx:id="nodeInfoVbox" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="125.0" prefWidth="600.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" />
+
+<VBox fx:id="nodeInfoVbox" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" />
