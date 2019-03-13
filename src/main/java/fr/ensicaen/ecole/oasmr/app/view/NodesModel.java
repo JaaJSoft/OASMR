@@ -1,53 +1,74 @@
+/*
+ *  Copyright (c) 2019. CCC-Development-Team
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package fr.ensicaen.ecole.oasmr.app.view;
 
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class NodesModel {
 
-    private ObservableList<NodeBean> allNodeBeans;
+    private static NodesModel instance = null;
 
-    private ObservableList<NodeBean> currentNodeBeans;
+    private ObservableList<NodeData> allNodeData;
 
-    public NodesModel() {
-        this.allNodeBeans = FXCollections.observableArrayList();
-        this.currentNodeBeans = FXCollections.observableArrayList();
+    private ObservableList<NodeData> currentNodeData;
+
+    public static NodesModel getInstance(){
+        if(instance == null){
+            instance = new NodesModel();
+        }
+        return instance;
     }
 
-    public NodesModel(NodeBean[] nodeList) {
-        this.allNodeBeans = FXCollections.observableArrayList(nodeList);
-        this.currentNodeBeans = FXCollections.observableArrayList();
+    private NodesModel() {
+        this.allNodeData = FXCollections.observableArrayList();
+        this.currentNodeData = FXCollections.observableArrayList();
     }
 
-    public void addCurrentNodes(NodeBean nodeBean){
-        if(!currentNodeBeans.contains(nodeBean)){
-            currentNodeBeans.add(nodeBean);
+    public void addCurrentNodes(NodeData nodeData){
+        if(!currentNodeData.contains(nodeData)){
+            currentNodeData.add(nodeData);
         }
     }
 
-    public void removeCurrentNodes(NodeBean nodeBean){
-        if(currentNodeBeans.contains(nodeBean)){
-            currentNodeBeans.remove(nodeBean);
-        }
+    public void removeCurrentNodes(NodeData nodeData){
+        currentNodeData.remove(nodeData);
     }
 
-    public void refreshNodeBeanList(NodeBean[] nodeList){
-        allNodeBeans.clear();
-        currentNodeBeans.clear();
-        allNodeBeans.addAll(nodeList);
+    public void update(NodeData[] nodeList){
+        currentNodeData.clear();
+        allNodeData.clear();
+        allNodeData.addAll(nodeList);
     }
 
-    public ObservableList<NodeBean> getAllNodeBeans(){
-        return allNodeBeans;
+    public ObservableList<NodeData> getAllNodeData(){
+        return allNodeData;
     }
 
-    public ObservableList<NodeBean> getCurrentNodeBeans(){
-        return currentNodeBeans;
+    public ObservableList<NodeData> getCurrentNodeData(){
+        return currentNodeData;
     }
 
     public int getSelectedAmount(){
-        return currentNodeBeans.size();
+        return currentNodeData.size();
+    }
+
+    public int getTotalAmount(){
+        return allNodeData.size();
     }
 
 }

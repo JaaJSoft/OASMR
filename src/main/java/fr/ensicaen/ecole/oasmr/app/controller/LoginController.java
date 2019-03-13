@@ -1,3 +1,18 @@
+/*
+ *  Copyright (c) 2019. CCC-Development-Team
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.controls.JFXButton;
@@ -7,7 +22,6 @@ import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
-import fr.ensicaen.ecole.oasmr.lib.PropertiesFactory;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAddUser;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAuthentication;
@@ -16,22 +30,16 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URL;
 import java.net.UnknownHostException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.Properties;
-import java.util.ResourceBundle;
 
 public class LoginController extends View {
 
     private SceneManager sceneManager;
     private RequestManager requestManager;
-    private Properties p;
 
     @FXML
     Text loginError;
@@ -90,12 +98,8 @@ public class LoginController extends View {
             RequestSetAdmin ra = new RequestSetAdmin("admin", true);
             try {
                 requestManager.sendRequest(r);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
                 requestManager.sendRequest(ra);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -104,7 +108,7 @@ public class LoginController extends View {
             try {
                 if ((boolean) requestManager.sendRequest(requestAuthentication)) {
                     try {
-                        sceneManager.setScenes(UserManagementController.class);
+                        sceneManager.setScenes(MainController.class);
                     } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                         exceptionSceneNotFound.printStackTrace();
                     }
@@ -115,6 +119,7 @@ public class LoginController extends View {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
     }
 

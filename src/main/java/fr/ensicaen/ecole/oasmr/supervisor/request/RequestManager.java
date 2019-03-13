@@ -27,10 +27,14 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.exception.ExceptionRequestResp
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class RequestManager {
     private final InetAddress address;
     private final int port;
+    private final ExecutorService executorService;
 
     public RequestManager(InetAddress address, int port) throws ExceptionPortInvalid {
         this.address = address;
@@ -39,6 +43,7 @@ public class RequestManager {
         } else {
             throw new ExceptionPortInvalid();
         }
+        executorService = Executors.newCachedThreadPool();
     }
 
     public Serializable sendRequest(Command r) throws Exception {
@@ -61,6 +66,10 @@ public class RequestManager {
             e.printStackTrace();
         }
         throw new ExceptionRequestError();
+    }
+
+    public Future<? extends Serializable> aSyncSendRequest(Command r) {
+        return executorService.submit(() -> sendRequest(r));
     }
 
     @Override

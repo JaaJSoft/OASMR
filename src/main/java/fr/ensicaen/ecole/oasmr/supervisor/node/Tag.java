@@ -15,10 +15,11 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.node;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Tag {
-    private String name;
+public class Tag implements Serializable {
+    private final String name;
 
     public Tag(String name) {
         this.name = name;
@@ -40,5 +41,9 @@ public class Tag {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    public String getName() {
+        return name;
     }
 }

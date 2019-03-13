@@ -22,8 +22,13 @@ import java.io.IOException;
 
 public class SupervisorMain {
 
-    public static void main(String[] args) throws IOException, ExceptionPortInvalid, CloneNotSupportedException, InterruptedException {
-        Supervisor s = new Supervisor(6969, 40404);
+    public static void main(String[] args) throws IOException, ExceptionPortInvalid, InterruptedException {
+        Supervisor s;
+        if (args.length == 1) {
+            s = new Supervisor(Integer.parseInt(args[0]));
+        } else {
+            s = new Supervisor(40404);
+        }
         s.getCommandFinder().addCommand(CommandEchoString.class);
         s.start();
     }

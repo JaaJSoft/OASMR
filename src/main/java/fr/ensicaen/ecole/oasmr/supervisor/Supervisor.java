@@ -16,6 +16,7 @@
 package fr.ensicaen.ecole.oasmr.supervisor;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr.lib.command.CommandExecutor;
 import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
@@ -23,33 +24,22 @@ import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionServerRunnableNotEnded;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.UserList;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeFlyweightFactory;
-import fr.ensicaen.ecole.oasmr.supervisor.node.ServerRunnableHeartBeatsHandler;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
 
-public class Supervisor {
-    private NodeFlyweightFactory nodeFlyweightFactory = new NodeFlyweightFactory();
-    private Server serverHeartBeatsHandler;
+public class Supervisor extends CommandExecutor {
+    private final NodeFlyweightFactory nodeFlyweightFactory = new NodeFlyweightFactory();
     private Server serverRequestHandler;
-    private UserList userList = new UserList();
+    private final UserList userList = new UserList();
 
-    private CommandFinder finder = new CommandFinder("commands");
+    private final CommandFinder finder = new CommandFinder("commands");
 
-    public Supervisor(int portHeartBeats, int portRequests) throws IOException, ExceptionPortInvalid {
-        serverHeartBeatsHandler = new Server(portHeartBeats, new ServerRunnableHeartBeatsHandler(this));
-        serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler("Request", this));
+    public Supervisor(int portRequests) throws IOException, ExceptionPortInvalid {
+        serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler(this));
     }
 
     public void start() throws InterruptedException {
-        Thread ThreadServerHeartBeatsHandler = new Thread(() -> {
-            try {
-                serverHeartBeatsHandler.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
         Thread ThreadServerRequestHandler = new Thread(() -> {
             try {
                 serverRequestHandler.start();
@@ -57,23 +47,20 @@ public class Supervisor {
                 e.printStackTrace();
             }
         });
-        System.out.print("[" + dateUtil.getFormattedDate() + "]-> HeartBeatHandler loading... ");
-        ThreadServerHeartBeatsHandler.start();
-        System.out.println("Done !");
-        System.out.print("[" + dateUtil.getFormattedDate() + "]-> RequestHandler loading... ");
+
+        System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandHandler (" + serverRequestHandler.getPort() + ") loading... ");
         ThreadServerRequestHandler.start();
         System.out.println("Done !");
-        System.out.print("[" + dateUtil.getFormattedDate() + "]-> Command finder loading... ");
+        System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandFinder loading... ");
         finder.start();
         System.out.println("Done !");
-        ThreadServerHeartBeatsHandler.join();
         ThreadServerRequestHandler.join();
         finder.join();
     }
 
     public void stop() throws ExceptionServerRunnableNotEnded {
-        serverHeartBeatsHandler.stop();
         serverRequestHandler.stop();
+        finder.interrupt();
     }
 
     public NodeFlyweightFactory getNodeFlyweightFactory() {
@@ -86,5 +73,10 @@ public class Supervisor {
 
     public CommandFinder getCommandFinder() {
         return finder;
+    }
+
+    @Override
+    protected Serializable execute(Command c) throws Exception {
+        return c.executeCommand(this);
     }
 }

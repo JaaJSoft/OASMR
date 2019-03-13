@@ -16,7 +16,7 @@
 package fr.ensicaen.ecole.oasmr.supervisor.request;
 
 import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
-import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestExecuteCommand;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 
 import java.net.InetAddress;
 

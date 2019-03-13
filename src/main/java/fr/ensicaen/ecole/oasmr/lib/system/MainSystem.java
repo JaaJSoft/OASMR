@@ -1,7 +1,20 @@
-package fr.ensicaen.ecole.oasmr.lib.system;
 /*
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+ *  Copyright (c) 2019. CCC-Development-Team
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+package fr.ensicaen.ecole.oasmr.lib.system;
+
 import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.software.os.*;
@@ -11,75 +24,50 @@ import oshi.util.Util;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.lang.Thread.sleep;
-
 public class MainSystem {
 
     public static void main(String[] args) {
 
-        try {
+        SystemInfo si = new SystemInfo();
 
-            // Options: ERROR > WARN > INFO > DEBUG > TRACE
+        HardwareAbstractionLayer hal = si.getHardware();
+        OperatingSystem os = si.getOperatingSystem();
 
-            SystemInfo si = new SystemInfo();
+        System.out.println(os);
 
-            HardwareAbstractionLayer hal = si.getHardware();
-            OperatingSystem os = si.getOperatingSystem();
+        printComputerSystem(hal.getComputerSystem());
 
-            System.out.println(os);
+        printProcessor(hal.getProcessor());
 
-            printComputerSystem(hal.getComputerSystem());
-            sleep(10000);
+        printMemory(hal.getMemory());
 
-            printProcessor(hal.getProcessor());
-            sleep(10000);
+        printCpu(hal.getProcessor());
 
-            printMemory(hal.getMemory());
-            sleep(10000);
+        printProcesses(os, hal.getMemory());
 
-            printCpu(hal.getProcessor());
-            sleep(10000);
+        printSensors(hal.getSensors());
 
-            printProcesses(os, hal.getMemory());
-            sleep(10000);
+        printPowerSources(hal.getPowerSources());
 
-            printSensors(hal.getSensors());
-            sleep(10000);
+        printDisks(hal.getDiskStores());
 
-            printPowerSources(hal.getPowerSources());
-            sleep(10000);
+        printFileSystem(os.getFileSystem());
 
-            printDisks(hal.getDiskStores());
-            sleep(10000);
+        printNetworkInterfaces(hal.getNetworkIFs());
 
-            printFileSystem(os.getFileSystem());
-            sleep(10000);
+        printNetworkParameters(os.getNetworkParams());
 
-            printNetworkInterfaces(hal.getNetworkIFs());
-            sleep(10000);
+        // hardware: displays
+        printDisplays(hal.getDisplays());
 
-            printNetworkParameters(os.getNetworkParams());
-            sleep(10000);
+        // hardware: USB devices
+        printUsbDevices(hal.getUsbDevices(true));
 
-            // hardware: displays
-            printDisplays(hal.getDisplays());
-            sleep(10000);
-
-            // hardware: USB devices
-            printUsbDevices(hal.getUsbDevices(true));
-            sleep(10000);
-
-            printSoundCards(hal.getSoundCards());
-            sleep(10000);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        printSoundCards(hal.getSoundCards());
 
     }
 
     private static void printComputerSystem(final ComputerSystem computerSystem) {
-
         System.out.println("manufacturer: " + computerSystem.getManufacturer());
         System.out.println("model: " + computerSystem.getModel());
         System.out.println("serialnumber: " + computerSystem.getSerialNumber());
@@ -165,13 +153,7 @@ public class MainSystem {
         List<OSProcess> procs = Arrays.asList(os.getProcesses(5, OperatingSystem.ProcessSort.CPU));
 
         System.out.println("   PID  %CPU %MEM       VSZ       RSS Name");
-        for (int i = 0; i < procs.size() && i < 5; i++) {
-            OSProcess p = procs.get(i);
-            System.out.format(" %5d %5.1f %4.1f %9s %9s %s%n", p.getProcessID(),
-                    100d * (p.getKernelTime() + p.getUserTime()) / p.getUpTime(),
-                    100d * p.getResidentSetSize() / memory.getTotal(), FormatUtil.formatBytes(p.getVirtualSize()),
-                    FormatUtil.formatBytes(p.getResidentSetSize()), p.getName());
-        }
+
     }
 
     private static void printSensors(Sensors sensors) {
@@ -301,4 +283,3 @@ public class MainSystem {
     }
 
 }
-*/

@@ -18,21 +18,20 @@ package fr.ensicaen.ecole.oasmr.app;
 import fr.ensicaen.ecole.oasmr.lib.PropertiesFactory;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
 public final class Config {
     private final static int DEFAULT_PORT = 40404;
-    private static String file = "config.properties";
+    private final static int DEFAULT_PORT_SSH = 22;
+
+    private static final String file = "config.properties";
     private Properties properties;
 
-    private static Config ourInstance = new Config();
+    private static final Config ourInstance = new Config();
 
     public static Config getInstance() {
         return ourInstance;
@@ -94,4 +93,19 @@ public final class Config {
         setAndStoreProperty("port", port);
     }
 
+    public int getSSHPort() {
+        return Integer.parseInt(properties.getProperty("ssh_port", String.valueOf(DEFAULT_PORT_SSH)));
+    }
+
+    public String getSSHPortInString() {
+        return properties.getProperty("ssh_port", String.valueOf(DEFAULT_PORT_SSH));
+    }
+
+    public void setSSHPort(int ssh_port) {
+        setAndStoreProperty("ssh_port", String.valueOf(ssh_port));
+    }
+
+    public void setSSHPort(String ssh_port) {
+        setAndStoreProperty("ssh_port", ssh_port);
+    }
 }

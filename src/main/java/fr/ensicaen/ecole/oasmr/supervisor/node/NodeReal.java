@@ -21,6 +21,9 @@ import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.HeartbeatNodeAlive;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.event.EventNodeDataChange;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -29,15 +32,17 @@ import java.net.InetAddress;
 public class NodeReal extends Node {
     private Server server;
     private Heart heart;
-    private InetAddress supervisorAddress;
-    private int supervisorPort;
+    private final InetAddress supervisorAddress;
+    private final int supervisorPort;
+    private final RequestManager requestManager;
 
-    NodeReal(NodeBean data, InetAddress supervisorAddress, int supervisorPort) throws IOException, ExceptionPortInvalid {
+    NodeReal(NodeData data, InetAddress supervisorAddress, int supervisorPort) throws IOException, ExceptionPortInvalid {
         super(data);
+        requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(supervisorAddress, supervisorPort);
         this.supervisorAddress = supervisorAddress;
         this.supervisorPort = supervisorPort;
-        server = new Server(data.getPort(), new ServerRunnableCommandHandler("command", this));
-        heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort, data.getPort()), 5, this);
+        server = new Server(data.getPort(), new ServerRunnableCommandHandler(this));
+        heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort), data.getHeartbeatPeriod(), this);
     }
 
     public void start() throws IOException {
@@ -47,7 +52,16 @@ public class NodeReal extends Node {
     }
 
     @Override
-    public Serializable executeCommand(Command c) throws Exception {
-        return c.execute(this);
+    protected Serializable execute(Command c) throws Exception {
+        return c.executeCommand(this);
+    }
+
+    @Override
+    public void syncData() {
+        try {
+            requestManager.sendRequest(new EventNodeDataChange(getId(),data));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

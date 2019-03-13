@@ -16,19 +16,25 @@
 package fr.ensicaen.ecole.oasmr.app.view;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class View {
 
     protected Scene scene;
-    protected Parent root;
+    protected Node root;
     protected String fxml;
     protected int width;
     protected int height;
+    protected List<View> subView;
+    protected View parent = null;
+
     private String path = "/fr/ensicaen/ecole/oasmr/app/";
 
     public View(String fxml, int width, int height) throws IOException {
@@ -39,40 +45,53 @@ public abstract class View {
         fxmlLoader.setLocation(getClass().getResource(path + fxml + ".fxml"));
         fxmlLoader.setController(this);
         root = fxmlLoader.load();
+        subView = new ArrayList<>();
     }
 
-    public View(String fxml) throws IOException {
+    public View(String fxml, View parent) throws IOException {
         this.fxml = fxml;
         this.width = 0;
         this.height = 0;
+        this.parent = parent;
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource(path + fxml + ".fxml"));
         fxmlLoader.setController(this);
         root = fxmlLoader.load();
+        subView = new ArrayList<>();
     }
 
-
     /**
-     * Called when the scene is add in the scene manager
+     * Called when the scene is add in the scene manager or in another view
      */
     public abstract void onCreate();
 
+
+    /**
+     * Start the view
+     */
+    protected abstract void onStart();
+
     /**
      * Called at every SceneManager::setScene()
+     * Update all sub view before
      */
-    public abstract void onStart();
+    public void onLoad(){
+        onStart();
+        for (View v : subView) {
+            v.onLoad();
+        }
+    }
 
     public abstract void onStop();
 
     public Scene getScene() {
         if(scene == null){
-            return new Scene(root, width, height);
-        }else{
-            return scene;
+            scene = new Scene((Parent) root, width, height);
         }
+        return scene;
     }
 
-    public Parent getRoot() {
+    public Node getRoot() {
         return root;
     }
 
@@ -86,6 +105,14 @@ public abstract class View {
 
     public int getHeight() {
         return height;
+    }
+
+    public View getParent(){
+        return parent;
+    }
+
+    public void addSubView(View v){
+        subView.add(v);
     }
 
     @Override

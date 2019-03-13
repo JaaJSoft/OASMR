@@ -1,16 +1,29 @@
 
+/*
+ *  Copyright (c) 2019. CCC-Development-Team
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package fr.ensicaen.ecole.oasmr.lib.packagemanagment.pip;
 
-import fr.ensicaen.ecole.oasmr.lib.ProcessBuilderUtil;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
-import fr.ensicaen.ecole.oasmr.lib.packagemanagment.pip.exceptions.PipException;
 
 import java.io.IOException;
 import java.io.Serializable;
 
 public class CommandPipInstall extends Command {
 
-    private String packageName;
+    private final String packageName;
 
     public CommandPipInstall(String packageName) { this.packageName = packageName; }
 
@@ -18,19 +31,7 @@ public class CommandPipInstall extends Command {
     public Serializable execute(Object... params) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("pip", "install", packageName);
         try {
-            Process p = processBuilder.start();
-            p.waitFor();
-            int ret = p.exitValue();
-            switch (ret) {
-                case 0:
-                    //System.out.println(ProcessBuilderUtil.getOutput(p));
-                    return ProcessBuilderUtil.getOutput(p);
-
-                default:
-                    throw new PipException(ProcessBuilderUtil.getOutputError(p));
-
-            }
-
+            return PipUtil.executeDefault(processBuilder);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return e;
@@ -39,6 +40,6 @@ public class CommandPipInstall extends Command {
 
     @Override
     public String toString() {
-        return "pip" + " " + "install" + " " + packageName;
+        return "pip " + "install " + packageName;
     }
 }

@@ -16,19 +16,25 @@
 package fr.ensicaen.ecole.oasmr.supervisor.node;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr.lib.command.CommandExecutor;
+import fr.ensicaen.ecole.oasmr.lib.command.CommandsHist;
 
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
-public abstract class Node implements Comparable, Serializable {
+public abstract class Node extends CommandExecutor implements Comparable, Serializable {
 
-    protected final NodeBean data;
+    protected NodeData data;
 
-    protected Node(NodeBean data) {
+    private final CommandsHist hist;
+
+    protected Node(NodeData data) {
         this.data = data;
+        hist = new CommandsHist();
     }
+
 
     @Override
     public int compareTo(Object o) {
@@ -51,7 +57,9 @@ public abstract class Node implements Comparable, Serializable {
         return data.getId();
     }
 
-    public abstract Serializable executeCommand(Command c) throws Exception;
+    protected abstract Serializable execute(Command c) throws Exception;
+
+    public abstract void syncData();
 
     public Integer getId() {
         return data.getId();
@@ -61,7 +69,7 @@ public abstract class Node implements Comparable, Serializable {
         return data.getName();
     }
 
-    public LocalDate getLastHeartBeat() {
+    public LocalDateTime getLastHeartBeat() {
         return data.getLastHeartBeat();
     }
 
@@ -73,7 +81,7 @@ public abstract class Node implements Comparable, Serializable {
         return data.getPort();
     }
 
-    public void setLastHeartBeat(LocalDate lastHeartBeat) {
+    public void setLastHeartBeat(LocalDateTime lastHeartBeat) {
         data.setLastHeartBeat(lastHeartBeat);
     }
 
@@ -82,8 +90,9 @@ public abstract class Node implements Comparable, Serializable {
         return data.toString();
     }
 
-    public void setName(String name) {
+    public void setName(String name){
         data.setName(name);
+        syncData();
     }
 
     public Set<Tag> getTags() {
@@ -92,13 +101,32 @@ public abstract class Node implements Comparable, Serializable {
 
     public void addTag(Tag s) {
         data.addTag(s);
+        syncData();
     }
 
     public void addTags(Set<Tag> s) {
         data.addTags(s);
+        syncData();
     }
 
-    public NodeBean getData() {
+    public NodeData getData() {
         return data;
+    }
+
+    public CommandsHist getHist() {
+        return hist;
+    }
+
+    public void setData(NodeData data) {
+        this.data = data;
+    }
+
+    public void setSSHLogin(String login){
+        data.setSshLogin(login);
+        syncData();
+    }
+    public void setSSHPort(int port){
+        data.setSshPort(port);
+        syncData();
     }
 }

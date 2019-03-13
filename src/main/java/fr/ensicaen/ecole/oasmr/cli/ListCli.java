@@ -15,19 +15,21 @@
 
 package fr.ensicaen.ecole.oasmr.cli;
 
-import fr.ensicaen.ecole.oasmr.supervisor.node.NodeBean;
-import fr.ensicaen.ecole.oasmr.supervisor.node.request.RequestGetNodes;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestGetNodes;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "list")
-public class ListCli implements Callable {
+class ListCli implements Callable {
 
     @CommandLine.ParentCommand
+    private
     MainCli main;
 
     @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "display a help message")
+    private
     boolean help = false;
 
     @Override
@@ -37,8 +39,8 @@ public class ListCli implements Callable {
             CommandLine.usage(this, System.err);
             return null;
         }
-        NodeBean[] nodes = (NodeBean[]) main.r.sendRequest(new RequestGetNodes());
-        for (NodeBean n : nodes) {
+        NodeData[] nodes = (NodeData[]) main.r.sendRequest(new RequestGetNodes());
+        for (NodeData n : nodes) {
             System.out.println(n.getId() + " -> " + n.getNodeAddress() + ":" + n.getPort());
         }
         return nodes;
