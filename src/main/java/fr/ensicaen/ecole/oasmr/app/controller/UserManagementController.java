@@ -47,6 +47,7 @@ public class UserManagementController extends View{
     private List<String> userList;
     private ObservableList<UserInfo> data;
     private String currentUserLogin;
+    private int nbAdmin;
 
     @FXML
     JFXButton returnPrev;
@@ -64,22 +65,24 @@ public class UserManagementController extends View{
     JFXButton adminBtn;
 
     @FXML
-    JFXButton searchBtn;
+    Label errorMsg;
 
-    @FXML
-    JFXTextField searchUsers;
 
     public UserManagementController(int width, int height) throws IOException {
         super("UserManagement", width, height);
+
     }
 
-    private void onLoadTest(){
-        onLoadTest("");
+
+
+    public void applyChanges(ActionEvent actionEvent) {
+
     }
 
-    private void onLoadTest(String userSearch) {
+    private void onLoadTest() {
+        nbAdmin = 0;
 
-        currentUserLogin = "admin";//TODO: recup l'user, a terme on utilisera un autre moyen...
+        currentUserLogin = "admin";//TODO: reccup le vrai login
         RequestGetAdmin requestGetAdmin = new RequestGetAdmin(currentUserLogin);
         Boolean isCurrentAdmin = false;
         try {
@@ -99,17 +102,6 @@ public class UserManagementController extends View{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            /*
-            if (!userSearch.trim().equals("")) {
-                for (String userSearched : userList) {
-                    if (!userSearched.contains(userSearch)) {
-                        userList.remove(userSearched);
-                    }
-                }
-            }*/
-
-            //searchBtn.setOnAction(reseach());
 
             addUser.setOnAction(addUser(new Stage()));
             returnPrev.setOnAction(this::returnAction);
@@ -161,6 +153,9 @@ public class UserManagementController extends View{
                 boolean admin = false;
                 try {
                     admin = (boolean) requestManager.sendRequest(new RequestGetAdmin(user));
+                    if (admin){
+                        nbAdmin++;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -208,7 +203,16 @@ public class UserManagementController extends View{
 
                             RequestSetAdmin requestSetAdmin = new RequestSetAdmin(((UserInfo) ((TreeItem) u).getValue()).getLogin(), !((UserInfo) ((TreeItem) u).getValue()).getAdmin().getValue());
                             try {
-                                requestManager.sendRequest(requestSetAdmin);
+                                if (nbAdmin==1 && ((UserInfo) ((TreeItem) u).getValue()).getAdmin().getValue()){
+                                    errorMsg.setText("You have to have at least one administrator");
+                                } else {
+                                    if (((UserInfo) ((TreeItem) u).getValue()).getAdmin().getValue()) {
+                                        nbAdmin--;
+                                    }
+
+                                    requestManager.sendRequest(requestSetAdmin);
+
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -217,6 +221,7 @@ public class UserManagementController extends View{
                 }
                 onLoadTest();
             });
+
 
             userTableVBox.getChildren().add(userTable);
 
@@ -273,13 +278,6 @@ public class UserManagementController extends View{
             userTableVBox.getChildren().addAll(grid);
         }
     }
-
-    /*
-    private EventHandler<ActionEvent> reseach() {
-
-        onLoadTest(searchUsers.getText());
-        return null;
-    }*/
 
     private void modifyUserFunction(Label message, JFXTextField loginField, JFXPasswordField oldPasswordField,JFXPasswordField passwordField) {
 
@@ -408,8 +406,6 @@ public class UserManagementController extends View{
             exceptionPortInvalid.printStackTrace();
         }
     }
-
-
 
     @Override
     public void onStart() {
