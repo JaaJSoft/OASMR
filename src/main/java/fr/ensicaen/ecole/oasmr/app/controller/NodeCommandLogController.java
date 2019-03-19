@@ -15,11 +15,43 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller;
 
+import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.JFXTreeTableColumn;
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import fr.ensicaen.ecole.oasmr.app.Config;
+import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr.lib.command.CommandGetExecutorCommandHistory;
+import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class NodeCommandLogController extends View {
+
+    @FXML
+    VBox commandLogVBox;
+
+    private RequestManager requestManager = null;
+    private Config config;
+    private NodesModel nodesModel;
+
     public NodeCommandLogController(View parent) throws IOException {
         super("NodeCommandLog", parent);
     }
@@ -31,6 +63,62 @@ public class NodeCommandLogController extends View {
 
     @Override
     protected void onStart() {
+        if (requestManager == null) {
+            try {
+                nodesModel = NodesModel.getInstance();
+                config = Config.getInstance();
+                requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+            } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+                exceptionPortInvalid.printStackTrace();
+            }
+        }
+
+        commandLogVBox.getChildren().clear();
+
+        if(nodesModel.getSelectedAmount() == 1){
+            try {
+
+                Future<? extends Serializable> reponseCommandHist = requestManager.aSyncSendRequest(
+                        new RequestExecuteCommand(nodesModel.getCurrentNodeData().get(0).getId(), new CommandGetExecutorCommandHistory())
+                );// TODO forall selected nodes
+
+                JFXTreeTableColumn<CommandAdapterTableView, String> commandColumn = new JFXTreeTableColumn<>("Commands");
+                commandColumn.setPrefWidth(300);
+                commandColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
+                    if (commandColumn.validateValue(param)) {
+                        return param.getValue().getValue().commandName();
+                    } else {
+                        return commandColumn.getComputedValue(param);
+                    }
+                });
+
+                JFXTreeTableColumn<CommandAdapterTableView, String> stateColumn = new JFXTreeTableColumn<>("State");
+                stateColumn.setPrefWidth(150);
+                stateColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
+                    if (stateColumn.validateValue(param)) {
+                        return param.getValue().getValue().stateName();
+                    } else {
+                        return stateColumn.getComputedValue(param);
+                    }
+                });
+
+
+                Command[] commands = (Command[]) reponseCommandHist.get();
+                ObservableList<CommandAdapterTableView> commandsList = FXCollections.observableArrayList();
+                for (Command command : commands) {
+                    commandsList.add(new CommandAdapterTableView(command));
+                }
+                final TreeItem<CommandAdapterTableView> root = new RecursiveTreeItem<>(commandsList, RecursiveTreeObject::getChildren);
+
+                JFXTreeTableView<CommandAdapterTableView> commandHistTableView = new JFXTreeTableView<>(root);
+                commandHistTableView.getColumns().addAll(commandColumn, stateColumn);
+                commandHistTableView.setShowRoot(false);
+
+                commandLogVBox.getChildren().add(commandHistTableView);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

@@ -16,9 +16,7 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.animation.alert.JFXAlertAnimation;
-import com.jfoenix.controls.JFXAlert;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.*;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
@@ -36,9 +34,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Set;
+import java.util.concurrent.Future;
 
 public class NodeCommandController extends View {
 
@@ -51,18 +51,19 @@ public class NodeCommandController extends View {
 
     public NodeCommandController(View parent) throws IOException {
         super("NodeCommand", parent);
+        onCreate();
     }
 
     @Override
     public void onCreate() {
-
+        nodesModel = NodesModel.getInstance();
     }
 
     @Override
     protected void onStart() {
+
         if (requestManager == null) {
             try {
-                nodesModel = NodesModel.getInstance();
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
@@ -70,13 +71,13 @@ public class NodeCommandController extends View {
             }
         }
 
-        commandFlowPane.getChildren().clear();
 
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
             try {
-                Set<Class<? extends Command>> commands = (Set<Class<? extends Command>>) requestManager.sendRequest(new RequestGetCommands());
+                Future<? extends Serializable> reponseCommandList = requestManager.aSyncSendRequest(new RequestGetCommands());
+                Set<Class<? extends Command>> commands = (Set<Class<? extends Command>>) reponseCommandList.get();
                 for (Class<? extends Command> command : commands) {
                     JFXButton jeej = initButtonFromClass(command);
                     commandFlowPane.getChildren().add(jeej);
@@ -85,6 +86,7 @@ public class NodeCommandController extends View {
                 e.printStackTrace();
             }
         }
+
     }
 
     private JFXButton initButtonFromClass(Class<? extends Command> command) {
@@ -127,4 +129,5 @@ public class NodeCommandController extends View {
     public void onStop() {
 
     }
+
 }

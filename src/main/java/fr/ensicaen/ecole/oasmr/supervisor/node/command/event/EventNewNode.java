@@ -26,22 +26,16 @@ import java.time.LocalDateTime;
 public class EventNewNode extends Event {
     private final InetAddress address;
     private final int port;
-    private final String login;
-    private final int ssh_port;
 
-    public EventNewNode(InetAddress address, int port, String login, int ssh_port) {
+    public EventNewNode(InetAddress address, int port) {
         this.address = address;
         this.port = port;
-        this.login = login;
-        this.ssh_port = ssh_port;
     }
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
         Node n = supervisor.getNodeFlyweightFactory().getNode(address, port);
         n.setLastHeartBeat(LocalDateTime.now());
-        n.setSSHLogin(login);
-        n.setSSHPort(ssh_port);
         return n.getData();
     }
 

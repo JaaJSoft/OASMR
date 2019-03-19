@@ -50,8 +50,11 @@ public class NodeService {
 
     private static NodeReal initNode(InetAddress supervisorAddress, int port, InetAddress localAddress, int commandPort) throws Exception {
         RequestManager r = RequestManagerFlyweightFactory.getInstance().getRequestManager(supervisorAddress, port);
-        NodeData data = (NodeData) r.sendRequest(new EventNewNode(localAddress, commandPort, System.getProperty("user.name"), 22));
-        return new NodeReal(data, supervisorAddress, port);
+        NodeData data = (NodeData) r.sendRequest(new EventNewNode(localAddress, commandPort));
+        NodeReal nodeReal = new NodeReal(data, supervisorAddress, port);
+        nodeReal.setSSHLogin(System.getProperty("user.name"));
+        nodeReal.setSSHPort(22);
+        return nodeReal;
     }
 
 }

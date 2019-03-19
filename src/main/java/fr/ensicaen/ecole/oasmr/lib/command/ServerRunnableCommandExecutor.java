@@ -15,8 +15,12 @@
 
 package fr.ensicaen.ecole.oasmr.lib.command;
 
+import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.ServerRunnable;
+import fr.ensicaen.ecole.oasmr.lib.network.util;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,6 +48,26 @@ public class ServerRunnableCommandExecutor extends ServerRunnable {
 
     @Override
     public void run() {
-
+        System.out.print("[" + dateUtil.getFormattedDate() + "]-> New command from " + clientSocket.getInetAddress() + " : ");
+        try {
+            Command command = (Command) util.receiveSerializable(clientSocket);
+            System.out.println(command);
+            Serializable response;
+            if (!authorizedCommands.contains(command) && !authorizedCommands.isEmpty()) {
+                response = new ExceptionCommandNotAuthorized(command.toString());
+            } else {
+                response = executor.executeCommand(command);
+            }
+            util.sendSerializable(clientSocket, response);
+            clientSocket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                util.sendSerializable(clientSocket, e);
+                clientSocket.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 }
