@@ -62,7 +62,7 @@ public class NodeViewController extends View {
             nodesModel = NodesModel.getInstance();
             nodeInfoView = new NodeInfoController(this);
             addSubView(nodeInfoView);
-            nodeModuleView = new NodeCommandModuleController(this);
+            nodeModuleView = new NodeCenterTabController(this);
             addSubView(nodeModuleView);
             nodeTermView = new NodeTerminalController(this);
             addSubView(nodeTermView);

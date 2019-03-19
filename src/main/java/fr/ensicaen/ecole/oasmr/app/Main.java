@@ -30,11 +30,11 @@ public class Main extends Application {
         SceneManager sceneManager = SceneManager.getInstance();
 
         try {
-            sceneManager.addScene(new LoginController(400, 450));
-            sceneManager.addScene(new MainController(1500, 800));
-            sceneManager.addScene(new UserManagementController(1500, 800));
+            sceneManager.addScene(new LoginController());
+            sceneManager.addScene(new MainController());
+            sceneManager.addScene(new UserManagementController());
 
-            sceneManager.setScenes(LoginController.class);
+            sceneManager.setScenes(LoginController.class, 400, 450);
             sceneManager.show();
         } catch (Exception e) {
             e.printStackTrace();

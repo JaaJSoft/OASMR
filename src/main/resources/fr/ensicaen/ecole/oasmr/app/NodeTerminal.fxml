@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXTabPane?>
 
-
 <!--
   ~  Copyright (c) 2019. CCC-Development-Team
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,4 +17,5 @@
   ~  limitations under the License.
   -->
 
-<JFXTabPane fx:id="nodeTermTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" />
+
+<JFXTabPane fx:id="nodeTermTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" />
