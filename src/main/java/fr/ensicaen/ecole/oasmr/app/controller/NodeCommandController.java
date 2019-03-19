@@ -16,7 +16,9 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.animation.alert.JFXAlertAnimation;
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXAlert;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialogLayout;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
@@ -28,9 +30,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.RequestGetCommands;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -40,31 +40,29 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Set;
 
-public class NodeCommandModuleController extends View {
+public class NodeCommandController extends View {
 
     @FXML
-    JFXTabPane nodeCommandTabPane;
+    FlowPane commandFlowPane;
 
     private RequestManager requestManager = null;
     private Config config;
     private NodesModel nodesModel;
 
-    public NodeCommandModuleController(View parent) throws IOException {
-        super("NodeCommandModule", parent);
-        onCreate();
+    public NodeCommandController(View parent) throws IOException {
+        super("NodeCommand", parent);
     }
 
     @Override
     public void onCreate() {
-        nodesModel = NodesModel.getInstance();
-        nodeCommandTabPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
     }
 
     @Override
     protected void onStart() {
-
         if (requestManager == null) {
             try {
+                nodesModel = NodesModel.getInstance();
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
@@ -72,48 +70,28 @@ public class NodeCommandModuleController extends View {
             }
         }
 
+        commandFlowPane.getChildren().clear();
 
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
-            nodeCommandTabPane.getTabs().clear();
-            Tab t = new Tab();
-            t.setText("Commands");
-            t.setContent(new Label("Insert module core"));
-            Tab t2 = new Tab();
-            t2.setText("Commands Logs");
-            t2.setContent(new Label("Insert module core"));
-            Tab t3 = new Tab();
-            t3.setText("Tasks manager");
-            t3.setContent(new Label("Insert module core"));
-            Tab t4 = new Tab();
-            t4.setText("Tags");
-            t4.setContent(new Label("Insert module core"));
-            nodeCommandTabPane.getTabs().addAll(t, t2, t3, t4);
-
-            FlowPane flowPane = new FlowPane();
-            flowPane.setPadding(new Insets(10));
-            flowPane.setVgap(8);
-            flowPane.setHgap(8);
             try {
                 Set<Class<? extends Command>> commands = (Set<Class<? extends Command>>) requestManager.sendRequest(new RequestGetCommands());
                 for (Class<? extends Command> command : commands) {
                     JFXButton jeej = initButtonFromClass(command);
-                    flowPane.getChildren().add(jeej);
+                    commandFlowPane.getChildren().add(jeej);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            t.setContent(flowPane);
         }
-
     }
 
     private JFXButton initButtonFromClass(Class<? extends Command> command) {
         JFXButton jeej = new JFXButton(command.getSimpleName());
         jeej.setStyle("-jfx-button-type: RAISED;-fx-background-color: #FF6026; -fx-text-fill: white;");
         jeej.setOnAction(e -> {
-            Stage stage = (Stage) nodeCommandTabPane.getScene().getWindow();
+            Stage stage = (Stage) getScene().getWindow();
 
             new FXClassInitializer(stage, command).initFromClass(newObject -> {
                 Command c = (Command) newObject;
@@ -149,5 +127,4 @@ public class NodeCommandModuleController extends View {
     public void onStop() {
 
     }
-
 }
