@@ -17,7 +17,9 @@ package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
 import fr.ensicaen.ecole.oasmr.lib.crypto.HashUtil;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String login;
     private String password;
     private boolean authenticated;

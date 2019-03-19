@@ -67,6 +67,15 @@ public class UserManagementController extends View{
     @FXML
     Label errorMsg;
 
+    @FXML
+    JFXButton searchBtn;
+
+    @FXML
+    JFXTextField searchField;
+
+    @FXML
+    JFXButton stopSearchBtn;
+
 
     public UserManagementController(int width, int height) throws IOException {
         super("UserManagement", width, height);
@@ -79,7 +88,7 @@ public class UserManagementController extends View{
 
     }
 
-    private void onLoadTest() {
+    private void onLoadTest(String toSearch) {
         nbAdmin = 0;
 
         currentUserLogin = "admin";//TODO: reccup le vrai login
@@ -90,6 +99,26 @@ public class UserManagementController extends View{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        searchBtn.setOnAction(event -> {
+            if (!searchField.getText().trim().equals("")) {
+                onLoadTest(searchField.getText());
+            } else {
+                onLoadTest("");
+            }
+        });
+
+        searchField.setOnAction(event -> {
+            if (!searchField.getText().trim().equals("")) {
+                onLoadTest(searchField.getText());
+            } else {
+                onLoadTest("");
+            }
+        });
+
+        stopSearchBtn.setOnAction(event -> {
+            onLoadTest("");
+        });
 
         if(isCurrentAdmin) {
 
@@ -150,16 +179,22 @@ public class UserManagementController extends View{
             ObservableList<UserInfo> users = FXCollections.observableArrayList();
 
             for (String user : userList) {
+
                 boolean admin = false;
                 try {
                     admin = (boolean) requestManager.sendRequest(new RequestGetAdmin(user));
-                    if (admin){
+                    if (admin) {
                         nbAdmin++;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                users.add(new UserInfo(user, admin));
+                if (!toSearch.trim().equals("") && user.contains(toSearch)) {
+                    users.add(new UserInfo(user, admin));
+                } else if (toSearch.trim().equals("")){
+                    users.add(new UserInfo(user, admin));
+                }
+
             }
 
             for (UserInfo u : users) {
@@ -191,7 +226,7 @@ public class UserManagementController extends View{
                         }
                     }
                 }
-                onLoadTest();
+                onLoadTest(toSearch);
             });
 
 
@@ -219,7 +254,7 @@ public class UserManagementController extends View{
                         }
                     }
                 }
-                onLoadTest();
+                onLoadTest(toSearch);
             });
 
 
@@ -378,7 +413,7 @@ public class UserManagementController extends View{
                     RequestSetAdmin requestSetAdmin = new RequestSetAdmin(loginField.getText(), true);
                     requestManager.sendRequest(requestSetAdmin);
                 }
-                onLoadTest();
+                onLoadTest("");
                 dialog.close();
 
             } catch (Exception e1) {
@@ -409,7 +444,7 @@ public class UserManagementController extends View{
 
     @Override
     public void onStart() {
-        onLoadTest();
+        onLoadTest("");
 
     }
 
