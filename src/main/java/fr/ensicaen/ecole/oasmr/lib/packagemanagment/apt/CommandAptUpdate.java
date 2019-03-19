@@ -35,12 +35,10 @@ public class CommandAptUpdate extends Command {
             Process p = processBuilder.start();
             p.waitFor();
             int ret = p.exitValue();
-            switch (ret) {
-                case 0:
-                    return ProcessBuilderUtil.getOutput(p);
-                default:
-                    throw new ExceptionAptUpdateFailure(ProcessBuilderUtil.getOutputError(p));
+            if (ret == 0) {
+                return ProcessBuilderUtil.getOutput(p);
             }
+            throw new ExceptionAptUpdateFailure(ProcessBuilderUtil.getOutputError(p));
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

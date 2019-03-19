@@ -24,15 +24,11 @@ class PipUtil {
         Process process = p.start();
         process.waitFor();
         int ret = process.exitValue();
-        switch (ret) {
-            case 0:
-                System.out.println(ProcessBuilderUtil.getOutput(process));
-                return ProcessBuilderUtil.getOutput(process);
-
-            default:
-                System.out.println(ProcessBuilderUtil.getOutputError(process));
-                throw new PipException(ProcessBuilderUtil.getOutputError(process));
-
+        if (ret == 0) {
+            System.out.println(ProcessBuilderUtil.getOutput(process));
+            return ProcessBuilderUtil.getOutput(process);
         }
+        System.out.println(ProcessBuilderUtil.getOutputError(process));
+        throw new PipException(ProcessBuilderUtil.getOutputError(process));
     }
 }

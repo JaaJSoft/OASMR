@@ -15,30 +15,15 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller;
 
-import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.*;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
-import fr.ensicaen.ecole.oasmr.lib.FXClassInitializer;
-import fr.ensicaen.ecole.oasmr.lib.command.Command;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
-import fr.ensicaen.ecole.oasmr.supervisor.request.RequestGetCommands;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
-import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Set;
 
 public class NodeCenterTabController extends View {
 

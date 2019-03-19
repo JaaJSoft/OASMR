@@ -33,8 +33,7 @@ public class RequestAuthentication extends Request {
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        boolean isCorrectlyAuthenticated = supervisor.getUserList().authenticate(login, password);//We can use this value for accessing or not at the software
-        return isCorrectlyAuthenticated;
+        return supervisor.getUserList().authenticate(login, password);
     }
 
     @Override

@@ -17,7 +17,6 @@
   ~  limitations under the License.
   -->
 
-<VBox fx:id="ramVBox" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-    </children>
+<VBox fx:id="ramVBox" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.172-ea"
+      xmlns:fx="http://javafx.com/fxml/1">
 </VBox>

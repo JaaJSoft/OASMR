@@ -38,14 +38,10 @@ public class CommandAptUpgrade extends Command {
             p.waitFor();
             int ret = p.exitValue();
             //System.out.println(ProcessBuilderUtil.getOutput(p));
-            switch (ret) {
-                case 0:
-                    return ProcessBuilderUtil.getOutput(p);
-
-                default:
-                    throw new ExceptionAptUpgradeFailure(ProcessBuilderUtil.getOutputError(p));
-
+            if (ret == 0) {
+                return ProcessBuilderUtil.getOutput(p);
             }
+            throw new ExceptionAptUpgradeFailure(ProcessBuilderUtil.getOutputError(p));
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

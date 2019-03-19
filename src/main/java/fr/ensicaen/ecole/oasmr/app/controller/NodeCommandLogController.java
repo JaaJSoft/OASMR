@@ -15,7 +15,6 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller;
 
-import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
