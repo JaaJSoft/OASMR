@@ -15,6 +15,8 @@
 
 package fr.ensicaen.ecole.oasmr.lib.command;
 
+import fr.ensicaen.ecole.oasmr.lib.network.Server;
+
 import java.io.Serializable;
 import java.util.Collection;
 

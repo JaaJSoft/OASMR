@@ -17,6 +17,7 @@ package fr.ensicaen.ecole.oasmr.supervisor.node;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.command.Heart;
+import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandExecutor;
 import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
@@ -41,7 +42,7 @@ public class NodeReal extends Node {
         requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(supervisorAddress, supervisorPort);
         this.supervisorAddress = supervisorAddress;
         this.supervisorPort = supervisorPort;
-        server = new Server(data.getPort(), new ServerRunnableCommandHandler(this));
+        server = new Server(data.getPort(), new ServerRunnableCommandExecutor(this));
         heart = new Heart(new HeartbeatNodeAlive(supervisorAddress, supervisorPort), data.getHeartbeatPeriod(), this);
     }
 

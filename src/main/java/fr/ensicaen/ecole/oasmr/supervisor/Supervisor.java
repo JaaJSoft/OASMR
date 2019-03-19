@@ -17,6 +17,7 @@ package fr.ensicaen.ecole.oasmr.supervisor;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.command.CommandExecutor;
+import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandExecutor;
 import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
@@ -36,7 +37,7 @@ public class Supervisor extends CommandExecutor {
     private final CommandFinder finder = new CommandFinder("commands");
 
     public Supervisor(int portRequests) throws IOException, ExceptionPortInvalid {
-        serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler(this));
+        serverRequestHandler = new Server(portRequests, new ServerRunnableCommandExecutor(this));
     }
 
     public void start() throws InterruptedException {
@@ -48,7 +49,7 @@ public class Supervisor extends CommandExecutor {
             }
         });
 
-        System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandHandler (" + serverRequestHandler.getPort() + ") loading... ");
+        System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandExecutorServer (" + serverRequestHandler.getPort() + ") loading... ");
         ThreadServerRequestHandler.start();
         System.out.println("Done !");
         System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandFinder loading... ");

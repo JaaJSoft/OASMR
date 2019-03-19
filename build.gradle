@@ -52,6 +52,7 @@ dependencies {
     compile 'org.testfx:testfx-junit:4.0.15-alpha'
     compile group: 'com.github.oshi', name: 'oshi-core', version: '3.13.0'
     compile group: 'eu.hansolo', name: 'tilesfx', version: '1.6.5'
+    compile group: 'net.java.dev.jna', name: 'jna', version: '4.5.0'
 }
 compileJava {
     options.compilerArgs += ["-parameters"]
