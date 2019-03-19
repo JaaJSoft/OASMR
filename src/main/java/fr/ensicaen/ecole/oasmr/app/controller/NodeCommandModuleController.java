@@ -121,7 +121,7 @@ public class NodeCommandModuleController extends View {
             t.setContent(flowPane);
             try {
                 JFXTreeTableColumn<CommandAdapterTableView, String> commandColumn = new JFXTreeTableColumn<>("Commands");
-                commandColumn.setPrefWidth(150);
+                commandColumn.setPrefWidth(300);
                 commandColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
                     if (commandColumn.validateValue(param)) {
                         return param.getValue().getValue().commandName();
