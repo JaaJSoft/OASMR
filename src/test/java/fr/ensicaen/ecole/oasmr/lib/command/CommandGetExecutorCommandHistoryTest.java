@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class CommandGetCommandHistoryTest {
+public class CommandGetExecutorCommandHistoryTest {
 
     @Before
     public void setUp() throws Exception {

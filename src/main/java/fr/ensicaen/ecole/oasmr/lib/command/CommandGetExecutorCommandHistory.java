@@ -17,7 +17,7 @@ package fr.ensicaen.ecole.oasmr.lib.command;
 
 import java.io.Serializable;
 
-public class CommandGetCommandHistory extends Command {
+public class CommandGetExecutorCommandHistory extends Command {
     @Override
     protected Serializable execute(Object... params) throws Exception {
         CommandExecutor c = (CommandExecutor) params[0];

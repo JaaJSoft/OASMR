@@ -17,28 +17,37 @@ package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.FXClassInitializer;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr.lib.command.CommandGetExecutorCommandHistory;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestGetCommands;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class NodeCommandModuleController extends View {
 
@@ -73,9 +82,14 @@ public class NodeCommandModuleController extends View {
         }
 
 
+        Future<? extends Serializable> reponseCommandList = requestManager.aSyncSendRequest(new RequestGetCommands());
+
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
+            Future<? extends Serializable> reponseCommandHist = requestManager.aSyncSendRequest(
+                    new RequestExecuteCommand(nodesModel.getCurrentNodeData().get(0).getId(), new CommandGetExecutorCommandHistory())
+            );// TODO forall selected nodes
             nodeCommandTabPane.getTabs().clear();
             Tab t = new Tab();
             t.setText("Commands");
@@ -96,7 +110,7 @@ public class NodeCommandModuleController extends View {
             flowPane.setVgap(8);
             flowPane.setHgap(8);
             try {
-                Set<Class<? extends Command>> commands = (Set<Class<? extends Command>>) requestManager.sendRequest(new RequestGetCommands());
+                Set<Class<? extends Command>> commands = (Set<Class<? extends Command>>) reponseCommandList.get();
                 for (Class<? extends Command> command : commands) {
                     JFXButton jeej = initButtonFromClass(command);
                     flowPane.getChildren().add(jeej);
@@ -105,8 +119,44 @@ public class NodeCommandModuleController extends View {
                 e.printStackTrace();
             }
             t.setContent(flowPane);
-        }
+            try {
+                JFXTreeTableColumn<CommandAdapterTableView, String> commandColumn = new JFXTreeTableColumn<>("Commands");
+                commandColumn.setPrefWidth(150);
+                commandColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
+                    if (commandColumn.validateValue(param)) {
+                        return param.getValue().getValue().commandName();
+                    } else {
+                        return commandColumn.getComputedValue(param);
+                    }
+                });
 
+                JFXTreeTableColumn<CommandAdapterTableView, String> stateColumn = new JFXTreeTableColumn<>("State");
+                stateColumn.setPrefWidth(150);
+                stateColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
+                    if (stateColumn.validateValue(param)) {
+                        return param.getValue().getValue().stateName();
+                    } else {
+                        return stateColumn.getComputedValue(param);
+                    }
+                });
+
+
+                Command[] commands = (Command[]) reponseCommandHist.get();
+                ObservableList<CommandAdapterTableView> commandsList = FXCollections.observableArrayList();
+                for (Command command : commands) {
+                    commandsList.add(new CommandAdapterTableView(command));
+                }
+                final TreeItem<CommandAdapterTableView> root = new RecursiveTreeItem<>(commandsList, RecursiveTreeObject::getChildren);
+
+                JFXTreeTableView<CommandAdapterTableView> commandHistTableView = new JFXTreeTableView<>(root);
+                commandHistTableView.getColumns().addAll(commandColumn, stateColumn);
+                commandHistTableView.setShowRoot(false);
+
+                t2.setContent(commandHistTableView);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private JFXButton initButtonFromClass(Class<? extends Command> command) {
