@@ -30,6 +30,7 @@ public class NodeSystemInfoController extends View {
     private NodesModel nodesModel;
     private View nodeRamInfo;
     private View nodeCpuInfo;
+    private View nodeFileExplorer;
 
     public NodeSystemInfoController(View parent) throws IOException {
         super("NodeSystemInfo", parent);
@@ -44,6 +45,7 @@ public class NodeSystemInfoController extends View {
             addSubView(nodeRamInfo);
             nodeCpuInfo = new NodeCpuInfoController(this);
             addSubView(nodeCpuInfo);
+            nodeFileExplorer = new NodeFileExplorerController(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,6 +59,7 @@ public class NodeSystemInfoController extends View {
             nodeSystemInfoVBox.getChildren().clear();
             nodeSystemInfoVBox.getChildren().add(nodeCpuInfo.getRoot());
             nodeSystemInfoVBox.getChildren().add(nodeRamInfo.getRoot());
+            nodeSystemInfoVBox.getChildren().add(nodeFileExplorer.getRoot());
         }
     }
 
