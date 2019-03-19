@@ -29,10 +29,10 @@ public class SceneManager {
 
     //TODO : Virer ce truc immonde :
     private String path = "/fr/ensicaen/ecole/oasmr/app/";
-    private HashSet<View> views = new HashSet<>();
+    private final HashSet<View> views = new HashSet<>();
     private View activeView;
-    private Stage primaryStage;
-    private static SceneManager ourInstance = new SceneManager();
+    private final Stage primaryStage;
+    private static final SceneManager ourInstance = new SceneManager();
 
     private SceneManager() {
         primaryStage = new Stage();
@@ -44,7 +44,7 @@ public class SceneManager {
         return ourInstance;
     }
 
-    public void addScene(View view) throws IOException, ExceptionSceneAlrdeadyExists {
+    public void addScene(View view) throws ExceptionSceneAlrdeadyExists {
         if (views.add(view)) {
             view.onCreate();
         } else {

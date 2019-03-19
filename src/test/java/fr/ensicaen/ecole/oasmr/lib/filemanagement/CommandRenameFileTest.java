@@ -13,9 +13,24 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib;
+package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
-public interface ObjectCreatedHandler {
+import org.junit.Test;
 
-    void objectCreatedHandler(Object newObject);
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class CommandRenameFileTest extends AbstractFileTest {
+
+    @Test
+    public void execute() throws Exception {
+        CommandRenameFile command = new CommandRenameFile(this.fileName1, this.unusedFileName1.replace(this.directoryName1, ""));
+
+        assertFalse(unusedFile1.exists());
+        command.executeCommand();
+
+        assertTrue(unusedFile1.exists());
+        assertFalse(file1.exists());
+
+    }
 }

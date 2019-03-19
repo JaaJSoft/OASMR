@@ -13,28 +13,39 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.auth.request;
+package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
-import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
-import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
+import java.io.File;
 import java.io.Serializable;
 
-public class RequestDeleteUser extends Request {
-    private final String login;
+/**
+ * Creates a non directory file.
+ */
+public class CommandCreateFile extends Command {
 
-    public RequestDeleteUser(String login) {
-        this.login = login;
+    /**
+     * The file path name to create.
+     */
+    private final String filePathName;
+
+    /**
+     *
+     * @param filePathName The file path name to create.
+     */
+    public CommandCreateFile(String filePathName) {
+        this.filePathName = filePathName;
     }
 
     @Override
-    public Serializable execute(Supervisor supervisor) throws Exception {
-        supervisor.getUserList().deleteUser(supervisor.getUserList().getUser(login));
-        return 0;
+    protected Serializable execute(Object... params) throws Exception {
+        File file = new File(filePathName);
+        return file.createNewFile();
     }
 
     @Override
     public String toString() {
-        return login + " RequestDeleteUser";
+        return null;
     }
 }

@@ -15,20 +15,21 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor;
 
+import fr.ensicaen.ecole.oasmr.lib.ComparatorClass;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
 public class CommandFinder extends Thread {
 
-    private final Set<Class<? extends Command>> commands = new HashSet<>();
-    private final Set<Class<? extends Request>> requests = new HashSet<>();
+    private final Set<Class<? extends Command>> commands = new TreeSet<>(new ComparatorClass());//TODO use TreeSet & compareTo
+    private final Set<Class<? extends Request>> requests = new TreeSet<>(new ComparatorClass());
     private final String directory;
     private final WatchService watchService;
 
@@ -63,7 +64,7 @@ public class CommandFinder extends Thread {
         commands.clear();
         requests.clear();
         scanDirectory(new File(directory));
-        System.out.println(commands);
+        //System.out.println(commands);
     }
 
     private void scanDirectory(File f) {

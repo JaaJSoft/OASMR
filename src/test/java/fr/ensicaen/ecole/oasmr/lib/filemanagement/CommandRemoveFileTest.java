@@ -13,9 +13,18 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib;
+package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
-public interface ObjectCreatedHandler {
+import org.junit.Test;
 
-    void objectCreatedHandler(Object newObject);
+import static org.junit.Assert.assertFalse;
+
+public class CommandRemoveFileTest extends AbstractFileTest {
+
+    @Test
+    public void execute() throws Exception {
+        CommandRemoveFile command = new CommandRemoveFile(this.fileName1);
+        command.executeCommand();
+        assertFalse(file1.exists());
+    }
 }

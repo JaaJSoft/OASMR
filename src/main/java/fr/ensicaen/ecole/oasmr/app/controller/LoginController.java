@@ -35,7 +35,6 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Properties;
 
 public class LoginController extends View {
 

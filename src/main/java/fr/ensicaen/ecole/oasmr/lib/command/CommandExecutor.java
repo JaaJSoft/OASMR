@@ -13,28 +13,22 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.supervisor.auth.request;
-
-import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
-import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
+package fr.ensicaen.ecole.oasmr.lib.command;
 
 import java.io.Serializable;
+import java.util.Collection;
 
-public class RequestDeleteUser extends Request {
-    private final String login;
+public abstract class CommandExecutor {
+    private final CommandsHist commandsHist = new CommandsHist();
 
-    public RequestDeleteUser(String login) {
-        this.login = login;
+    public Serializable executeCommand(Command command) throws Exception {
+        commandsHist.addCommand(command);
+        return execute(command);
     }
 
-    @Override
-    public Serializable execute(Supervisor supervisor) throws Exception {
-        supervisor.getUserList().deleteUser(supervisor.getUserList().getUser(login));
-        return 0;
-    }
+    protected abstract Serializable execute(Command c) throws Exception;
 
-    @Override
-    public String toString() {
-        return login + " RequestDeleteUser";
+    public Collection<Command> getCommandsHistory() {
+        return commandsHist.getCommands();
     }
 }

@@ -13,9 +13,20 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib;
+package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
-public interface ObjectCreatedHandler {
+import org.junit.Test;
 
-    void objectCreatedHandler(Object newObject);
+import static org.junit.Assert.assertTrue;
+
+public class CommandMakeDirectoryTest extends AbstractFileTest {
+
+    @Test
+    public void execute() throws Exception {
+        CommandMakeDiretory commandMakeDiretory = new CommandMakeDiretory(this.unusedDirName);
+
+        commandMakeDiretory.executeCommand();
+
+        assertTrue(unusedDir.isDirectory());
+    }
 }

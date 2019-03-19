@@ -30,7 +30,7 @@ public class Server implements Serializable {
     private ServerRunnable runnable;
     private Boolean run;
 
-    public Server(int port, ServerRunnable runnable) throws IOException, ExceptionPortInvalid {
+    public Server(int port, ServerRunnable runnable) throws ExceptionPortInvalid {
         if (port < 65536 && port > 0) {
             this.port = port;
             run = false;

@@ -15,6 +15,8 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor;
 
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr.lib.command.CommandExecutor;
 import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
@@ -24,8 +26,9 @@ import fr.ensicaen.ecole.oasmr.supervisor.auth.UserList;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeFlyweightFactory;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-public class Supervisor {
+public class Supervisor extends CommandExecutor {
     private final NodeFlyweightFactory nodeFlyweightFactory = new NodeFlyweightFactory();
     private Server serverRequestHandler;
     private final UserList userList = new UserList();
@@ -70,5 +73,10 @@ public class Supervisor {
 
     public CommandFinder getCommandFinder() {
         return finder;
+    }
+
+    @Override
+    protected Serializable execute(Command c) throws Exception {
+        return c.executeCommand(this);
     }
 }

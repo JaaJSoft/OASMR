@@ -16,6 +16,7 @@
 package fr.ensicaen.ecole.oasmr.supervisor.node;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr.lib.command.CommandExecutor;
 import fr.ensicaen.ecole.oasmr.lib.command.CommandsHist;
 
 import java.io.Serializable;
@@ -23,7 +24,7 @@ import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-public abstract class Node implements Comparable, Serializable {
+public abstract class Node extends CommandExecutor implements Comparable, Serializable {
 
     protected NodeData data;
 
@@ -54,11 +55,6 @@ public abstract class Node implements Comparable, Serializable {
     @Override
     public int hashCode() {
         return data.getId();
-    }
-
-    public final Serializable executeCommand(Command c) throws Exception {
-        hist.addCommand(c);
-        return execute(c);
     }
 
     protected abstract Serializable execute(Command c) throws Exception;

@@ -22,7 +22,6 @@ import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.system.CommandGetAvailableRAM;
-import fr.ensicaen.ecole.oasmr.lib.system.CommandGetCpuLoad;
 import fr.ensicaen.ecole.oasmr.lib.system.CommandGetTotalRAM;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
@@ -31,9 +30,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Stop;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.io.IOException;

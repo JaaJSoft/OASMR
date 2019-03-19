@@ -13,9 +13,22 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib;
+package fr.ensicaen.ecole.oasmr.lib.command;
 
-public interface ObjectCreatedHandler {
+import org.junit.Before;
+import org.junit.Test;
 
-    void objectCreatedHandler(Object newObject);
+import static org.junit.Assert.*;
+
+public class CommandGetCommandHistoryTest {
+
+    @Before
+    public void setUp() throws Exception {
+
+    }
+
+    @Test
+    public void execute() {
+        
+    }
 }

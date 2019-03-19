@@ -46,7 +46,7 @@ public class UserList {
         getUser(login).setLogin(newLogin);
     }
 
-    public void modifyUserPassword(String login, String password, String newPassword) throws ExceptionLoginAlreadyExisting, ExceptionUserUnknown {
+    public void modifyUserPassword(String login, String password, String newPassword) throws ExceptionUserUnknown {
         User oldUser = new User(login, password);
         if (!authenticate(oldUser.getLogin(),oldUser.getPassword())){
             throw new ExceptionUserUnknown(oldUser.getLogin()+ ": incorrect password)");

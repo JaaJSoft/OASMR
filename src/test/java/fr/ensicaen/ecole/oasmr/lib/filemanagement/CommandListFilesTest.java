@@ -13,9 +13,24 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib;
+package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
-public interface ObjectCreatedHandler {
+import org.junit.Test;
 
-    void objectCreatedHandler(Object newObject);
+import java.util.Arrays;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
+public class CommandListFilesTest extends AbstractFileTest {
+
+    @Test
+    public void execute() throws Exception {
+        CommandListFiles commandListFiles = new CommandListFiles(directoryName1);
+
+        String[] res = (String[])commandListFiles.executeCommand();
+        Arrays.sort(res);
+        Arrays.sort(this.listFilesDir1);
+        assertArrayEquals(this.listFilesDir1, res);
+    }
 }
