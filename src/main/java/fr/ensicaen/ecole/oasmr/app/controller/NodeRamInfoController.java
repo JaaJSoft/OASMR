@@ -46,6 +46,7 @@ public class NodeRamInfoController extends View {
     private NodesModel nodesModel;
     private Tile ramGraph;
     private Timeline scheduleTask;
+    private double totalRam = 0;
 
     public NodeRamInfoController(View parent) throws IOException {
         super("NodeRamInfo", parent);
@@ -58,7 +59,7 @@ public class NodeRamInfoController extends View {
         scheduleTask = new Timeline(
                 new KeyFrame(Duration.seconds(5), e -> {
                     try {
-                        ramGraph.setValue( (double) (long)  requestManager.sendRequest(
+                        ramGraph.setValue(totalRam - (double) (long) requestManager.sendRequest(
                                 new RequestExecuteCommand(
                                         nodesModel.getCurrentNodeData().get(0).getId(),
                                         new CommandGetAvailableRAM()
@@ -70,7 +71,7 @@ public class NodeRamInfoController extends View {
         scheduleTask.setCycleCount(Timeline.INDEFINITE);
         ramGraph = TileBuilder.create()
                 .skinType(Tile.SkinType.CIRCULAR_PROGRESS)
-                .prefSize(150,150)
+                .prefSize(150, 150)
                 .title("RAM usage")
                 .valueVisible(false)
                 .build();
@@ -80,7 +81,7 @@ public class NodeRamInfoController extends View {
     @Override
     protected void onStart() {
 
-        if(requestManager == null){
+        if (requestManager == null) {
             try {
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
@@ -91,13 +92,14 @@ public class NodeRamInfoController extends View {
 
         scheduleTask.stop();
 
-        if(nodesModel.getSelectedAmount() == 1){
+        if (nodesModel.getSelectedAmount() == 1) {
             try {
-                ramGraph.setMaxValue((double) (long) requestManager.sendRequest(
+                totalRam = (double) (long) requestManager.sendRequest(
                         new RequestExecuteCommand(
                                 nodesModel.getCurrentNodeData().get(0).getId(),
                                 new CommandGetTotalRAM()
-                        )));
+                        ));
+                ramGraph.setMaxValue(totalRam);
             } catch (Exception e) {
                 e.printStackTrace();
             }
