@@ -18,4 +18,18 @@
   -->
 
 
-<VBox xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" />
+<?import javafx.scene.layout.HBox?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+
+<?import java.net.URL?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <stylesheets>
+        <URL value="@css/style.css" />
+    </stylesheets>
+    <HBox>
+        <JFXButton fx:id="kill" >Mettre fin au processus</JFXButton>
+        <JFXTextField fx:id="searchField" promptText="Search"></JFXTextField>
+    </HBox>
+</VBox>

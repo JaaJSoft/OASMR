@@ -15,22 +15,36 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller.node;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.lib.system.CommandGetProcesses;
+import fr.ensicaen.ecole.oasmr.lib.system.CommandKillProcess;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import javafx.fxml.FXML;
+import javafx.scene.control.TreeItem;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class NodeTaskManagerController extends View {
 
     private NodesModel nodesModel;
     private RequestManager requestManager = null;
     private Config config;
+
+    @FXML
+    JFXButton kill;
+
+    @FXML
+    JFXTextField searchField;
 
     public NodeTaskManagerController(View parent) throws IOException {
         super("NodeTaskManager", parent);
@@ -61,6 +75,46 @@ public class NodeTaskManagerController extends View {
         }
 
     }
+
+    public void init(){
+
+
+        CommandGetProcesses getProcesses = new CommandGetProcesses();
+
+        HashMap<String, String>[] processes;
+
+        try {
+            processes = (HashMap<String, String>[]) requestManager.sendRequest(getProcesses);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * =>
+         * Create a table with all processes
+         * Refresh table every 5sec (like diapo EX java bean TP)
+         * make a search bar
+         * make a kill btn
+         * make a test for CommandKill
+         */
+/*
+        kill.setOnAction(event -> {
+            for (Object u : table.getSelectionModel().getSelectedItems()) {
+                System.out.println(u);
+                if (u instanceof TreeItem) {
+                    if (((TreeItem) u).getValue() instanceof UserInfo) {
+                        CommandKillProcess killProcess = new CommandKillProcess(((UserInfo) ((TreeItem) u).getValue()).getPID());
+                        try {
+                            requestManager.sendRequest(killProcess);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+
+    */}
 
     @Override
     public void onStop() {
