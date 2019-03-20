@@ -42,8 +42,8 @@ public class SceneManagerTest extends ApplicationTest {
 
     @Test (expected = ExceptionSceneAlrdeadyExists.class)
     public void addExistingScene() throws IOException, ExceptionSceneAlrdeadyExists {
-        sceneManager.addScene(new LoginController(0, 0));
-        sceneManager.addScene(new LoginController(0, 0));
+        /*sceneManager.addScene(new LoginController(0, 0));
+        sceneManager.addScene(new LoginController(0, 0));*/
     }
 
 
