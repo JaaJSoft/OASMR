@@ -54,6 +54,7 @@ public class NodeService {
         NodeReal nodeReal = new NodeReal(data, supervisorAddress, port);
         nodeReal.setSSHLogin(System.getProperty("user.name"));
         nodeReal.setSSHPort(22);
+        nodeReal.setName(InetAddress.getLocalHost().getHostName());
         return nodeReal;
     }
 

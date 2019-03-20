@@ -26,4 +26,9 @@ public class CommandStateError implements CommandState {
     public String getStateOutput() {
         return exception.getMessage();
     }
+
+    @Override
+    public String getStateInString() {
+        return "Error";
+    }
 }

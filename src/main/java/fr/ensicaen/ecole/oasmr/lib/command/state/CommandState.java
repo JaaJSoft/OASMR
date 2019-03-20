@@ -20,4 +20,5 @@ import java.io.Serializable;
 public interface CommandState extends Serializable {
 
     String getStateOutput();
+    String getStateInString();
 }

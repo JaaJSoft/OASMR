@@ -20,4 +20,9 @@ public class CommandStateWaiting implements CommandState {
     public String getStateOutput() {
         return "not running yet";
     }
+
+    @Override
+    public String getStateInString() {
+        return "Waiting";
+    }
 }

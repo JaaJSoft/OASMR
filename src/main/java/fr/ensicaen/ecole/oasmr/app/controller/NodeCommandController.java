@@ -93,7 +93,7 @@ public class NodeCommandController extends View {
         JFXButton jeej = new JFXButton(command.getSimpleName());
         jeej.setStyle("-jfx-button-type: RAISED;-fx-background-color: #FF6026; -fx-text-fill: white;");
         jeej.setOnAction(e -> {
-            Stage stage = (Stage) getScene().getWindow();
+            Stage stage = (Stage) commandFlowPane.getScene().getWindow();
 
             new FXClassInitializer(stage, command).initFromClass(newObject -> {
                 Command c = (Command) newObject;

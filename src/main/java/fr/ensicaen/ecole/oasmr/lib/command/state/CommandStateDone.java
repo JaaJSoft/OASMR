@@ -28,4 +28,9 @@ public class CommandStateDone implements CommandState {
     public String getStateOutput() {
         return result.toString();
     }
+
+    @Override
+    public String getStateInString() {
+        return "Done";
+    }
 }

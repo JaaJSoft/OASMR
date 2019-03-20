@@ -20,4 +20,9 @@ public class CommandStateRunning implements CommandState {
     public String getStateOutput() {
         return "Running";
     }
+
+    @Override
+    public String getStateInString() {
+        return "Running";
+    }
 }

@@ -17,7 +17,11 @@ final class CommandAdapterTableView extends RecursiveTreeObject<CommandAdapterTa
     }
 
     public StringProperty stateName() {
-        return new SimpleStringProperty(command.getState().getClass().getSimpleName());
+        return new SimpleStringProperty(command.getState().getStateInString());
+    }
+
+    public StringProperty response() {
+        return new SimpleStringProperty(command.getState().getStateOutput());
     }
 
     @Override

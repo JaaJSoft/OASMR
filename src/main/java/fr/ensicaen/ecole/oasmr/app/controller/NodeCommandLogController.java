@@ -74,7 +74,7 @@ public class NodeCommandLogController extends View {
 
         commandLogVBox.getChildren().clear();
 
-        if(nodesModel.getSelectedAmount() == 1){
+        if (nodesModel.getSelectedAmount() == 1) {
             try {
 
                 Future<? extends Serializable> reponseCommandHist = requestManager.aSyncSendRequest(
@@ -101,6 +101,16 @@ public class NodeCommandLogController extends View {
                     }
                 });
 
+                JFXTreeTableColumn<CommandAdapterTableView, String> responseColumn = new JFXTreeTableColumn<>("Response");
+                responseColumn.setPrefWidth(300);
+                responseColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
+                    if (responseColumn.validateValue(param)) {
+                        return param.getValue().getValue().response();
+                    } else {
+                        return responseColumn.getComputedValue(param);
+                    }
+                });
+
 
                 Command[] commands = (Command[]) reponseCommandHist.get();
                 ObservableList<CommandAdapterTableView> commandsList = FXCollections.observableArrayList();
@@ -110,7 +120,7 @@ public class NodeCommandLogController extends View {
                 final TreeItem<CommandAdapterTableView> root = new RecursiveTreeItem<>(commandsList, RecursiveTreeObject::getChildren);
 
                 JFXTreeTableView<CommandAdapterTableView> commandHistTableView = new JFXTreeTableView<>(root);
-                commandHistTableView.getColumns().addAll(commandColumn, stateColumn);
+                commandHistTableView.getColumns().addAll(commandColumn, stateColumn, responseColumn);
                 commandHistTableView.setShowRoot(false);
 
                 commandLogVBox.getChildren().add(commandHistTableView);
