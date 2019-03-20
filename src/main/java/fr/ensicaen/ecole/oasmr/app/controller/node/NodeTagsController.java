@@ -15,11 +15,26 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller.node;
 
+import fr.ensicaen.ecole.oasmr.app.Config;
+import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
+import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
+import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
+import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.concurrent.Future;
 
 public class NodeTagsController extends View {
+
+    private RequestManager requestManager = null;
+    private Config config;
+    private NodesModel nodesModel;
 
     public NodeTagsController(View parent) throws IOException {
         super("NodeTags", parent);
@@ -32,7 +47,20 @@ public class NodeTagsController extends View {
 
     @Override
     protected void onStart() {
+        if (requestManager == null) {
+            try {
+                nodesModel = NodesModel.getInstance();
+                config = Config.getInstance();
+                requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+            } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
+                exceptionPortInvalid.printStackTrace();
+            }
+        }
 
+        if (nodesModel.getSelectedAmount() == 1) {
+            NodeData n = nodesModel.getCurrentNodeData().get(0);
+
+        }
     }
 
     @Override

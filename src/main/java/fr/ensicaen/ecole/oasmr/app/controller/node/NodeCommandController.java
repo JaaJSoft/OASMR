@@ -76,6 +76,7 @@ public class NodeCommandController extends View {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
             try {
+                commandFlowPane.getChildren().clear();
                 Future<? extends Serializable> reponseCommandList = requestManager.aSyncSendRequest(new RequestGetCommands());
                 Set<Class<? extends Command>> commands = (Set<Class<? extends Command>>) reponseCommandList.get();
                 for (Class<? extends Command> command : commands) {
