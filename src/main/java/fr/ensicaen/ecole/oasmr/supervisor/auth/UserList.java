@@ -15,8 +15,14 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
+import com.google.gson.Gson;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionUserUnknown;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionLoginAlreadyExisting;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -108,5 +114,20 @@ public class UserList {
             loginList.add(user.getLogin());
         }
         return loginList;
+    }
+
+    public void saveUsers() throws IOException {
+        Gson gson = new Gson();
+        String users2Json = gson.toJson(userList);
+        FileWriter file = new FileWriter("users.json");
+        file.write(users2Json);
+        file.close();
+    }
+
+    public void loadUsers() throws FileNotFoundException {
+        Gson gson = new Gson();
+        FileReader file = new FileReader("users.json");
+        String users2Json = file.toString();
+        //userList = gson.fromJson(users2Json, User[].class);
     }
 }

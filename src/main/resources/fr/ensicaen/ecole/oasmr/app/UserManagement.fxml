@@ -7,6 +7,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.Label?>
+<?import com.jfoenix.controls.JFXTextField?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@css/style.css" />
@@ -15,7 +17,13 @@
         <padding>
             <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
         </padding>
+        <Label fx:id="errorMsg"></Label>
+        <HBox alignment="TOP_RIGHT">
+            <JFXTextField fx:id="searchField">Search</JFXTextField>
+            <JFXButton fx:id="searchBtn">Search</JFXButton>
+            <JFXButton fx:id="stopSearchBtn">Search STOP</JFXButton>
 
+        </HBox>
         <HBox alignment="CENTER">
 
             <JFXButton fx:id="adminBtn" ripplerFill="#e8dcdc" text="Set/Unset admin">

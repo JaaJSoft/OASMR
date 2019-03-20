@@ -47,6 +47,7 @@ public class UserManagementController extends View{
     private List<String> userList;
     private ObservableList<UserInfo> data;
     private String currentUserLogin;
+    private int nbAdmin;
 
     @FXML
     JFXButton returnPrev;
@@ -63,8 +64,22 @@ public class UserManagementController extends View{
     @FXML
     JFXButton adminBtn;
 
-    public UserManagementController() throws IOException {
+    @FXML
+    Label errorMsg;
+
+    @FXML
+    JFXButton searchBtn;
+
+    @FXML
+    JFXTextField searchField;
+
+    @FXML
+    JFXButton stopSearchBtn;
+
+
+    public UserManagementController(int width, int height) throws IOException {
         super("UserManagement");
+
     }
 
 
@@ -73,9 +88,10 @@ public class UserManagementController extends View{
 
     }
 
-    private void onLoadTest() {
+    private void onLoadTest(String toSearch) {
+        nbAdmin = 0;
 
-        currentUserLogin = "admin";
+        currentUserLogin = "admin";//TODO: reccup le vrai login
         RequestGetAdmin requestGetAdmin = new RequestGetAdmin(currentUserLogin);
         Boolean isCurrentAdmin = false;
         try {
@@ -83,6 +99,26 @@ public class UserManagementController extends View{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        searchBtn.setOnAction(event -> {
+            if (!searchField.getText().trim().equals("")) {
+                onLoadTest(searchField.getText());
+            } else {
+                onLoadTest("");
+            }
+        });
+
+        searchField.setOnAction(event -> {
+            if (!searchField.getText().trim().equals("")) {
+                onLoadTest(searchField.getText());
+            } else {
+                onLoadTest("");
+            }
+        });
+
+        stopSearchBtn.setOnAction(event -> {
+            onLoadTest("");
+        });
 
         if(isCurrentAdmin) {
 
@@ -143,13 +179,22 @@ public class UserManagementController extends View{
             ObservableList<UserInfo> users = FXCollections.observableArrayList();
 
             for (String user : userList) {
+
                 boolean admin = false;
                 try {
                     admin = (boolean) requestManager.sendRequest(new RequestGetAdmin(user));
+                    if (admin) {
+                        nbAdmin++;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                users.add(new UserInfo(user, admin));
+                if (!toSearch.trim().equals("") && user.contains(toSearch)) {
+                    users.add(new UserInfo(user, admin));
+                } else if (toSearch.trim().equals("")){
+                    users.add(new UserInfo(user, admin));
+                }
+
             }
 
             for (UserInfo u : users) {
@@ -181,7 +226,7 @@ public class UserManagementController extends View{
                         }
                     }
                 }
-                onLoadTest();
+                onLoadTest(toSearch);
             });
 
 
@@ -193,15 +238,25 @@ public class UserManagementController extends View{
 
                             RequestSetAdmin requestSetAdmin = new RequestSetAdmin(((UserInfo) ((TreeItem) u).getValue()).getLogin(), !((UserInfo) ((TreeItem) u).getValue()).getAdmin().getValue());
                             try {
-                                requestManager.sendRequest(requestSetAdmin);
+                                if (nbAdmin==1 && ((UserInfo) ((TreeItem) u).getValue()).getAdmin().getValue()){
+                                    errorMsg.setText("You have to have at least one administrator");
+                                } else {
+                                    if (((UserInfo) ((TreeItem) u).getValue()).getAdmin().getValue()) {
+                                        nbAdmin--;
+                                    }
+
+                                    requestManager.sendRequest(requestSetAdmin);
+
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
                     }
                 }
-                onLoadTest();
+                onLoadTest(toSearch);
             });
+
 
             userTableVBox.getChildren().add(userTable);
 
@@ -358,7 +413,7 @@ public class UserManagementController extends View{
                     RequestSetAdmin requestSetAdmin = new RequestSetAdmin(loginField.getText(), true);
                     requestManager.sendRequest(requestSetAdmin);
                 }
-                onLoadTest();
+                onLoadTest("");
                 dialog.close();
 
             } catch (Exception e1) {
@@ -389,7 +444,7 @@ public class UserManagementController extends View{
 
     @Override
     public void onStart() {
-        onLoadTest();
+        onLoadTest("");
 
     }
 
