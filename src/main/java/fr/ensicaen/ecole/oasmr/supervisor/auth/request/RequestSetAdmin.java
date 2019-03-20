@@ -17,6 +17,8 @@ public class RequestSetAdmin extends Request {
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
         supervisor.getUserList().getUser(login).setAdmin(admin);
+        supervisor.getUserList().saveUsers();
+
         return 0;
     }
 

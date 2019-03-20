@@ -5,6 +5,7 @@ import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
 import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import fr.ensicaen.ecole.oasmr.app.Config;
+import fr.ensicaen.ecole.oasmr.app.Session;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
@@ -91,7 +92,8 @@ public class UserManagementController extends View{
     private void onLoadTest(String toSearch) {
         nbAdmin = 0;
 
-        currentUserLogin = "admin";//TODO: reccup le vrai login
+        currentUserLogin = Session.getProperty("user");
+        System.out.println("User connected :" + currentUserLogin);
         RequestGetAdmin requestGetAdmin = new RequestGetAdmin(currentUserLogin);
         Boolean isCurrentAdmin = false;
         try {
@@ -273,6 +275,9 @@ public class UserManagementController extends View{
             deleteUser.setDisable(true);
             addUser.setDisable(true);
             adminBtn.setDisable(true);
+            searchField.setDisable(true);
+            searchBtn.setDisable(true);
+            stopSearchBtn.setDisable(true);
             final Label message = new Label("");
 
             GridPane grid = new GridPane();
@@ -280,7 +285,7 @@ public class UserManagementController extends View{
             grid.setVgap(5);
             grid.setHgap(5);
             VBox dialogVbox = new VBox(20);
-            Text login = new Text("Enter a login:");
+            Text login = new Text("Enter new login:");
             Text password = new Text("Enter your password:");
             GridPane.setConstraints(login,0,0);
             grid.getChildren().add(login);
@@ -315,35 +320,42 @@ public class UserManagementController extends View{
     }
 
     private void modifyUserFunction(Label message, JFXTextField loginField, JFXPasswordField oldPasswordField,JFXPasswordField passwordField) {
-
+        int a =0;
         if (!loginField.getText().trim().equals("")) {
+            a++;
             try {
                 RequestModifyUserLogin loginModif = new RequestModifyUserLogin(currentUserLogin, loginField.getText());
                 requestManager.sendRequest(loginModif);
+                message.setText("Successfull Changes");
+                message.setTextFill(Color.rgb(30, 220, 30));
+                Session.setProperty("user", loginField.getText());
+                currentUserLogin = loginField.getText();
 
             } catch (Exception e1) {
                 e1.printStackTrace();
                 message.setText("Error");
                 message.setTextFill(Color.rgb(210, 39, 30));
             }
-            message.setText("Successfull Changes");
-            message.setTextFill(Color.rgb(30, 220, 30));
+
             loginField.clear();
 
-        } else if (!passwordField.getText().trim().equals("") && !oldPasswordField.getText().trim().equals("")) {
+        } if (!passwordField.getText().trim().equals("") && !oldPasswordField.getText().trim().equals("")) {
+            a++;
             try {
                 RequestModifyUserPassword pswdModif = new RequestModifyUserPassword(currentUserLogin, oldPasswordField.getText(), passwordField.getText());
+                requestManager.sendRequest(pswdModif);
+                message.setText("Successfull Changes");
+                message.setTextFill(Color.rgb(30, 220, 30));
             } catch (Exception e1) {
                 e1.printStackTrace();
                 message.setText("Error");
                 message.setTextFill(Color.rgb(210, 39, 30));
             }
-            message.setText("Successfull Changes");
-            message.setTextFill(Color.rgb(30, 220, 30));
+
             passwordField.clear();
             oldPasswordField.clear();
 
-        } else {
+        } if (a==0) {
             message.setText("No Changes");
             message.setTextFill(Color.rgb(210, 39, 30));
         }

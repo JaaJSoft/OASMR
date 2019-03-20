@@ -25,6 +25,7 @@ import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionServerRunnableNotE
 import fr.ensicaen.ecole.oasmr.supervisor.auth.UserList;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeFlyweightFactory;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -39,7 +40,7 @@ public class Supervisor extends CommandExecutor {
         serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler(this));
     }
 
-    public void start() throws InterruptedException {
+    public void start() throws InterruptedException, IOException {
         Thread ThreadServerRequestHandler = new Thread(() -> {
             try {
                 serverRequestHandler.start();
@@ -54,6 +55,8 @@ public class Supervisor extends CommandExecutor {
         System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandFinder loading... ");
         finder.start();
         System.out.println("Done !");
+        userList.loadUsers();
+
         ThreadServerRequestHandler.join();
         finder.join();
     }
