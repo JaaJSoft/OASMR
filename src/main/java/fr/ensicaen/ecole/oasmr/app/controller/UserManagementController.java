@@ -278,6 +278,14 @@ public class UserManagementController extends View{
             searchField.setDisable(true);
             searchBtn.setDisable(true);
             stopSearchBtn.setDisable(true);
+
+            deleteUser.setVisible(false);
+            addUser.setVisible(false);
+            adminBtn.setVisible(false);
+            searchField.setVisible(false);
+            searchBtn.setVisible(false);
+            stopSearchBtn.setVisible(false);
+
             final Label message = new Label("");
 
             GridPane grid = new GridPane();
