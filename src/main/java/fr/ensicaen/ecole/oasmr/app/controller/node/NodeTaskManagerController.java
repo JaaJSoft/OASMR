@@ -13,21 +13,24 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.app.controller;
+package fr.ensicaen.ecole.oasmr.app.controller.node;
 
+import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 
 import java.io.IOException;
 
-public class NodeTagsController extends View {
+public class NodeTaskManagerController extends View {
 
-    public NodeTagsController(View parent) throws IOException {
-        super("NodeTags", parent);
+    private NodesModel nodesModel;
+
+    public NodeTaskManagerController(View parent) throws IOException {
+        super("NodeTaskManager", parent);
     }
 
     @Override
     public void onCreate() {
-
+        nodesModel = NodesModel.getInstance();
     }
 
     @Override

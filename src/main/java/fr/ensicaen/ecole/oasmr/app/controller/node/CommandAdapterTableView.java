@@ -1,4 +1,4 @@
-package fr.ensicaen.ecole.oasmr.app.controller;
+package fr.ensicaen.ecole.oasmr.app.controller.node;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;

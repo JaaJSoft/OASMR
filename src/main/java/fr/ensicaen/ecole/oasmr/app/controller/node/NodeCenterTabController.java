@@ -13,7 +13,7 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.app.controller;
+package fr.ensicaen.ecole.oasmr.app.controller.node;
 
 import com.jfoenix.controls.*;
 import fr.ensicaen.ecole.oasmr.app.Config;

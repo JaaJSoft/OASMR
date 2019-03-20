@@ -16,6 +16,8 @@
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import fr.ensicaen.ecole.oasmr.app.Config;
+import fr.ensicaen.ecole.oasmr.app.controller.node.NodeListController;
+import fr.ensicaen.ecole.oasmr.app.controller.node.NodeViewController;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.View;
