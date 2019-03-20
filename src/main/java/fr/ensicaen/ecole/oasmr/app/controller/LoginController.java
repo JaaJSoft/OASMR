@@ -19,6 +19,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import fr.ensicaen.ecole.oasmr.app.Config;
+import fr.ensicaen.ecole.oasmr.app.Session;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
@@ -94,20 +95,12 @@ public class LoginController extends View {
 
             requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(IPServer.getText()), Integer.parseInt(portNumber.getText()));
 
-            RequestAddUser r = new RequestAddUser("admin", "jeej");
-            RequestSetAdmin ra = new RequestSetAdmin("admin", true);
-            try {
-                requestManager.sendRequest(r);
-                requestManager.sendRequest(ra);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
             RequestAuthentication requestAuthentication = new RequestAuthentication(loginUser.getText(), loginPassword.getText());
             try {
                 if ((boolean) requestManager.sendRequest(requestAuthentication)) {
                     try {
+                        Session.setProperty("user", loginUser.getText());
                         sceneManager.setScenes(MainController.class, 1500, 800);
                     } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                         exceptionSceneNotFound.printStackTrace();

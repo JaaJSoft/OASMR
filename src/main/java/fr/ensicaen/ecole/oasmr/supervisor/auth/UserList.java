@@ -18,20 +18,17 @@ package fr.ensicaen.ecole.oasmr.supervisor.auth;
 import com.google.gson.Gson;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionUserUnknown;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionLoginAlreadyExisting;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class UserList {
-    private final List<User> userList;
+    private HashSet<User> userList;
 
     public UserList(){
-        userList = new ArrayList<>();
+        userList = new HashSet<>();
     }
 
     public void addUser(User newUser) throws ExceptionLoginAlreadyExisting {
@@ -41,6 +38,11 @@ public class UserList {
             }
         }
         userList.add(newUser);
+        try {
+            saveUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void modifyUserLogin(String login, String newLogin) throws ExceptionLoginAlreadyExisting, ExceptionUserUnknown {
@@ -50,6 +52,11 @@ public class UserList {
             }
         }
         getUser(login).setLogin(newLogin);
+        try {
+            saveUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void modifyUserPassword(String login, String password, String newPassword) throws ExceptionUserUnknown {
@@ -58,6 +65,11 @@ public class UserList {
             throw new ExceptionUserUnknown(oldUser.getLogin()+ ": incorrect password)");
         }
         getUser(login).setPassword(newPassword);
+        try {
+            saveUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteUser(User user2delete) throws ExceptionUserUnknown {
@@ -71,15 +83,16 @@ public class UserList {
                 break;
             }
         }
+        try {
+            saveUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean authenticate(String login, String passwordHashed){
         for (User user : userList) {
             if (user.getLogin().equals(login)) {
-                System.out.println("Login" + user.getLogin());
-                System.out.println("Password Hashed" + user.getPassword());
-                System.out.println("Try authenticate with hashed:" + passwordHashed);
-                System.out.println("Authentication Result:" + user.getPassword().equals(passwordHashed));
                 if (user.getPassword().equals(passwordHashed)){
                     user.authenticate();
                     return true;
@@ -118,16 +131,17 @@ public class UserList {
 
     public void saveUsers() throws IOException {
         Gson gson = new Gson();
-        String users2Json = gson.toJson(userList);
+        String users2Json = gson.toJson(userList.toArray(new User[0]));
         FileWriter file = new FileWriter("users.json");
         file.write(users2Json);
         file.close();
     }
 
-    public void loadUsers() throws FileNotFoundException {
+    public void loadUsers() throws IOException {
         Gson gson = new Gson();
-        FileReader file = new FileReader("users.json");
-        String users2Json = file.toString();
-        //userList = gson.fromJson(users2Json, User[].class);
+        byte[] encoded = Files.readAllBytes(Paths.get("users.json"));
+        String users2Json = new String(encoded, "UTF-8");
+        User[] users = gson.fromJson(users2Json, User[].class);
+        userList.addAll(Arrays.asList(users));
     }
 }
