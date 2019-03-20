@@ -78,7 +78,7 @@ public class UserManagementController extends View{
     JFXButton stopSearchBtn;
 
 
-    public UserManagementController(int width, int height) throws IOException {
+    public UserManagementController() throws IOException {
         super("UserManagement");
 
     }
