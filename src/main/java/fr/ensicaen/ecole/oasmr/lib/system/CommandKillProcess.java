@@ -31,10 +31,8 @@ public class CommandKillProcess extends Command {
     protected Serializable execute(Object... params) throws Exception {
         Runtime rt = Runtime.getRuntime();
         if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1) {
-            System.out.println("jaaj");
             rt.exec("taskkill " + pidToKill);
         } else {
-            System.out.println("jeej");
             rt.exec("kill -9 " + pidToKill);
         }
         return null;

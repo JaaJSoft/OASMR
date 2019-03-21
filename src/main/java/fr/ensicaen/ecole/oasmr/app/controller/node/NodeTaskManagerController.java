@@ -15,24 +15,37 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller.node;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import fr.ensicaen.ecole.oasmr.app.Config;
+import fr.ensicaen.ecole.oasmr.app.controller.UserManagementController;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.system.CommandGetProcesses;
 import fr.ensicaen.ecole.oasmr.lib.system.CommandKillProcess;
+import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestGetAdmin;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class NodeTaskManagerController extends View {
 
@@ -45,6 +58,9 @@ public class NodeTaskManagerController extends View {
 
     @FXML
     JFXTextField searchField;
+
+    @FXML
+    VBox tableBox;
 
     public NodeTaskManagerController(View parent) throws IOException {
         super("NodeTaskManager", parent);
@@ -67,11 +83,10 @@ public class NodeTaskManagerController extends View {
             }
         }
 
-
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
-
+            init();
         }
 
     }
@@ -81,13 +96,15 @@ public class NodeTaskManagerController extends View {
 
         CommandGetProcesses getProcesses = new CommandGetProcesses();
 
-        HashMap<String, String>[] processes;
+        HashMap<String, String>[] processes = new HashMap[0];
 
         try {
-            processes = (HashMap<String, String>[]) requestManager.sendRequest(getProcesses);
+            processes = (HashMap<String, String>[]) requestManager.sendRequest(new RequestExecuteCommand(nodesModel.getCurrentNodeData().get(0).getId(), getProcesses));
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("AAAAAAAA");
+        System.out.println(Arrays.toString(processes));
 
         /**
          * =>
@@ -97,7 +114,68 @@ public class NodeTaskManagerController extends View {
          * make a kill btn
          * make a test for CommandKill
          */
-/*
+        tableBox.getChildren().clear();
+        ObservableList<InternalProcess> processesList = FXCollections.observableArrayList();
+
+
+        for (HashMap<String, String> p : processes) {
+                processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
+        }
+
+        final TreeItem<InternalProcess> root = new RecursiveTreeItem<>(processesList, RecursiveTreeObject::getChildren);
+
+        JFXTreeTableView processesTable = new JFXTreeTableView(root);
+
+        JFXTreeTableColumn<InternalProcess, String> nameCol = new JFXTreeTableColumn<>("Name");
+        nameCol.setPrefWidth(300);
+        nameCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<InternalProcess, String> param) -> {
+            if (nameCol.validateValue(param)) {
+                return param.getValue().getValue().Name;
+            } else {
+                return nameCol.getComputedValue(param);
+            }
+        });
+
+
+        JFXTreeTableColumn<InternalProcess, String> cpuCol = new JFXTreeTableColumn<>("CPU usage");
+        cpuCol.setPrefWidth(300);
+        cpuCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<InternalProcess, String> param) -> {
+            if (cpuCol.validateValue(param)) {
+                return param.getValue().getValue().Cpu;
+            } else {
+                return cpuCol.getComputedValue(param);
+            }
+        });
+
+        JFXTreeTableColumn<InternalProcess, String> memCol = new JFXTreeTableColumn<>("Memory");
+        memCol.setPrefWidth(300);
+        memCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<InternalProcess, String> param) -> {
+            if (memCol.validateValue(param)) {
+                return param.getValue().getValue().Mem;
+            } else {
+                return memCol.getComputedValue(param);
+            }
+        });
+
+        JFXTreeTableColumn<InternalProcess, String> pidCol = new JFXTreeTableColumn<>("PID");
+        pidCol.setPrefWidth(300);
+        pidCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<InternalProcess, String> param) -> {
+            if (pidCol.validateValue(param)) {
+                return param.getValue().getValue().Pid;
+            } else {
+                return pidCol.getComputedValue(param);
+            }
+        });
+
+        processesTable.setShowRoot(false);
+        processesTable.setEditable(false);
+        processesTable.getColumns().setAll(nameCol, cpuCol, memCol, pidCol);
+        processesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        processesTable.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        tableBox.getChildren().addAll(processesTable);
+
+
+        /*
         kill.setOnAction(event -> {
             for (Object u : table.getSelectionModel().getSelectedItems()) {
                 System.out.println(u);
@@ -114,10 +192,42 @@ public class NodeTaskManagerController extends View {
             }
         });
 
-    */}
+    */
+    }
 
     @Override
     public void onStop() {
 
     }
+
+    private static final class InternalProcess extends RecursiveTreeObject<InternalProcess>{
+        StringProperty Pid;
+        StringProperty Cpu;
+        StringProperty Mem;
+        StringProperty Name;
+
+        public InternalProcess(String pid, String cpu, String mem, String name) {
+            Pid = new SimpleStringProperty(pid);
+            Cpu = new SimpleStringProperty(cpu);
+            Mem = new SimpleStringProperty(mem);
+            Name = new SimpleStringProperty(name);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            InternalProcess that = (InternalProcess) o;
+            return Objects.equals(Pid, that.Pid) &&
+                    Objects.equals(Cpu, that.Cpu) &&
+                    Objects.equals(Mem, that.Mem) &&
+                    Objects.equals(Name, that.Name);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(Pid, Cpu, Mem, Name);
+        }
+    }
+
 }

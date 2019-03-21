@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <!--
@@ -17,19 +21,13 @@
   ~  limitations under the License.
   -->
 
-
-<?import javafx.scene.layout.HBox?>
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTextField?>
-
-<?import java.net.URL?>
-
-<VBox xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<VBox xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" spacing="20">
     <stylesheets>
         <URL value="@css/style.css" />
     </stylesheets>
-    <HBox>
-        <JFXButton fx:id="kill" >Mettre fin au processus</JFXButton>
-        <JFXTextField fx:id="searchField" promptText="Search"></JFXTextField>
+    <HBox spacing="20">
+        <JFXButton fx:id="kill">Mettre fin au processus</JFXButton>
+        <JFXTextField fx:id="searchField" prefHeight="26.0" prefWidth="396.0" promptText="Search" />
     </HBox>
+    <VBox fx:id="tableBox" />
 </VBox>

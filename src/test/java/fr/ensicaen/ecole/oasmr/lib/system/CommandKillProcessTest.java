@@ -32,7 +32,7 @@ public class CommandKillProcessTest {
 
     @Before
     public void setUp() {
-        c = new CommandKillProcess(24765);
+        c = new CommandKillProcess(9498);
         hal = SystemInfoSingleton.getHardware();
         ProcessBuilder topProcessBuilder = new ProcessBuilder();
         topProcessBuilder.command("top");
@@ -42,7 +42,8 @@ public class CommandKillProcessTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //topProcess.
+
+
     }
 
     @Test
