@@ -15,15 +15,20 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller.node;
 
+import com.jfoenix.controls.JFXButton;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestAddTagToNode;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -31,6 +36,8 @@ import java.net.UnknownHostException;
 import java.util.concurrent.Future;
 
 public class NodeTagsController extends View {
+    @FXML
+    VBox tagsNode;
 
     private RequestManager requestManager = null;
     private Config config;
@@ -59,8 +66,20 @@ public class NodeTagsController extends View {
 
         if (nodesModel.getSelectedAmount() == 1) {
             NodeData n = nodesModel.getCurrentNodeData().get(0);
+            tagsNode.getChildren().clear();
+            n.getTags().forEach(e -> tagsNode.getChildren().add(new Label(e.getName())));
 
+            JFXButton newTag = new JFXButton("new Tag");
+            newTag.setOnAction(actionEvent -> {
+                try {
+                    requestManager.sendRequest(new RequestAddTagToNode(nodesModel.getCurrentNodeData().get(0).getId(),new Tag("AH")));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            tagsNode.getChildren().add(newTag);
         }
+
     }
 
     @Override

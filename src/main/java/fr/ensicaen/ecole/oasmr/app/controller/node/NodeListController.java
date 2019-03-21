@@ -28,6 +28,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestGetAllTags
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestGetNodes;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.SelectionMode;
@@ -46,7 +47,7 @@ public class NodeListController extends View {
     JFXButton refreshBtn;
 
     @FXML
-    JFXChipView filter;
+    JFXChipView<String> filter;
 
     @FXML
     VBox vbox;
@@ -82,12 +83,30 @@ public class NodeListController extends View {
                 nodesModel.addCurrentNodes(node);
             }
         });
+        filter.getChips().addListener((ListChangeListener<? super String>) change -> {
+            ObservableList<? extends String> list = change.getList();
+            List<NodeData> filterList;
+            System.out.println(nodesModel.getTotalAmount());
+            if (list.isEmpty()) {
+                filterList = nodesModel.getAllNodeData();
+            } else {
+                List<Tag> tags = list.stream().map(Tag::new).collect(Collectors.toList());
+                filterList = filterNodeData(nodesModel.getAllNodeData(), tags);
+            }
+            System.out.println(filterList);
+            nodeListView.getItems().clear();
+            nodeListView.getItems().addAll(filterList);
+        });
+    }
+
+    private List<NodeData> filterNodeData(List<NodeData> nodeDataList, List<Tag> tags) {
+        return nodeDataList.stream().filter(n -> n.getTags().containsAll(tags)).collect(Collectors.toList());
     }
 
     @Override
     public void onStart() {
 
-        if(requestManager == null){
+        if (requestManager == null) {
             try {
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
@@ -102,8 +121,8 @@ public class NodeListController extends View {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        nodeListView.getItems().removeAll();
-        nodeListView.setItems(nodesModel.getAllNodeData());
+        nodeListView.getItems().clear();
+        nodeListView.getItems().addAll(nodesModel.getAllNodeData());
         try {
             filter.getSuggestions().clear();
             Tag[] tags = (Tag[]) requestManager.sendRequest(new RequestGetAllTags());

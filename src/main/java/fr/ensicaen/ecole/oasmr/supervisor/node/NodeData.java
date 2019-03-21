@@ -40,6 +40,7 @@ public class NodeData implements Comparable, Serializable {
         this.nodeAddress = nodeAddress;
         this.port = port;
         tags.add(new Tag("ALL"));
+        tags.add(new Tag("JEEJ"));
     }
 
     public NodeData(Integer id, String name, Integer heartbeatPeriod, InetAddress nodeAddress, int port, String sshLogin, int sshPort) {
