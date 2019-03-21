@@ -20,14 +20,9 @@ import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 /**
  * Lists all the files of a directory.
