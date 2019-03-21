@@ -86,14 +86,12 @@ public class NodeListController extends View {
         filter.getChips().addListener((ListChangeListener<? super String>) change -> {
             ObservableList<? extends String> list = change.getList();
             List<NodeData> filterList;
-            System.out.println(nodesModel.getTotalAmount());
             if (list.isEmpty()) {
                 filterList = nodesModel.getAllNodeData();
             } else {
                 List<Tag> tags = list.stream().map(Tag::new).collect(Collectors.toList());
                 filterList = filterNodeData(nodesModel.getAllNodeData(), tags);
             }
-            System.out.println(filterList);
             nodeListView.getItems().clear();
             nodeListView.getItems().addAll(filterList);
         });
