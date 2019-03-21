@@ -66,15 +66,20 @@ public class NodeTaskManagerController extends View {
     @FXML
     VBox tableBox;
 
+    @FXML
+    JFXButton searchBtn;
+
     public NodeTaskManagerController(View parent) throws IOException {
         super("NodeTaskManager", parent);
+        toSearch = "";
     }
 
     @Override
     public void onCreate() {
         nodesModel = NodesModel.getInstance();
-        toSearch = "";
     }
+
+    //TODO: essayer de garder la selection d'un rafraichissement à l'autre...
 
     @Override
     protected void onStart() {
@@ -88,6 +93,16 @@ public class NodeTaskManagerController extends View {
             }
         }
 
+        searchBtn.setOnAction(event -> {
+            toSearch = searchField.getText();
+            init();
+        });
+
+        searchField.setOnAction(event -> {
+            toSearch = searchField.getText();
+            init();
+        });
+
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
@@ -96,7 +111,7 @@ public class NodeTaskManagerController extends View {
 
                 @Override
                 public void handle(ActionEvent event) {
-                    System.out.println("this is called every 5 seconds on UI thread");
+
                     init();
                 }
             }));
@@ -110,7 +125,6 @@ public class NodeTaskManagerController extends View {
 
     public void init(){
 
-
         CommandGetProcesses getProcesses = new CommandGetProcesses();
 
         HashMap<String, String>[] processes = new HashMap[0];
@@ -122,24 +136,17 @@ public class NodeTaskManagerController extends View {
         }
         tableBox.getChildren().clear();
 
-        System.out.println("AAAAAAAA");
-        System.out.println(Arrays.toString(processes));
+        //System.out.println(Arrays.toString(processes));
 
-        /**
-         * =>
-         * Refresh table every 5sec (like diapo EX java bean TP)
-         * make a search bar
-         * make a test for CommandKill
-         */
         ObservableList<InternalProcess> processesList = FXCollections.observableArrayList();
 
 
         for (HashMap<String, String> p : processes) {
-            //if (!toSearch.trim().equals("") && p.get("NAME").contains(toSearch)) {
-             //   processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
-            //} else if (toSearch.trim().equals("")){
+            if (!toSearch.trim().equals("") && p.get("NAME").contains(toSearch)) {
                 processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
-           // }
+            } else if (toSearch.trim().equals("")){
+                processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
+            }
         }
 
         final TreeItem<InternalProcess> root = new RecursiveTreeItem<>(processesList, RecursiveTreeObject::getChildren);
@@ -195,7 +202,6 @@ public class NodeTaskManagerController extends View {
         tableBox.getChildren().addAll(processesTable);
 
 
-
         kill.setOnAction(event -> {
             for (Object u : processesTable.getSelectionModel().getSelectedItems()) {
                 if (u instanceof TreeItem) {
@@ -213,15 +219,6 @@ public class NodeTaskManagerController extends View {
         });
 
 
-
-
-    }
-
-    private class Task extends TimerTask{
-        @Override
-        public void run(){
-            init();
-        }
     }
 
     @Override
