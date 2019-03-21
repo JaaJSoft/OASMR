@@ -53,6 +53,7 @@ public class NodeCommandLogController extends View {
 
     public NodeCommandLogController(View parent) throws IOException {
         super("NodeCommandLog", parent);
+        onCreate();
     }
 
     @Override

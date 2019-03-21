@@ -46,6 +46,7 @@ public class NodeSystemInfoController extends View {
             nodeCpuInfo = new NodeCpuInfoController(this);
             addSubView(nodeCpuInfo);
             nodeFileExplorer = new NodeFileExplorerController(this);
+            addSubView(nodeFileExplorer);
         } catch (IOException e) {
             e.printStackTrace();
         }

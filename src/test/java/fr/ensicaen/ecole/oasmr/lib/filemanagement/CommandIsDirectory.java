@@ -15,21 +15,8 @@
 
 package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
-import org.junit.Test;
+public class CommandIsDirectory {
 
-import java.util.Arrays;
+    //TODO : tests
 
-import static org.junit.Assert.assertArrayEquals;
-
-public class CommandListFilesTest extends AbstractFileTest {
-
-    @Test
-    public void execute() throws Exception {
-        CommandListFiles commandListFiles = new CommandListFiles(directoryName1);
-
-        String[] res = (String[])commandListFiles.executeCommand();
-        Arrays.sort(res);
-        Arrays.sort(this.listFilesDir1);
-        assertArrayEquals(this.listFilesDir1, res);
-    }
 }

@@ -13,23 +13,32 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib.filemanagement;
+package fr.ensicaen.ecole.oasmr.app.controller.node;
 
-import org.junit.Test;
+import java.io.File;
+import java.nio.file.Paths;
 
-import java.util.Arrays;
+public class FileAdapter {
 
-import static org.junit.Assert.assertArrayEquals;
+    private String path;
+    private String name;
 
-public class CommandListFilesTest extends AbstractFileTest {
+    public FileAdapter(String path) {
+        this.path = path;
+        String filename = path.substring(path.lastIndexOf(File.separator)+1);
+        this.name = (filename.equals("") ? path : filename);
+    }
 
-    @Test
-    public void execute() throws Exception {
-        CommandListFiles commandListFiles = new CommandListFiles(directoryName1);
+    public String getPath() {
+        return path;
+    }
 
-        String[] res = (String[])commandListFiles.executeCommand();
-        Arrays.sort(res);
-        Arrays.sort(this.listFilesDir1);
-        assertArrayEquals(this.listFilesDir1, res);
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

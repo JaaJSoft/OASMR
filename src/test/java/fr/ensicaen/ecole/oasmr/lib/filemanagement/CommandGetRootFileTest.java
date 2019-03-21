@@ -17,19 +17,18 @@ package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.io.File;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
-public class CommandListFilesTest extends AbstractFileTest {
+
+public class CommandGetRootFileTest {
 
     @Test
     public void execute() throws Exception {
-        CommandListFiles commandListFiles = new CommandListFiles(directoryName1);
-
-        String[] res = (String[])commandListFiles.executeCommand();
-        Arrays.sort(res);
-        Arrays.sort(this.listFilesDir1);
-        assertArrayEquals(this.listFilesDir1, res);
+        File rootDir = new File(".").toPath().toAbsolutePath().getRoot().toFile();
+        CommandGetRootFile c = new CommandGetRootFile();
+        assertEquals(c.execute(), rootDir);
     }
+
 }

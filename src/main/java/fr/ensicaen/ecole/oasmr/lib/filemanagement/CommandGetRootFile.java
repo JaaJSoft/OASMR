@@ -15,21 +15,22 @@
 
 package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
-import org.junit.Test;
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
-import java.util.Arrays;
+import java.io.File;
+import java.io.Serializable;
 
-import static org.junit.Assert.assertArrayEquals;
+public class CommandGetRootFile extends Command {
 
-public class CommandListFilesTest extends AbstractFileTest {
+    public CommandGetRootFile() { }
 
-    @Test
-    public void execute() throws Exception {
-        CommandListFiles commandListFiles = new CommandListFiles(directoryName1);
+    @Override
+    protected Serializable execute(Object... params) throws Exception {
+        return new File(".").toPath().toAbsolutePath().getRoot().toString();
+    }
 
-        String[] res = (String[])commandListFiles.executeCommand();
-        Arrays.sort(res);
-        Arrays.sort(this.listFilesDir1);
-        assertArrayEquals(this.listFilesDir1, res);
+    @Override
+    public String toString() {
+        return "Command get root file";
     }
 }

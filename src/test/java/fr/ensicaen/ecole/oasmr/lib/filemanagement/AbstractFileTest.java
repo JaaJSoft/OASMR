@@ -44,7 +44,7 @@ public abstract class AbstractFileTest {
 
     protected final String testString = "This is a test String.";
 
-    protected final String listFilesDir1[] = {"subdir", "file"};
+    protected final String listFilesDir1[] = new String[2]; // {"subdir", "file"};
 
     protected File dir, subdir, file1, file2, unusedFile1, unusedFile2, unusedDir;
 
@@ -58,6 +58,8 @@ public abstract class AbstractFileTest {
         unusedFile1 = new File(unusedFileName1);
         unusedFile2 = new File(unusedFileName2);
         unusedDir = new File(unusedDirName);
+        listFilesDir1[0] = subdir.getAbsolutePath();
+        listFilesDir1[1] = file1.getAbsolutePath();
 
         dir.mkdirs();
         subdir.mkdir();
