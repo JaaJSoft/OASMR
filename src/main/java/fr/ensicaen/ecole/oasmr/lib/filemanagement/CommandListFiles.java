@@ -20,6 +20,14 @@ import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Lists all the files of a directory.
@@ -58,14 +66,20 @@ public class CommandListFiles extends Command {
     @Override
     protected Serializable execute(Object... params) throws Exception {
         File file = new File(directoryPathName);
-
+        File[] listFile;
+        List<String> listPath = new ArrayList<>();
         if (filter == null)
-            return file.list();
-        return file.list(filter);
+            listFile = file.listFiles();
+        else
+            listFile = file.listFiles(filter);
+        for(File f : listFile){
+            listPath.add(f.getAbsolutePath());
+        }
+        return listPath.toArray(new String[listPath.size()]);
     }
 
     @Override
     public String toString() {
-        return null;
+        return "Command get files list";
     }
 }

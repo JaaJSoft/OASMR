@@ -13,24 +13,32 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.lib.filemanagement;
-
-import fr.ensicaen.ecole.oasmr.lib.command.Command;
+package fr.ensicaen.ecole.oasmr.app.controller.node;
 
 import java.io.File;
-import java.io.Serializable;
+import java.nio.file.Paths;
 
-public class CommandGetRootFile extends Command {
+public class FileAdapter {
 
-    public CommandGetRootFile() { }
+    private String path;
+    private String name;
 
-    @Override
-    protected Serializable execute(Object... params) throws Exception {
-        return new File(".").toPath().toAbsolutePath().getRoot().toString();
+    public FileAdapter(String path) {
+        this.path = path;
+        String filename = path.substring(path.lastIndexOf(File.separator)+1);
+        this.name = (filename.equals("") ? path : filename);
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
     public String toString() {
-        return "Command get root file";
+        return name;
     }
 }

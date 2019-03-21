@@ -20,17 +20,22 @@ import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import java.io.File;
 import java.io.Serializable;
 
-public class CommandGetRootFile extends Command {
+public class CommandIsDirectory extends Command {
 
-    public CommandGetRootFile() { }
+    private String path;
+
+    public CommandIsDirectory(String path) {
+        this.path = path;
+    }
 
     @Override
     protected Serializable execute(Object... params) throws Exception {
-        return new File(".").toPath().toAbsolutePath().getRoot().toString();
+        return new File(path).isDirectory();
     }
 
     @Override
     public String toString() {
-        return "Command get root file";
+        return "Command is Directory";
     }
+
 }

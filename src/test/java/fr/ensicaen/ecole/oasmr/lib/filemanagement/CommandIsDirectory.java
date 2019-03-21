@@ -15,22 +15,8 @@
 
 package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
-import fr.ensicaen.ecole.oasmr.lib.command.Command;
+public class CommandIsDirectory {
 
-import java.io.File;
-import java.io.Serializable;
+    //TODO : tests
 
-public class CommandGetRootFile extends Command {
-
-    public CommandGetRootFile() { }
-
-    @Override
-    protected Serializable execute(Object... params) throws Exception {
-        return new File(".").toPath().toAbsolutePath().getRoot().toString();
-    }
-
-    @Override
-    public String toString() {
-        return "Command get root file";
-    }
 }
