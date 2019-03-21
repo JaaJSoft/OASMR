@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 public class CommandKillProcess extends Command {
 
-    private int pidToKill;
+    private final int pidToKill;
 
     public CommandKillProcess(int pidToKill) {
         this.pidToKill = pidToKill;
@@ -35,11 +35,11 @@ public class CommandKillProcess extends Command {
         } else {
             rt.exec("kill -9 " + pidToKill);
         }
-        return null;
+        return 0;
     }
 
     @Override
     public String toString() {
-        return null;
+        return "kill " + pidToKill;
     }
 }

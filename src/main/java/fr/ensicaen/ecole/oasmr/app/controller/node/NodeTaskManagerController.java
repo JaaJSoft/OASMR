@@ -138,7 +138,7 @@ public class NodeTaskManagerController extends View {
 
 
         JFXTreeTableColumn<InternalProcess, String> cpuCol = new JFXTreeTableColumn<>("CPU usage");
-        cpuCol.setPrefWidth(300);
+        cpuCol.setPrefWidth(150);
         cpuCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<InternalProcess, String> param) -> {
             if (cpuCol.validateValue(param)) {
                 return param.getValue().getValue().Cpu;
@@ -148,7 +148,7 @@ public class NodeTaskManagerController extends View {
         });
 
         JFXTreeTableColumn<InternalProcess, String> memCol = new JFXTreeTableColumn<>("Memory");
-        memCol.setPrefWidth(300);
+        memCol.setPrefWidth(150);
         memCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<InternalProcess, String> param) -> {
             if (memCol.validateValue(param)) {
                 return param.getValue().getValue().Mem;
@@ -158,7 +158,7 @@ public class NodeTaskManagerController extends View {
         });
 
         JFXTreeTableColumn<InternalProcess, String> pidCol = new JFXTreeTableColumn<>("PID");
-        pidCol.setPrefWidth(300);
+        pidCol.setPrefWidth(150);
         pidCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<InternalProcess, String> param) -> {
             if (pidCol.validateValue(param)) {
                 return param.getValue().getValue().Pid;
@@ -175,13 +175,13 @@ public class NodeTaskManagerController extends View {
         tableBox.getChildren().addAll(processesTable);
 
 
-        /*
+
         kill.setOnAction(event -> {
-            for (Object u : table.getSelectionModel().getSelectedItems()) {
-                System.out.println(u);
+            for (Object u : processesTable.getSelectionModel().getSelectedItems()) {
                 if (u instanceof TreeItem) {
-                    if (((TreeItem) u).getValue() instanceof UserInfo) {
-                        CommandKillProcess killProcess = new CommandKillProcess(((UserInfo) ((TreeItem) u).getValue()).getPID());
+                    if (((TreeItem) u).getValue() instanceof InternalProcess) {
+                        System.out.println(((InternalProcess) ((TreeItem) u).getValue()).getPid());
+                        CommandKillProcess killProcess = new CommandKillProcess(((InternalProcess) ((TreeItem) u).getValue()).getPid());
                         try {
                             requestManager.sendRequest(killProcess);
                         } catch (Exception e) {
@@ -192,7 +192,7 @@ public class NodeTaskManagerController extends View {
             }
         });
 
-    */
+
     }
 
     @Override
@@ -227,6 +227,10 @@ public class NodeTaskManagerController extends View {
         @Override
         public int hashCode() {
             return Objects.hash(Pid, Cpu, Mem, Name);
+        }
+
+        public int getPid(){
+            return Integer.parseInt(Pid.get());
         }
     }
 
