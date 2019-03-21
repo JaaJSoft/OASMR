@@ -86,12 +86,12 @@ public class NodeTaskManagerController extends View {
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
-            init();
+            init("");
         }
 
     }
 
-    public void init(){
+    public void init(String toSearch){
 
 
         CommandGetProcesses getProcesses = new CommandGetProcesses();
@@ -108,10 +108,8 @@ public class NodeTaskManagerController extends View {
 
         /**
          * =>
-         * Create a table with all processes
          * Refresh table every 5sec (like diapo EX java bean TP)
          * make a search bar
-         * make a kill btn
          * make a test for CommandKill
          */
         tableBox.getChildren().clear();
@@ -119,6 +117,7 @@ public class NodeTaskManagerController extends View {
 
 
         for (HashMap<String, String> p : processes) {
+
                 processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
         }
 
@@ -208,8 +207,16 @@ public class NodeTaskManagerController extends View {
 
         public InternalProcess(String pid, String cpu, String mem, String name) {
             Pid = new SimpleStringProperty(pid);
-            Cpu = new SimpleStringProperty(cpu);
-            Mem = new SimpleStringProperty(mem);
+            if (cpu.length()>4) {
+                Cpu = new SimpleStringProperty(cpu.substring(0, 4) + "%");
+            } else {
+                Cpu = new SimpleStringProperty(cpu+"%");
+            }
+            if (mem.length()>4) {
+                Mem = new SimpleStringProperty(mem.substring(0, 4)+"%");
+            } else {
+                Mem = new SimpleStringProperty(mem+"%");
+            }
             Name = new SimpleStringProperty(name);
         }
 
