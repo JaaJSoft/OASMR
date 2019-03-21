@@ -25,39 +25,42 @@
   ~  limitations under the License.
   -->
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
-      <VBox fx:id="vbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" spacing="10.0" BorderPane.alignment="CENTER">
-         <ImageView fitHeight="76.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-               <Image url="@img/OASMR.png" />
-            </image>
-            <VBox.margin>
-            <Insets top="5.0" />
-           </VBox.margin>
-         </ImageView>
-         <JFXChipView fx:id="filter">
-            <VBox.margin>
-               <Insets left="5.0" right="5.0" />
-            </VBox.margin>
-         </JFXChipView>
-         <Separator prefWidth="200.0">
-            <VBox.margin>
-               <Insets />
-            </VBox.margin>
-         </Separator>
-         <VBox fx:id="vboxList" alignment="TOP_CENTER" BorderPane.alignment="CENTER">
-     <children>
-          <JFXListView fx:id="nodeListView">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <VBox fx:id="vbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+              prefHeight="100.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <ImageView fitHeight="76.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@img/OASMR.png"/>
+                </image>
+                <VBox.margin>
+                    <Insets top="5.0"/>
+                </VBox.margin>
+            </ImageView>
+            <JFXChipView fx:id="filter">
+                <VBox.margin>
+                    <Insets left="5.0" right="5.0"/>
+                </VBox.margin>
+            </JFXChipView>
+            <Separator prefWidth="200.0">
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+            </Separator>
+            <VBox fx:id="vboxList" alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+                <children>
+                    <JFXListView prefHeight="800" fx:id="nodeListView">
 
-                  </JFXListView>
-            </children>
-         </VBox>
-         <JFXButton fx:id="refreshBtn" buttonType="RAISED" ripplerFill="#e8dcdc" stylesheets="@css/style.css" text="Refresh">
-            <VBox.margin>
-               <Insets top="20" />
-            </VBox.margin>
-         </JFXButton>
-      </VBox>
-   </center>
+                    </JFXListView>
+                </children>
+            </VBox>
+            <JFXButton fx:id="refreshBtn" buttonType="RAISED" ripplerFill="#e8dcdc" stylesheets="@css/style.css"
+                       text="Refresh">
+                <VBox.margin>
+                    <Insets top="20"/>
+                </VBox.margin>
+            </JFXButton>
+        </VBox>
+    </center>
 </BorderPane>
