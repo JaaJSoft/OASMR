@@ -28,6 +28,7 @@
     <HBox spacing="20">
         <JFXButton fx:id="kill">Mettre fin au processus</JFXButton>
         <JFXTextField fx:id="searchField" prefHeight="26.0" prefWidth="396.0" promptText="Search" />
+        <JFXButton fx:id="searchBtn">Search</JFXButton>
     </HBox>
     <VBox fx:id="tableBox" />
 </VBox>

@@ -28,30 +28,34 @@ import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestGetAdmin;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 public class NodeTaskManagerController extends View {
 
     private NodesModel nodesModel;
     private RequestManager requestManager = null;
     private Config config;
+    private Timer t;
+    private String toSearch;
 
     @FXML
     JFXButton kill;
@@ -69,6 +73,7 @@ public class NodeTaskManagerController extends View {
     @Override
     public void onCreate() {
         nodesModel = NodesModel.getInstance();
+        toSearch = "";
     }
 
     @Override
@@ -86,12 +91,24 @@ public class NodeTaskManagerController extends View {
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
-            init("");
+            //init();
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    System.out.println("this is called every 5 seconds on UI thread");
+                    init();
+                }
+            }));
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
+
         }
 
     }
 
-    public void init(String toSearch){
+
+    public void init(){
 
 
         CommandGetProcesses getProcesses = new CommandGetProcesses();
@@ -103,6 +120,8 @@ public class NodeTaskManagerController extends View {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        tableBox.getChildren().clear();
+
         System.out.println("AAAAAAAA");
         System.out.println(Arrays.toString(processes));
 
@@ -112,13 +131,15 @@ public class NodeTaskManagerController extends View {
          * make a search bar
          * make a test for CommandKill
          */
-        tableBox.getChildren().clear();
         ObservableList<InternalProcess> processesList = FXCollections.observableArrayList();
 
 
         for (HashMap<String, String> p : processes) {
-
+            //if (!toSearch.trim().equals("") && p.get("NAME").contains(toSearch)) {
+             //   processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
+            //} else if (toSearch.trim().equals("")){
                 processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
+           // }
         }
 
         final TreeItem<InternalProcess> root = new RecursiveTreeItem<>(processesList, RecursiveTreeObject::getChildren);
@@ -192,11 +213,21 @@ public class NodeTaskManagerController extends View {
         });
 
 
+
+
+    }
+
+    private class Task extends TimerTask{
+        @Override
+        public void run(){
+            init();
+        }
     }
 
     @Override
     public void onStop() {
-
+        t.cancel();
+        t.purge();
     }
 
     private static final class InternalProcess extends RecursiveTreeObject<InternalProcess>{
