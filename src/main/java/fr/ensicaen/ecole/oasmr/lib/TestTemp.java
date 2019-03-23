@@ -15,13 +15,8 @@
 
 package fr.ensicaen.ecole.oasmr.lib;
 
-import fr.ensicaen.ecole.oasmr.lib.example.CommandEchoString;
-
-import static fr.ensicaen.ecole.oasmr.lib.ParamsFromClass.getParamsFromClass;
-
 public class TestTemp {
 
     public static void main(String[] args) {
-        getParamsFromClass(CommandEchoString.class);
     }
 }

@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXChipView?>
-<?import com.jfoenix.controls.JFXListView?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-
 <!--
   ~  Copyright (c) 2019. CCC-Development-Team
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +15,14 @@
   ~  limitations under the License.
   -->
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXChipView?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
             xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <center>
@@ -50,7 +48,7 @@
             </Separator>
             <VBox fx:id="vboxList" alignment="TOP_CENTER" BorderPane.alignment="CENTER">
                 <children>
-                    <JFXListView prefHeight="800" fx:id="nodeListView">
+                    <JFXListView prefHeight="600" fx:id="nodeListView">
 
                     </JFXListView>
                 </children>
