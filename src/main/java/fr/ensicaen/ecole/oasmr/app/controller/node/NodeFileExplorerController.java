@@ -17,6 +17,7 @@ package fr.ensicaen.ecole.oasmr.app.controller.node;
 
 import com.jfoenix.controls.JFXTreeView;
 import fr.ensicaen.ecole.oasmr.app.Config;
+import fr.ensicaen.ecole.oasmr.app.Main;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandGetRootFile;
@@ -31,6 +32,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -50,6 +53,13 @@ public class NodeFileExplorerController extends View {
     private NodesModel nodesModel;
     private String path  = ".";
     private JFXTreeView<FileAdapter> fileTreeView;
+
+    private final Image folderCloseIcon =
+            new Image(Main.class.getResourceAsStream("img/folder_close.png"), 18, 18, false, false);
+    private final Image folderOpenIcon =
+            new Image(Main.class.getResourceAsStream("img/folder_open.png"), 18, 18, false, false);
+    private final Image fileIcon =
+            new Image(Main.class.getResourceAsStream("img/file.png"), 18, 18, false, false);
 
     public NodeFileExplorerController(View parent) throws IOException {
         super("NodeFileExplorer", parent);
@@ -84,7 +94,7 @@ public class NodeFileExplorerController extends View {
                 String rootPath = (String) reponseRoot.get();
                 FileAdapter root = new FileAdapter(rootPath);
                 fileExplorerVBox.getChildren().clear();
-                TreeItem<FileAdapter> rootItem = new TreeItem<>(root);
+                TreeItem<FileAdapter> rootItem = new TreeItem<>(root, new ImageView(folderCloseIcon));
                 ObservableList<TreeItem<FileAdapter>> children = buildChildren(rootItem);
                 rootItem.getChildren().addAll(children);
                 fileTreeView = new JFXTreeView<>(rootItem);
@@ -121,17 +131,27 @@ public class NodeFileExplorerController extends View {
                 Boolean isDirectoryReponse = (Boolean) isDirectory.get();
                 if(isDirectoryReponse){
                     childTreeItem.getChildren().add(null);
+                    childTreeItem.setGraphic(new ImageView(folderCloseIcon));
                     childTreeItem.expandedProperty().addListener((observable, oldValue, newValue) -> {
                         BooleanProperty bb = (BooleanProperty) observable;
                         TreeItem<FileAdapter> t = (TreeItem<FileAdapter>) bb.getBean();
-                        try {
-                            ObservableList<TreeItem<FileAdapter>> newTreeItem = buildChildren(t);
-                            t.getChildren().addAll(newTreeItem);
-                        } catch (ExecutionException | InterruptedException e) {
-                            e.printStackTrace();
+                        if(observable.getValue()){
+                            try {
+                                ObservableList<TreeItem<FileAdapter>> newTreeItem = buildChildren(t);
+                                t.getChildren().addAll(newTreeItem);
+                            } catch (ExecutionException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            t.getChildren().add(null);
+                            t.setGraphic(new ImageView(folderOpenIcon));
+                        }else{
+                            t.getChildren().clear();
+                            t.getChildren().add(null);
+                            t.setGraphic(new ImageView(folderCloseIcon));
                         }
-
                     });
+                }else{
+                    childTreeItem.setGraphic(new ImageView(fileIcon));
                 }
                 children.add(childTreeItem);
             }
