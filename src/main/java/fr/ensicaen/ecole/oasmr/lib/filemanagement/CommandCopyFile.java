@@ -16,6 +16,7 @@
 package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Serializable;
@@ -36,8 +37,7 @@ public class CommandCopyFile extends Command {
     private final String destinationFilePathName;
 
     /**
-     *
-     * @param sourceFilePathName The source file path name to copy.
+     * @param sourceFilePathName      The source file path name to copy.
      * @param destinationFilePathName The destination file path name to copy.
      */
     public CommandCopyFile(String sourceFilePathName, String destinationFilePathName) {
@@ -61,6 +61,6 @@ public class CommandCopyFile extends Command {
 
     @Override
     public String toString() {
-        return null;
+        return "copy file " + sourceFilePathName + " -> " + destinationFilePathName;
     }
 }

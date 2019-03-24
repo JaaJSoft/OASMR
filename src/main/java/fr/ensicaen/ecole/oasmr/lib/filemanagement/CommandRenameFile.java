@@ -36,9 +36,8 @@ public class CommandRenameFile extends Command {
     private final String newFileName;
 
     /**
-     *
      * @param fileNamePathToBeRenamed The file name path to be renamed.
-     * @param newFileName The new file name, without the path.
+     * @param newFileName             The new file name, without the path.
      */
     public CommandRenameFile(String fileNamePathToBeRenamed, String newFileName) {
         this.fileNamePathToBeRenamed = fileNamePathToBeRenamed;
@@ -54,6 +53,6 @@ public class CommandRenameFile extends Command {
 
     @Override
     public String toString() {
-        return null;
+        return "renameFile " + fileNamePathToBeRenamed + " -> " + newFileName;
     }
 }

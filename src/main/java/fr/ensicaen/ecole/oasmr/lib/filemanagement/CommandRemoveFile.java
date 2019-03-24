@@ -32,7 +32,6 @@ public class CommandRemoveFile extends Command {
     private final String fileNamePathToBeRemoved;
 
     /**
-     *
      * @param fileNamePathToBeRemoved The name of the path of the file to be removed.
      */
     public CommandRemoveFile(String fileNamePathToBeRemoved) {
@@ -48,6 +47,6 @@ public class CommandRemoveFile extends Command {
 
     @Override
     public String toString() {
-        return null;
+        return "remove file " + fileNamePathToBeRemoved;
     }
 }

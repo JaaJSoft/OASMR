@@ -31,7 +31,6 @@ public class CommandMakeDiretory extends Command {
     private final String directoryPathName;
 
     /**
-     *
      * @param directoryPathName The directory path name to be created.
      */
     public CommandMakeDiretory(String directoryPathName) {
@@ -47,6 +46,6 @@ public class CommandMakeDiretory extends Command {
 
     @Override
     public String toString() {
-        return null;
+        return "make directory " + directoryPathName;
     }
 }
