@@ -40,7 +40,6 @@ public class CommandListFiles extends Command {
     private final FilenameFilter filter;
 
     /**
-     *
      * @param directoryPathName The directory path name to list.
      */
     public CommandListFiles(String directoryPathName) {
@@ -49,9 +48,8 @@ public class CommandListFiles extends Command {
     }
 
     /**
-     *
      * @param directoryPathName The directory path name to list.
-     * @param filter a filter
+     * @param filter            a filter
      */
     public CommandListFiles(String directoryPathName, FilenameFilter filter) {
         this.directoryPathName = directoryPathName;
@@ -67,9 +65,10 @@ public class CommandListFiles extends Command {
             listFile = file.listFiles();
         else
             listFile = file.listFiles(filter);
-        for(File f : listFile){
+        for (File f : listFile) {
             listPath.add(f.getAbsolutePath());
         }
+        listPath.sort(String::compareTo);
         return listPath.toArray(new String[listPath.size()]);
     }
 

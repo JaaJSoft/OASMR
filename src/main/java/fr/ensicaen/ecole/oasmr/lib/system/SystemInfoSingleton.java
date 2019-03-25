@@ -26,7 +26,7 @@ public class SystemInfoSingleton {
 
     private static SystemInfo getInstance(){
         if(instance == null) {
-            instance = new SystemInfo();//TODO AAAAAAAAAAAHHHHH
+            instance = new SystemInfo();
         }
         return instance;
     }
