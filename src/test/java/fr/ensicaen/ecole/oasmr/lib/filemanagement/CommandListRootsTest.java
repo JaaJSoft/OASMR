@@ -18,17 +18,21 @@ package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
-
-public class CommandGetRootFileTest {
+public class CommandListRootsTest {
 
     @Test
     public void execute() throws Exception {
-        String rootDir = new File(".").toPath().toAbsolutePath().getRoot().toString();
-        CommandGetRootFile c = new CommandGetRootFile();
-        assertEquals(c.execute(), rootDir);
+        CommandListRoots c = new CommandListRoots();
+        String[] roots = (String[]) c.execute();
+        File[] rootsFile = File.listRoots();
+        assertEquals(roots.length, rootsFile.length);
+        for(int i = 0; i<roots.length; i++){
+            assertEquals(roots[i], rootsFile[i].getAbsolutePath());
+        }
     }
 
 }

@@ -23,6 +23,7 @@ import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandGetRootFile;
 import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandIsDirectory;
 import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandListFiles;
+import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandListRoots;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
@@ -89,15 +90,20 @@ public class NodeFileExplorerController extends View {
             try {
                 Future<? extends Serializable> reponseRoot = requestManager.aSyncSendRequest(new RequestExecuteCommand(
                         nodesModel.getCurrentNodeData().get(0).getId(),
-                        new CommandGetRootFile()
+                        new CommandListRoots()
                 ));
-                String rootPath = (String) reponseRoot.get();
-                FileAdapter root = new FileAdapter(rootPath);
-                fileExplorerVBox.getChildren().clear();
-                TreeItem<FileAdapter> rootItem = new TreeItem<>(root, new ImageView(folderCloseIcon));
-                ObservableList<TreeItem<FileAdapter>> children = buildChildren(rootItem);
-                rootItem.getChildren().addAll(children);
-                fileTreeView = new JFXTreeView<>(rootItem);
+                String[] listRoots = (String[]) reponseRoot.get();
+                TreeItem<FileAdapter> treeRoot = new TreeItem<>(null);
+                for(String rootPath : listRoots){
+                    FileAdapter root = new FileAdapter(rootPath);
+                    fileExplorerVBox.getChildren().clear();
+                    TreeItem<FileAdapter> rootItem = new TreeItem<>(root, new ImageView(folderCloseIcon));
+                    ObservableList<TreeItem<FileAdapter>> children = buildChildren(rootItem);
+                    rootItem.getChildren().addAll(children);
+                    treeRoot.getChildren().add(rootItem);
+                }
+                fileTreeView = new JFXTreeView<>(treeRoot);
+                fileTreeView.setShowRoot(false);
                 fileExplorerVBox.getChildren().add(fileTreeView);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
