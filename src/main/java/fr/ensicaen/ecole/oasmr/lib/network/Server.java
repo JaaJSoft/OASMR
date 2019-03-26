@@ -49,6 +49,8 @@ public class Server implements Serializable {
                 ServerRunnable r;
                 r = (ServerRunnable) runnable.clone();
                 r.setClientSocket(client);
+                //GET KEY
+                //r.setKey();
                 Thread t = new Thread(r);
                 t.start();
             } catch (CloneNotSupportedException e) {

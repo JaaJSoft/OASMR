@@ -30,6 +30,7 @@ public class Client implements Serializable {
     private final InetAddress ip;
     private final int port;
     private Socket socket;
+    private String key;
 
     public Client(InetAddress ip, int port) throws ExceptionPortInvalid {
         this.ip = ip;
@@ -43,6 +44,7 @@ public class Client implements Serializable {
     public void connect() throws ExceptionConnectionFailure {
         try {
             socket = new Socket(ip, port);
+            //GET KEY
         } catch (IOException e) {
             throw new ExceptionConnectionFailure();
         }
@@ -54,6 +56,10 @@ public class Client implements Serializable {
         } catch (IOException e) {
             throw new ExceptionCannotDisconnect();
         }
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public Socket getSocket() {

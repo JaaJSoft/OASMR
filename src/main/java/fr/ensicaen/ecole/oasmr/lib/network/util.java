@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.net.Socket;
 
 public class util {
+
     public static void sendSerializable(Socket socket, Serializable c) throws IOException {
         ObjectOutputStream outToServer = new ObjectOutputStream(socket.getOutputStream());
         outToServer.writeObject(c);
@@ -31,4 +32,7 @@ public class util {
         ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
         return (Serializable) input.readObject();
     }
+
+
+
 }
