@@ -20,7 +20,6 @@ import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.Main;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
-import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandGetRootFile;
 import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandIsDirectory;
 import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandListFiles;
 import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandListRoots;
@@ -32,9 +31,10 @@ import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -104,6 +104,7 @@ public class NodeFileExplorerController extends View {
                 }
                 fileTreeView = new JFXTreeView<>(treeRoot);
                 fileTreeView.setShowRoot(false);
+                fileTreeView.setCellFactory(p -> new FileTreeCell());
                 fileExplorerVBox.getChildren().add(fileTreeView);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
@@ -166,5 +167,92 @@ public class NodeFileExplorerController extends View {
 
         return FXCollections.emptyObservableList();
     }
+
+
+    private final class FileTreeCell extends TreeCell<FileAdapter> {
+
+        private TextField textField;
+        private ContextMenu menu = new ContextMenu();
+
+        public FileTreeCell() {
+            MenuItem addFileMenuItem = new MenuItem("New file");
+            menu.getItems().add(addFileMenuItem);
+            addFileMenuItem.setOnAction(t -> System.out.println("Add new File"));
+
+            MenuItem addDirMenuItem = new MenuItem("New directory");
+            menu.getItems().add(addDirMenuItem);
+            addDirMenuItem.setOnAction(t -> System.out.println("Add new Dir"));
+
+            MenuItem removeMenuItem = new MenuItem("Remove");
+            menu.getItems().add(removeMenuItem);
+            removeMenuItem.setOnAction(t -> System.out.println("Remove"));
+
+            MenuItem renameMenuItem = new MenuItem("Rename");
+            menu.getItems().add(renameMenuItem);
+            renameMenuItem.setOnAction(t -> startEdit());
+
+        }
+
+        @Override
+        public void startEdit() {
+            super.startEdit();
+
+            if (textField == null) {
+                createTextField();
+            }
+            setText(null);
+            setGraphic(textField);
+            textField.selectAll();
+        }
+
+        @Override
+        public void cancelEdit() {
+            super.cancelEdit();
+            setText(getItem().getName());
+            setGraphic(getTreeItem().getGraphic());
+        }
+
+        @Override
+        public void updateItem(FileAdapter item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                if (isEditing()) {
+                    if (textField != null) {
+                        textField.setText(getString());
+                    }
+                    setText(null);
+                    setGraphic(textField);
+                } else {
+                    setText(getString());
+                    setGraphic(getTreeItem().getGraphic());
+                    if (!getTreeItem().isLeaf()&&getTreeItem().getParent()!= null){
+                        setContextMenu(menu);
+                    }
+                }
+            }
+        }
+
+        private void createTextField() {
+            textField = new TextField(getString());
+            textField.setOnKeyReleased(t -> {
+                if (t.getCode() == KeyCode.ENTER) {
+                    commitEdit(new FileAdapter(textField.getText()));
+                } else if (t.getCode() == KeyCode.ESCAPE) {
+                    cancelEdit();
+                }
+            });
+
+        }
+
+        private String getString() {
+            return getItem() == null ? "" : getItem().toString();
+        }
+    }
+
+
 
 }
