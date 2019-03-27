@@ -56,20 +56,27 @@ public class NodeTaskManagerController extends View {
     private Config config;
     private Timer t;
     private String toSearch;
+    private ObservableList<InternalProcess> processesList;
 
     @FXML
+    private
     JFXButton kill;
 
     @FXML
+    private
     JFXTextField searchField;
 
     @FXML
+    private
     VBox tableBox;
 
     @FXML
+    private
     JFXButton searchBtn;
 
-    public NodeTaskManagerController(View parent) throws IOException {
+
+
+    NodeTaskManagerController(View parent) throws IOException {
         super("NodeTaskManager", parent);
         toSearch = "";
     }
@@ -92,29 +99,26 @@ public class NodeTaskManagerController extends View {
                 exceptionPortInvalid.printStackTrace();
             }
         }
+        processesList = FXCollections.observableArrayList();
+        loadTable();
+
+        init();
 
         searchBtn.setOnAction(event -> {
             toSearch = searchField.getText();
-            init();
+            loadTable();
         });
 
         searchField.setOnAction(event -> {
             toSearch = searchField.getText();
-            init();
+            loadTable();
         });
 
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
             //init();
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-
-                    init();
-                }
-            }));
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> loadTable()));
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.play();
 
@@ -123,8 +127,7 @@ public class NodeTaskManagerController extends View {
     }
 
 
-    public void init(){
-
+    private void  loadTable(){
         CommandGetProcesses getProcesses = new CommandGetProcesses();
 
         HashMap<String, String>[] processes = new HashMap[0];
@@ -134,12 +137,10 @@ public class NodeTaskManagerController extends View {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        tableBox.getChildren().clear();
 
-        //System.out.println(Arrays.toString(processes));
+       processesList.removeAll(processesList);
 
-        ObservableList<InternalProcess> processesList = FXCollections.observableArrayList();
-
+        //loadTable();
 
         for (HashMap<String, String> p : processes) {
             if (!toSearch.trim().equals("") && p.get("NAME").contains(toSearch)) {
@@ -148,6 +149,12 @@ public class NodeTaskManagerController extends View {
                 processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
             }
         }
+    }
+
+    private void init(){
+        tableBox.getChildren().clear();
+
+        //ObservableList<InternalProcess> processesList = FXCollections.observableArrayList();
 
         final TreeItem<InternalProcess> root = new RecursiveTreeItem<>(processesList, RecursiveTreeObject::getChildren);
 
@@ -218,7 +225,6 @@ public class NodeTaskManagerController extends View {
             }
         });
 
-
     }
 
     @Override
@@ -233,7 +239,7 @@ public class NodeTaskManagerController extends View {
         StringProperty Mem;
         StringProperty Name;
 
-        public InternalProcess(String pid, String cpu, String mem, String name) {
+        InternalProcess(String pid, String cpu, String mem, String name) {
             Pid = new SimpleStringProperty(pid);
             if (cpu.length()>4) {
                 Cpu = new SimpleStringProperty(cpu.substring(0, 4) + "%");
@@ -264,7 +270,7 @@ public class NodeTaskManagerController extends View {
             return Objects.hash(Pid, Cpu, Mem, Name);
         }
 
-        public int getPid(){
+        int getPid(){
             return Integer.parseInt(Pid.get());
         }
     }
