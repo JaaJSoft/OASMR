@@ -16,7 +16,6 @@
 package fr.ensicaen.ecole.oasmr.app.controller.node;
 
 import java.io.File;
-import java.nio.file.Paths;
 
 public class FileAdapter {
 

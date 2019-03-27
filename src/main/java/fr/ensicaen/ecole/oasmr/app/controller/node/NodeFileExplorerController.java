@@ -51,6 +51,7 @@ public class NodeFileExplorerController extends View {
     private Config config;
     private NodesModel nodesModel;
     private JFXTreeView<FileAdapter> fileTreeView;
+    private FileAdapter selectedForCopy;
 
     private final Image folderCloseIcon =
             new Image(Main.class.getResourceAsStream("img/folder_close.png"), 18, 18, false, false);
@@ -131,7 +132,7 @@ public class NodeFileExplorerController extends View {
                         new CommandIsDirectory(childFile)
                 ));
                 Boolean isDirectoryReponse = (Boolean) isDirectory.get();
-                FileAdapter childFileAdapter = new FileAdapter(childFile, isDirectoryReponse);
+                FileAdapter childFileAdapter = new FileAdapter(childFile, isDirectoryReponse.booleanValue());
                 TreeItem<FileAdapter> childTreeItem = new TreeItem<>(childFileAdapter);
                 if(isDirectoryReponse){
                     childTreeItem.getChildren().add(new TreeItem<>(new FileAdapter()));
@@ -227,7 +228,7 @@ public class NodeFileExplorerController extends View {
 
             });
 
-
+            menu.setOnAction(e -> System.out.println(e.getSource()));
         }
 
         @Override
@@ -290,7 +291,6 @@ public class NodeFileExplorerController extends View {
             return getItem() == null ? "" : getItem().toString();
         }
     }
-
 
 
 }
