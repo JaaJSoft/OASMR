@@ -20,13 +20,21 @@ import java.nio.file.Paths;
 
 public class FileAdapter {
 
-    private String path;
-    private String name;
+    private String path = "";
+    private String name = "";
+    private boolean isDir = false;
 
-    public FileAdapter(String path) {
+    public FileAdapter(){ }
+
+    public FileAdapter(String path, boolean isDir) {
         this.path = path;
         String filename = path.substring(path.lastIndexOf(File.separator)+1);
         this.name = (filename.equals("") ? path : filename);
+        this.isDir = isDir;
+    }
+
+    public boolean isDir() {
+        return isDir;
     }
 
     public String getPath() {

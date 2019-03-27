@@ -20,9 +20,7 @@ import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.Main;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
-import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandIsDirectory;
-import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandListFiles;
-import fr.ensicaen.ecole.oasmr.lib.filemanagement.CommandListRoots;
+import fr.ensicaen.ecole.oasmr.lib.filemanagement.*;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
@@ -52,7 +50,6 @@ public class NodeFileExplorerController extends View {
     private RequestManager requestManager = null;
     private Config config;
     private NodesModel nodesModel;
-    private String path  = ".";
     private JFXTreeView<FileAdapter> fileTreeView;
 
     private final Image folderCloseIcon =
@@ -93,9 +90,9 @@ public class NodeFileExplorerController extends View {
                         new CommandListRoots()
                 ));
                 String[] listRoots = (String[]) reponseRoot.get();
-                TreeItem<FileAdapter> treeRoot = new TreeItem<>(null);
+                TreeItem<FileAdapter> treeRoot = new TreeItem<>(new FileAdapter());
                 for(String rootPath : listRoots){
-                    FileAdapter root = new FileAdapter(rootPath);
+                    FileAdapter root = new FileAdapter(rootPath, true);
                     fileExplorerVBox.getChildren().clear();
                     TreeItem<FileAdapter> rootItem = new TreeItem<>(root, new ImageView(folderCloseIcon));
                     ObservableList<TreeItem<FileAdapter>> children = buildChildren(rootItem);
@@ -129,15 +126,15 @@ public class NodeFileExplorerController extends View {
         if (list.length != 0) {
             ObservableList<TreeItem<FileAdapter>> children = FXCollections.observableArrayList();
             for (String childFile : list) {
-                FileAdapter childFileAdapter = new FileAdapter(childFile);
-                TreeItem<FileAdapter> childTreeItem = new TreeItem<>(childFileAdapter);
                 Future<? extends Serializable> isDirectory = requestManager.aSyncSendRequest(new RequestExecuteCommand(
                         nodesModel.getCurrentNodeData().get(0).getId(),
                         new CommandIsDirectory(childFile)
                 ));
                 Boolean isDirectoryReponse = (Boolean) isDirectory.get();
+                FileAdapter childFileAdapter = new FileAdapter(childFile, isDirectoryReponse);
+                TreeItem<FileAdapter> childTreeItem = new TreeItem<>(childFileAdapter);
                 if(isDirectoryReponse){
-                    childTreeItem.getChildren().add(null);
+                    childTreeItem.getChildren().add(new TreeItem<>(new FileAdapter()));
                     childTreeItem.setGraphic(new ImageView(folderCloseIcon));
                     childTreeItem.expandedProperty().addListener((observable, oldValue, newValue) -> {
                         BooleanProperty bb = (BooleanProperty) observable;
@@ -149,11 +146,10 @@ public class NodeFileExplorerController extends View {
                             } catch (ExecutionException | InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            t.getChildren().add(null);
                             t.setGraphic(new ImageView(folderOpenIcon));
                         }else{
                             t.getChildren().clear();
-                            t.getChildren().add(null);
+                            t.getChildren().add(new TreeItem<>(new FileAdapter()));
                             t.setGraphic(new ImageView(folderCloseIcon));
                         }
                     });
@@ -175,21 +171,62 @@ public class NodeFileExplorerController extends View {
         private ContextMenu menu = new ContextMenu();
 
         public FileTreeCell() {
-            MenuItem addFileMenuItem = new MenuItem("New file");
-            menu.getItems().add(addFileMenuItem);
-            addFileMenuItem.setOnAction(t -> System.out.println("Add new File"));
 
-            MenuItem addDirMenuItem = new MenuItem("New directory");
-            menu.getItems().add(addDirMenuItem);
-            addDirMenuItem.setOnAction(t -> System.out.println("Add new Dir"));
+            //if(getItem().isDir()){
+                MenuItem addFileMenuItem = new MenuItem("New file");
+                menu.getItems().add(addFileMenuItem);
+                addFileMenuItem.setOnAction(t -> {
+                    Future<? extends Serializable> isCreated = requestManager.aSyncSendRequest(new RequestExecuteCommand(
+                            nodesModel.getCurrentNodeData().get(0).getId(),
+                            new CommandCreateFile(getItem().getPath() + "/newFile")
+                    ));
+                    try {
+                        Boolean isCreatedReponse = (Boolean) isCreated.get();
+                        if(isCreatedReponse){
+                            TreeItem<FileAdapter> newFile = new TreeItem<>(
+                                    new FileAdapter(getItem().getPath() + "/newFile", false),
+                                    new ImageView(fileIcon)
+                            );
+                            getTreeItem().getChildren().add(newFile);
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                });
 
-            MenuItem removeMenuItem = new MenuItem("Remove");
-            menu.getItems().add(removeMenuItem);
-            removeMenuItem.setOnAction(t -> System.out.println("Remove"));
+                MenuItem addDirMenuItem = new MenuItem("New directory");
+                menu.getItems().add(addDirMenuItem);
+                addDirMenuItem.setOnAction(t -> {
+                    Future<? extends Serializable> isCreated = requestManager.aSyncSendRequest(new RequestExecuteCommand(
+                            nodesModel.getCurrentNodeData().get(0).getId(),
+                            new CommandMakeDiretory(getItem().getPath() + "/newDir")
+                    ));
+                    try {
+                        Boolean isCreatedReponse = (Boolean) isCreated.get();
+                        if(isCreatedReponse){
+                            TreeItem<FileAdapter> newDir = new TreeItem<>(
+                                    new FileAdapter(getItem().getPath() + "/newDir", true),
+                                    new ImageView(folderCloseIcon)
+                            );
+                            getTreeItem().getChildren().add(newDir);
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                });
+            //}
+
 
             MenuItem renameMenuItem = new MenuItem("Rename");
             menu.getItems().add(renameMenuItem);
             renameMenuItem.setOnAction(t -> startEdit());
+
+            MenuItem removeMenuItem = new MenuItem("Remove");
+            menu.getItems().add(removeMenuItem);
+            removeMenuItem.setOnAction(t -> {
+
+            });
+
 
         }
 
@@ -240,7 +277,8 @@ public class NodeFileExplorerController extends View {
             textField = new TextField(getString());
             textField.setOnKeyReleased(t -> {
                 if (t.getCode() == KeyCode.ENTER) {
-                    commitEdit(new FileAdapter(textField.getText()));
+                    System.out.println(getItem().getPath() + "/" + textField.getText());
+                    commitEdit(new FileAdapter(getItem().getPath() + "/" + textField.getText(), getItem().isDir()));
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();
                 }

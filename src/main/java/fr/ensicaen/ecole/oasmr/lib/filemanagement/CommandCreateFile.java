@@ -46,6 +46,6 @@ public class CommandCreateFile extends Command {
 
     @Override
     public String toString() {
-        return "create file " + filePathName;
+        return "Create file " + filePathName;
     }
 }
