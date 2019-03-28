@@ -15,6 +15,10 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller;
 
+import com.jfoenix.animation.alert.JFXAlertAnimation;
+import com.jfoenix.controls.JFXAlert;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialogLayout;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.controller.node.NodeListController;
 import fr.ensicaen.ecole.oasmr.app.controller.node.NodeViewController;
@@ -29,8 +33,14 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory
 import javafx.collections.ListChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -41,11 +51,21 @@ public class MainController extends View {
 
     @FXML
     SplitPane mainPane;
+
+    @FXML
+    MenuItem menuDisconnect;
+
+    @FXML
+    MenuItem menuExit;
+
     @FXML
     MenuItem menuUserAdmin;
 
     @FXML
-    MenuItem menuConfig;
+    MenuItem menuParam;
+
+    @FXML
+    MenuItem menuAbout;
 
     private NodesModel nodesModel;
 
@@ -55,6 +75,7 @@ public class MainController extends View {
     private SceneManager sceneManager;
     private RequestManager requestManager;
     private Config config;
+    private Node aboutNode = FXMLLoader.load(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/About.fxml"));
 
     public MainController() throws IOException {
         super("Main");
@@ -86,6 +107,29 @@ public class MainController extends View {
                     exceptionSceneNotFound.printStackTrace();
                 }
             });
+            menuExit.setOnAction(actionEvent -> {
+                getScene().getWindow().fireEvent(new WindowEvent(getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST));
+            });
+
+            menuDisconnect.setOnAction(actionEvent -> {
+                //TODO : Disconnect
+            });
+
+            menuAbout.setOnAction(actionEvent -> {
+                JFXDialogLayout about = new JFXDialogLayout();
+                about.setHeading(new Label("About"));
+                JFXAlert alert = new JFXAlert((Stage)getScene().getWindow());
+                alert.setOverlayClose(true);
+                alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
+                alert.setContent(about);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                about.setBody(aboutNode);
+                JFXButton close = new JFXButton("Close");
+                close.setOnAction(e -> alert.close());
+                about.setActions(close);
+                alert.show();
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
