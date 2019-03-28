@@ -25,30 +25,23 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-      fx:id="vbox"
-      alignment="TOP_CENTER"
-      maxHeight="1.7976931348623157E308"
-      maxWidth="500"
-      minWidth="250"
-      spacing="10.0"
-      BorderPane.alignment="CENTER">
+<VBox fx:id="vbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="500" minWidth="250" spacing="10.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <ImageView fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true">
         <image>
-            <Image url="@img/OASMR.png"/>
+            <Image url="@img/OASMR.png" />
         </image>
         <VBox.margin>
-            <Insets top="5.0"/>
+            <Insets top="5.0" />
         </VBox.margin>
     </ImageView>
-    <JFXChipView fx:id="filter">
+    <JFXChipView fx:id="filter" minHeight="80.0">
         <VBox.margin>
-            <Insets left="5.0" right="5.0"/>
+            <Insets left="5.0" right="5.0" />
         </VBox.margin>
     </JFXChipView>
     <Separator prefWidth="200.0">
         <VBox.margin>
-            <Insets/>
+            <Insets />
         </VBox.margin>
     </Separator>
     <VBox fx:id="vboxList" alignment="TOP_CENTER" BorderPane.alignment="CENTER">
@@ -60,8 +53,7 @@
     </VBox>
     <JFXButton fx:id="refreshBtn" buttonType="RAISED" ripplerFill="#e8dcdc" stylesheets="@css/style.css" text="Refresh">
         <VBox.margin>
-            <Insets top="20"/>
+            <Insets top="20" />
         </VBox.margin>
     </JFXButton>
 </VBox>
-

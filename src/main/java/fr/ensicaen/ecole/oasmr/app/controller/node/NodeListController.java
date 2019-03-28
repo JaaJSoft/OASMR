@@ -123,13 +123,17 @@ public class NodeListController extends View {
         nodeListView.getItems().clear();
         nodeListView.getItems().addAll(nodesModel.getAllNodeData());
         try {
-            filter.getSuggestions().clear();
-            Tag[] tags = (Tag[]) requestManager.sendRequest(new RequestGetAllTags());
-            List<Tag> tagArrayList = Arrays.asList(tags);
-            filter.getSuggestions().addAll(tagArrayList.stream().map(Tag::getName).collect(Collectors.toList()));
+            updateTags();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateTags() throws Exception {
+        filter.getSuggestions().clear();
+        Tag[] tags = (Tag[]) requestManager.sendRequest(new RequestGetAllTags());
+        List<Tag> tagArrayList = Arrays.asList(tags);
+        filter.getSuggestions().addAll(tagArrayList.stream().map(Tag::getName).collect(Collectors.toList()));
     }
 
     @Override
@@ -137,6 +141,7 @@ public class NodeListController extends View {
         try {
             NodeData[] nodeList = (NodeData[]) requestManager.sendRequest(new RequestGetNodes());
             nodesModel.update(nodeList);
+            updateTags();
         } catch (Exception e) {
             e.printStackTrace();
         }

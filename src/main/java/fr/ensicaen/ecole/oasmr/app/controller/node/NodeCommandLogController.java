@@ -50,10 +50,12 @@ public class NodeCommandLogController extends View {
     private RequestManager requestManager = null;
     private Config config;
     private NodesModel nodesModel;
+    private ObservableList<CommandAdapterTableView> commandsList;
 
     public NodeCommandLogController(View parent) throws IOException {
         super("NodeCommandLog", parent);
         onCreate();
+        commandsList = FXCollections.observableArrayList();
     }
 
     @Override
@@ -72,6 +74,35 @@ public class NodeCommandLogController extends View {
                 exceptionPortInvalid.printStackTrace();
             }
         }
+        JFXTreeTableColumn<CommandAdapterTableView, String> commandColumn = new JFXTreeTableColumn<>("Commands");
+        commandColumn.setPrefWidth(300);
+        commandColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
+            if (commandColumn.validateValue(param)) {
+                return param.getValue().getValue().commandName();
+            } else {
+                return commandColumn.getComputedValue(param);
+            }
+        });
+
+        JFXTreeTableColumn<CommandAdapterTableView, String> stateColumn = new JFXTreeTableColumn<>("State");
+        stateColumn.setPrefWidth(150);
+        stateColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
+            if (stateColumn.validateValue(param)) {
+                return param.getValue().getValue().stateName();
+            } else {
+                return stateColumn.getComputedValue(param);
+            }
+        });
+
+        JFXTreeTableColumn<CommandAdapterTableView, String> responseColumn = new JFXTreeTableColumn<>("Response");
+        responseColumn.setPrefWidth(300);
+        responseColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
+            if (responseColumn.validateValue(param)) {
+                return param.getValue().getValue().response();
+            } else {
+                return responseColumn.getComputedValue(param);
+            }
+        });
 
         commandLogVBox.getChildren().clear();
 
@@ -82,39 +113,7 @@ public class NodeCommandLogController extends View {
                         new RequestExecuteCommand(nodesModel.getCurrentNodeData().iterator().next().getId(), new CommandGetExecutorCommandHistory())
                 );// TODO forall selected nodes
 
-                JFXTreeTableColumn<CommandAdapterTableView, String> commandColumn = new JFXTreeTableColumn<>("Commands");
-                commandColumn.setPrefWidth(300);
-                commandColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
-                    if (commandColumn.validateValue(param)) {
-                        return param.getValue().getValue().commandName();
-                    } else {
-                        return commandColumn.getComputedValue(param);
-                    }
-                });
-
-                JFXTreeTableColumn<CommandAdapterTableView, String> stateColumn = new JFXTreeTableColumn<>("State");
-                stateColumn.setPrefWidth(150);
-                stateColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
-                    if (stateColumn.validateValue(param)) {
-                        return param.getValue().getValue().stateName();
-                    } else {
-                        return stateColumn.getComputedValue(param);
-                    }
-                });
-
-                JFXTreeTableColumn<CommandAdapterTableView, String> responseColumn = new JFXTreeTableColumn<>("Response");
-                responseColumn.setPrefWidth(300);
-                responseColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
-                    if (responseColumn.validateValue(param)) {
-                        return param.getValue().getValue().response();
-                    } else {
-                        return responseColumn.getComputedValue(param);
-                    }
-                });
-
-
                 Command[] commands = (Command[]) reponseCommandHist.get();
-                ObservableList<CommandAdapterTableView> commandsList = FXCollections.observableArrayList();
                 for (Command command : commands) {
                     commandsList.add(new CommandAdapterTableView(command));
                 }
@@ -134,7 +133,20 @@ public class NodeCommandLogController extends View {
 
     @Override
     protected void onUpdate() {
-
+        if (nodesModel.getSelectedAmount() == 1) {
+            try {
+                Future<? extends Serializable> reponseCommandHist = requestManager.aSyncSendRequest(
+                        new RequestExecuteCommand(nodesModel.getCurrentNodeData().iterator().next().getId(), new CommandGetExecutorCommandHistory())
+                );
+                commandsList.removeAll(commandsList);
+                Command[] commands = (Command[]) reponseCommandHist.get();
+                for (Command command : commands) {
+                    commandsList.add(new CommandAdapterTableView(command));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
