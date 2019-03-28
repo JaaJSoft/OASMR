@@ -15,11 +15,14 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller.node;
 
-import com.jfoenix.controls.JFXTreeView;
+
+import com.jfoenix.animation.alert.JFXAlertAnimation;
+import com.jfoenix.controls.*;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.Main;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
+import fr.ensicaen.ecole.oasmr.lib.ObjectCreatedHandler;
 import fr.ensicaen.ecole.oasmr.lib.filemanagement.*;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
@@ -33,10 +36,14 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
@@ -170,6 +177,39 @@ public class NodeFileExplorerController extends View {
         return FXCollections.emptyObservableList();
     }
 
+    private void nameFileFromDialog(String path, boolean isDir, Stage stage, ObjectCreatedHandler handler){
+        JFXDialogLayout content = new JFXDialogLayout();
+        String type = (isDir ? "directory" : "file");
+        content.setHeading(new Label("Name " + type));
+        HBox hBox = new HBox();
+        hBox.getChildren().add(new Label(type + "name : "));
+        JFXTextField textField = new JFXTextField();
+        hBox.getChildren().add(textField);
+        content.setBody(hBox);
+
+        JFXAlert alert = new JFXAlert(stage);
+        alert.setOverlayClose(true);
+        alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
+        alert.setContent(content);
+        alert.initModality(Modality.APPLICATION_MODAL);
+
+        JFXButton create = new JFXButton("Ok");
+        JFXButton close = new JFXButton("Close");
+        close.setOnAction(actionEvent -> alert.close());
+        create.setOnAction(actionEvent -> {
+            alert.close();
+            String name = textField.getText();
+            try {
+                Object o = FileAdapter.class.getConstructors()[1].newInstance(path + "/" + name, isDir);
+                handler.objectCreatedHandler(o);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        });
+        content.setActions(create, close);
+        alert.show();
+    }
+
 
     private final class FileTreeCell extends TreeCell<FileAdapter> {
 
@@ -178,19 +218,21 @@ public class NodeFileExplorerController extends View {
 
         public FileTreeCell() {
 
-            //if(getItem().isDir()){
-                MenuItem addFileMenuItem = new MenuItem("New file");
-                menu.getItems().add(addFileMenuItem);
-                addFileMenuItem.setOnAction(t -> {
+            MenuItem addFileMenuItem = new MenuItem("New file");
+            menu.getItems().add(addFileMenuItem);
+            addFileMenuItem.setOnAction(t -> {
+                Stage stage = (Stage) fileExplorerVBox.getScene().getWindow();
+                nameFileFromDialog(getItem().getPath(), false, stage, handler -> {
+                    FileAdapter createdFile = (FileAdapter) handler;
                     Future<? extends Serializable> isCreated = requestManager.aSyncSendRequest(new RequestExecuteCommand(
                             nodesModel.getCurrentNodeData().get(0).getId(),
-                            new CommandCreateFile(getItem().getPath() + "/newFile")
+                            new CommandCreateFile(createdFile.getPath())
                     ));
                     try {
                         Boolean isCreatedReponse = (Boolean) isCreated.get();
                         if(isCreatedReponse){
                             TreeItem<FileAdapter> newFile = new TreeItem<>(
-                                    new FileAdapter(getItem().getPath() + "/newFile", false),
+                                    createdFile,
                                     new ImageView(fileIcon)
                             );
                             getTreeItem().getChildren().add(newFile);
@@ -199,33 +241,40 @@ public class NodeFileExplorerController extends View {
                         e.printStackTrace();
                     }
                 });
+            });
 
-                MenuItem addDirMenuItem = new MenuItem("New directory");
-                menu.getItems().add(addDirMenuItem);
-                addDirMenuItem.setOnAction(t -> {
+            MenuItem addDirMenuItem = new MenuItem("New directory");
+            menu.getItems().add(addDirMenuItem);
+            addDirMenuItem.setOnAction(t -> {
+                Stage stage = (Stage) fileExplorerVBox.getScene().getWindow();
+                nameFileFromDialog(getItem().getPath(), true, stage, handler -> {
+                    FileAdapter createdFile = (FileAdapter) handler;
                     Future<? extends Serializable> isCreated = requestManager.aSyncSendRequest(new RequestExecuteCommand(
                             nodesModel.getCurrentNodeData().get(0).getId(),
-                            new CommandMakeDiretory(getItem().getPath() + "/newDir")
+                            new CommandMakeDiretory(createdFile.getPath())
                     ));
                     try {
                         Boolean isCreatedReponse = (Boolean) isCreated.get();
                         if(isCreatedReponse){
-                            TreeItem<FileAdapter> newDir = new TreeItem<>(
-                                    new FileAdapter(getItem().getPath() + "/newDir", true),
+                            TreeItem<FileAdapter> newFile = new TreeItem<>(
+                                    createdFile,
                                     new ImageView(folderCloseIcon)
                             );
-                            getTreeItem().getChildren().add(newDir);
+                            getTreeItem().getChildren().add(newFile);
                         }
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
                     }
                 });
-            //}
+            });
 
+            menu.getItems().add(new SeparatorMenuItem());
 
             MenuItem renameMenuItem = new MenuItem("Rename");
             menu.getItems().add(renameMenuItem);
-            renameMenuItem.setOnAction(t -> startEdit());
+            renameMenuItem.setOnAction(t -> {
+
+            });
 
             MenuItem removeMenuItem = new MenuItem("Remove");
             menu.getItems().add(removeMenuItem);
@@ -233,7 +282,26 @@ public class NodeFileExplorerController extends View {
 
             });
 
-            menu.setOnAction(e -> System.out.println(e.getSource()));
+            menu.getItems().add(new SeparatorMenuItem());
+
+            MenuItem copyMenuItem = new MenuItem("Copy");
+            menu.getItems().add(copyMenuItem);
+            copyMenuItem.setOnAction(t -> {
+                selectedForCopy = getItem();
+            });
+
+            MenuItem cutMenuItem = new MenuItem("Cut");
+            menu.getItems().add(cutMenuItem);
+            cutMenuItem.setOnAction(t -> {
+                selectedForCopy = getItem();
+            });
+
+            MenuItem pasteManuItem = new MenuItem("Paste");
+            menu.getItems().add(pasteManuItem);
+            pasteManuItem.setOnAction(t -> {
+                selectedForCopy = null;
+            });
+
         }
 
         @Override
