@@ -23,12 +23,14 @@ import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.FXClassInitializer;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.CommandAptShow;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestGetCommands;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -58,6 +60,7 @@ public class NodeCommandController extends View {
     private RequestManager requestManager = null;
     private Config config;
     private NodesModel nodesModel;
+    private Set<Class<? extends Command>> commands;
 
     public NodeCommandController(View parent) throws IOException {
         super("NodeCommand", parent);
@@ -76,6 +79,7 @@ public class NodeCommandController extends View {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
+
         });
 
         searchField.setOnAction(event -> {
@@ -108,9 +112,20 @@ public class NodeCommandController extends View {
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
+            commandFlowPane.getChildren().clear();
+            Future<? extends Serializable> reponseCommandList = requestManager.aSyncSendRequest(new RequestGetCommands());
+            try {
+                commands = (Set<Class<? extends Command>>) reponseCommandList.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
             try {
                 jeeeeeeeeeeej("");
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
                 e.printStackTrace();
             }
         }
@@ -120,8 +135,10 @@ public class NodeCommandController extends View {
     private void jeeeeeeeeeeej(String search) throws InterruptedException, java.util.concurrent.ExecutionException {
 
         commandFlowPane.getChildren().clear();
-        Future<? extends Serializable> reponseCommandList = requestManager.aSyncSendRequest(new RequestGetCommands());
-        Set<Class<? extends Command>> commands = (Set<Class<? extends Command>>) reponseCommandList.get();
+
+        //for test
+        commands.add(new CommandAptShow("").getClass());
+        //endOfTest
         if (search.trim().equals("")) {
             for (Class<? extends Command> command : commands) {
                 JFXButton jeej = initButtonFromClass(command);
@@ -154,10 +171,13 @@ public class NodeCommandController extends View {
 
                     JFXDialogLayout layout = new JFXDialogLayout();
                     layout.setHeading(new Label("Response"));
-                    layout.setBody(new Label(response));
+                    ScrollPane scrollPane = new ScrollPane();
+                    scrollPane.setContent(new Label(response));
+                    layout.setBody(scrollPane);
 
                     JFXAlert alert = new JFXAlert<>(stage);
                     alert.setOverlayClose(true);
+
                     alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
                     alert.setContent(layout);
                     alert.initModality(Modality.NONE);
