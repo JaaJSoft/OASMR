@@ -28,7 +28,7 @@ import java.util.jar.JarInputStream;
 
 public class CommandFinder extends Thread {
 
-    private final Set<Class<? extends Command>> commands = new TreeSet<>(new ComparatorClass());//TODO use TreeSet & compareTo
+    private final Set<Class<? extends Command>> commands = new TreeSet<>(new ComparatorClass());
     private final Set<Class<? extends Request>> requests = new TreeSet<>(new ComparatorClass());
     private final String directory;
     private final WatchService watchService;
@@ -49,10 +49,7 @@ public class CommandFinder extends Thread {
                     StandardWatchEventKinds.ENTRY_MODIFY);
             WatchKey key;
             while ((key = watchService.take()) != null) {
-                //for (WatchEvent<?> event : key.pollEvents()) {
-                //event.context();
                 scan();
-                //}
                 key.reset();
             }
         } catch (IOException | InterruptedException e) {
@@ -64,7 +61,7 @@ public class CommandFinder extends Thread {
         commands.clear();
         requests.clear();
         scanDirectory(new File(directory));
-        //System.out.println(commands);
+        System.out.println(commands);
     }
 
     private void scanDirectory(File f) {
