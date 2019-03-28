@@ -30,8 +30,8 @@ public class NodesModel {
 
     private ObservableSet<NodeData> currentNodeData;
 
-    public static NodesModel getInstance(){
-        if(instance == null){
+    public static NodesModel getInstance() {
+        if (instance == null) {
             instance = new NodesModel();
         }
         return instance;
@@ -42,33 +42,33 @@ public class NodesModel {
         this.currentNodeData = FXCollections.observableSet();
     }
 
-    public void addCurrentNodes(NodeData nodeData){
-        if(!currentNodeData.contains(nodeData)){
+    public void addCurrentNodes(NodeData nodeData) {
+        if (!currentNodeData.contains(nodeData)) {
             currentNodeData.add(nodeData);
         }
     }
 
-    public void removeCurrentNodes(NodeData nodeData){
+    public void removeCurrentNodes(NodeData nodeData) {
         currentNodeData.remove(nodeData);
     }
 
-    public void update(NodeData[] nodeList){
+    public void update(NodeData[] nodeList) {
         allNodeData.addAll(Arrays.asList(nodeList));
     }
 
-    public ObservableSet<NodeData> getAllNodeData(){
+    public ObservableSet<NodeData> getAllNodeData() {
         return allNodeData;
     }
 
-    public ObservableSet<NodeData> getCurrentNodeData(){
+    public ObservableSet<NodeData> getCurrentNodeData() {
         return currentNodeData;
     }
 
-    public int getSelectedAmount(){
+    public int getSelectedAmount() {
         return currentNodeData.size();
     }
 
-    public int getTotalAmount(){
+    public int getTotalAmount() {
         return allNodeData.size();
     }
 
