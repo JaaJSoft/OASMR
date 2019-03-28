@@ -23,9 +23,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import static java.nio.file.StandardCopyOption.*;
-
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * A command that copy a file.
@@ -58,7 +55,7 @@ public class CommandCopyFile extends Command {
             return false;
         }
 
-        //TODO : CopyDir
+        //TODO : Dir recursive
         Path result = Files.copy(Paths.get(sourceFilePathName), Paths.get(destinationFilePathName), StandardCopyOption.REPLACE_EXISTING);
         return Files.exists(result);
     }
