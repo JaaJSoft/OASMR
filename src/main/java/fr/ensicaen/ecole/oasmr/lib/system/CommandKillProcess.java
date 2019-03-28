@@ -13,39 +13,33 @@
  *  limitations under the License.
  */
 
-package fr.ensicaen.ecole.oasmr.app.controller.node;
+package fr.ensicaen.ecole.oasmr.lib.system;
 
-import java.io.File;
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
-public class FileAdapter {
+import java.io.Serializable;
 
-    private String path = "";
-    private String name = "";
-    private boolean isDir = false;
+public class CommandKillProcess extends Command {
 
-    public FileAdapter(){ }
+    private final int pidToKill;
 
-    public FileAdapter(String path, boolean isDir) {
-        this.path = path;
-        String filename = path.substring(path.lastIndexOf(File.separator)+1);
-        this.name = (filename.equals("") ? path : filename);
-        this.isDir = isDir;
+    public CommandKillProcess(int pidToKill) {
+        this.pidToKill = pidToKill;
     }
 
-    public boolean isDir() {
-        return isDir;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public String getName() {
-        return name;
+    @Override
+    protected Serializable execute(Object... params) throws Exception {
+        Runtime rt = Runtime.getRuntime();
+        if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1) {
+            rt.exec("taskkill " + pidToKill);
+        } else {
+            rt.exec("kill -9 " + pidToKill);
+        }
+        return 0;
     }
 
     @Override
     public String toString() {
-        return name;
+        return "kill " + pidToKill;
     }
 }
