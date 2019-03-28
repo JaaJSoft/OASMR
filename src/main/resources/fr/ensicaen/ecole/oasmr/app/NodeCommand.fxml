@@ -30,6 +30,7 @@
    <HBox spacing="20">
       <JFXTextField fx:id="searchField" prefHeight="26.0" prefWidth="396.0" promptText="Search" />
       <JFXButton fx:id="searchBtn">Search</JFXButton>
+      <JFXButton fx:id="refresh">Refresh</JFXButton>
    </HBox>
    <FlowPane fx:id="commandFlowPane" hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
       <padding>

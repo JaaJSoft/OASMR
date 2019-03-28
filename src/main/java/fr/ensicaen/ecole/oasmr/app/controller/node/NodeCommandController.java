@@ -57,6 +57,10 @@ public class NodeCommandController extends View {
     private
     JFXTextField searchField;
 
+    @FXML
+    private
+    JFXButton refresh;
+
     private RequestManager requestManager = null;
     private Config config;
     private NodesModel nodesModel;
@@ -95,6 +99,27 @@ public class NodeCommandController extends View {
 
         searchField.setOnKeyReleased(event -> {
             if(searchField.getText().trim().equals(""))
+            try {
+                jeeeeeeeeeeej("");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        refresh.setOnAction(event -> {
+            searchField.clear();
+            commandFlowPane.getChildren().clear();
+            Future<? extends Serializable> reponseCommandList = requestManager.aSyncSendRequest(new RequestGetCommands());
+            try {
+                commands = (Set<Class<? extends Command>>) reponseCommandList.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
             try {
                 jeeeeeeeeeeej("");
             } catch (InterruptedException e) {
