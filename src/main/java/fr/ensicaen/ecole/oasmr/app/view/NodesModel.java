@@ -53,8 +53,6 @@ public class NodesModel {
     }
 
     public void update(NodeData[] nodeList){
-        currentNodeData.clear();
-        allNodeData.clear();
         allNodeData.addAll(Arrays.asList(nodeList));
     }
 

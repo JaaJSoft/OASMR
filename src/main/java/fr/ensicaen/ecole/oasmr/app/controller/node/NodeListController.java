@@ -135,8 +135,8 @@ public class NodeListController extends View {
     @Override
     protected void onUpdate() {
         try {
-            /*NodeData[] nodeList = (NodeData[]) requestManager.sendRequest(new RequestGetNodes());
-            nodesModel.update(nodeList);*/
+            NodeData[] nodeList = (NodeData[]) requestManager.sendRequest(new RequestGetNodes());
+            nodesModel.update(nodeList);
         } catch (Exception e) {
             e.printStackTrace();
         }
