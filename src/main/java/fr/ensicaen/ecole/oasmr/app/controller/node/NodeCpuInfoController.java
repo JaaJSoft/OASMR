@@ -27,11 +27,13 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Stop;
 import javafx.util.Duration;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -45,7 +47,6 @@ public class NodeCpuInfoController extends View {
     private Config config;
     private NodesModel nodesModel;
     private Tile cpuGraph;
-    private Timeline scheduleTask;
 
     public NodeCpuInfoController(View parent) throws IOException {
         super("NodeCpuInfo", parent);
@@ -55,19 +56,6 @@ public class NodeCpuInfoController extends View {
     @Override
     public void onCreate() {
         nodesModel = NodesModel.getInstance();
-        scheduleTask = new Timeline(
-                new KeyFrame(Duration.seconds(5), e -> {
-                    try {
-                        cpuGraph.setValue((double) requestManager.sendRequest(
-                                new RequestExecuteCommand(
-                                        nodesModel.getCurrentNodeData().get(0).getId(),
-                                        new CommandGetCpuLoad()
-                                )) * 100 );
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                }));
-        scheduleTask.setCycleCount(Timeline.INDEFINITE);
         cpuGraph = TileBuilder.create()
                 .skinType(Tile.SkinType.GAUGE_SPARK_LINE)
                 .title("Cpu Usage")
@@ -83,11 +71,11 @@ public class NodeCpuInfoController extends View {
                 .strokeWithGradient(true)
                 .gradientStops(new Stop(0.0, Tile.GREEN),
                         new Stop(0.33, Tile.GREEN),
-                        new Stop(0.33,Tile.YELLOW),
+                        new Stop(0.33, Tile.YELLOW),
                         new Stop(0.67, Tile.YELLOW),
                         new Stop(0.67, Tile.RED),
                         new Stop(1.0, Tile.RED))
-                .prefSize(150,150)
+                .prefSize(150, 150)
                 .build();
         cpuInfoVBox.getChildren().add(cpuGraph);
 
@@ -95,8 +83,7 @@ public class NodeCpuInfoController extends View {
 
     @Override
     protected void onStart() {
-
-        if(requestManager == null){
+        if (requestManager == null) {
             try {
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
@@ -104,23 +91,25 @@ public class NodeCpuInfoController extends View {
                 exceptionPortInvalid.printStackTrace();
             }
         }
-
-        scheduleTask.stop();
-
-        if(nodesModel.getSelectedAmount() == 1){
-            scheduleTask.play();
-
-        }
-
     }
 
     @Override
     protected void onUpdate() {
-
+        if (nodesModel.getSelectedAmount() == 1) {
+            try {
+                cpuGraph.setValue((double) requestManager.sendRequest(
+                        new RequestExecuteCommand(
+                                nodesModel.getCurrentNodeData().get(0).getId(),
+                                new CommandGetCpuLoad()
+                        )) * 100);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void onStop() {
-        scheduleTask.stop();
+
     }
 }

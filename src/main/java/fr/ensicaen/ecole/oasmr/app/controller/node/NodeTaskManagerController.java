@@ -30,6 +30,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -75,7 +76,6 @@ public class NodeTaskManagerController extends View {
     JFXButton searchBtn;
 
 
-
     NodeTaskManagerController(View parent) throws IOException {
         super("NodeTaskManager", parent);
         toSearch = "";
@@ -116,45 +116,40 @@ public class NodeTaskManagerController extends View {
         } else if (nodesModel.getSelectedAmount() == 1) {
             loadTable();
             init();
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> loadTable()));
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.play();
-
         }
-
     }
 
     @Override
     protected void onUpdate() {
-
+        loadTable();
     }
 
 
-    private void  loadTable(){
-        CommandGetProcesses getProcesses = new CommandGetProcesses();
+    private void loadTable() {
+        if (nodesModel.getSelectedAmount() == 1) {
+            CommandGetProcesses getProcesses = new CommandGetProcesses();
 
-        HashMap<String, String>[] processes = new HashMap[0];
+            HashMap<String, String>[] processes = new HashMap[0];
 
-        try {
-            processes = (HashMap<String, String>[]) requestManager.sendRequest(new RequestExecuteCommand(nodesModel.getCurrentNodeData().get(0).getId(), getProcesses));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            try {
+                processes = (HashMap<String, String>[]) requestManager.sendRequest(new RequestExecuteCommand(nodesModel.getCurrentNodeData().get(0).getId(), getProcesses));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-       processesList.removeAll(processesList);
+            processesList.removeAll(processesList);
 
-        //loadTable();
-
-        for (HashMap<String, String> p : processes) {
-            if (!toSearch.trim().equals("") && p.get("NAME").contains(toSearch)) {
-                processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
-            } else if (toSearch.trim().equals("")){
-                processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
+            for (HashMap<String, String> p : processes) {
+                if (!toSearch.trim().equals("") && p.get("NAME").contains(toSearch)) {
+                    processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
+                } else if (toSearch.trim().equals("")) {
+                    processesList.add(new InternalProcess(p.get("PID"), p.get("CPU"), p.get("MEM"), p.get("NAME")));
+                }
             }
         }
     }
 
-    private void init(){
+    private void init() {
         tableBox.getChildren().clear();
 
         //ObservableList<InternalProcess> processesList = FXCollections.observableArrayList();
@@ -236,7 +231,7 @@ public class NodeTaskManagerController extends View {
         t.purge();
     }
 
-    private static final class InternalProcess extends RecursiveTreeObject<InternalProcess>{
+    private static final class InternalProcess extends RecursiveTreeObject<InternalProcess> {
         StringProperty Pid;
         StringProperty Cpu;
         StringProperty Mem;
@@ -244,15 +239,15 @@ public class NodeTaskManagerController extends View {
 
         InternalProcess(String pid, String cpu, String mem, String name) {
             Pid = new SimpleStringProperty(pid);
-            if (cpu.length()>4) {
+            if (cpu.length() > 4) {
                 Cpu = new SimpleStringProperty(cpu.substring(0, 4) + "%");
             } else {
-                Cpu = new SimpleStringProperty(cpu+"%");
+                Cpu = new SimpleStringProperty(cpu + "%");
             }
-            if (mem.length()>4) {
-                Mem = new SimpleStringProperty(mem.substring(0, 4)+"%");
+            if (mem.length() > 4) {
+                Mem = new SimpleStringProperty(mem.substring(0, 4) + "%");
             } else {
-                Mem = new SimpleStringProperty(mem+"%");
+                Mem = new SimpleStringProperty(mem + "%");
             }
             Name = new SimpleStringProperty(name);
         }
@@ -273,7 +268,7 @@ public class NodeTaskManagerController extends View {
             return Objects.hash(Pid, Cpu, Mem, Name);
         }
 
-        int getPid(){
+        int getPid() {
             return Integer.parseInt(Pid.get());
         }
     }
