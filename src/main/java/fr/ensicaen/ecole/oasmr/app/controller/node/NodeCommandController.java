@@ -147,10 +147,6 @@ public class NodeCommandController extends View {
     private void jeeeeeeeeeeej(String search) throws InterruptedException, java.util.concurrent.ExecutionException {
 
         commandFlowPane.getChildren().clear();
-
-        //for test
-        commands.add(new CommandAptShow("").getClass());
-        //endOfTest
         if (search.trim().equals("")) {
             for (Class<? extends Command> command : commands) {
                 JFXButton jeej = initButtonFromClass(command);
