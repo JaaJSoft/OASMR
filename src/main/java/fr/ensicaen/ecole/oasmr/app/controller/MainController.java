@@ -70,9 +70,9 @@ public class MainController extends View {
             addSubView(nodeView);
             defaultView = new DefaultController(this);
 
-            mainPane.setDividerPositions(0.2);
             mainPane.getItems().add(nodeListView.getRoot());
             mainPane.getItems().add(defaultView.getRoot());
+            mainPane.setDividerPositions(0.2);
 
             nodesModel = NodesModel.getInstance();
             nodesModel.getCurrentNodeData().addListener((SetChangeListener.Change<? extends NodeData> c) -> {
