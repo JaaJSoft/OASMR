@@ -93,6 +93,18 @@ public class NodeCommandController extends View {
 
         });
 
+        searchField.setOnKeyReleased(event -> {
+            if(searchField.getText().trim().equals(""))
+            try {
+                jeeeeeeeeeeej("");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+        });
+
 
     }
 

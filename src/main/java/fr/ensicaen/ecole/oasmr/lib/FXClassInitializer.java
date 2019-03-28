@@ -19,6 +19,7 @@ import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.*;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -46,8 +47,14 @@ public class FXClassInitializer {
         List<Parameter[]> parameters = ParamsFromClass.getParamsFromClass(klazz);
         JFXDialogLayout content = new JFXDialogLayout();
         content.setHeading(new Label(klazz.getSimpleName()));
+        JFXAlert alert = new JFXAlert(stage);
+        alert.setOverlayClose(true);
+        alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
+        alert.setContent(content);
+        alert.initModality(Modality.APPLICATION_MODAL);
         if (parameters.size() == 1) {
             content.setBody(generateInputFromParameters(parameters.get(0)));
+
         } else {
             VBox vBox = new VBox();
             JFXComboBox<Parameter[]> comboBox = new JFXComboBox<>();
@@ -73,15 +80,13 @@ public class FXClassInitializer {
                     vBox.getChildren().remove(vBox.getChildren().size() - 1);
                 vBox.getChildren().add(generateInputFromParameters(newvalue));
                 selectedIndex = parameters.indexOf(newvalue);
+                onEnterPressAction(handler, alert);
+
             });
             content.setBody(vBox);
         }
 
-        JFXAlert alert = new JFXAlert(stage);
-        alert.setOverlayClose(true);
-        alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
-        alert.setContent(content);
-        alert.initModality(Modality.APPLICATION_MODAL);
+
 
         JFXButton create = new JFXButton("Ok");
         JFXButton close = new JFXButton("Close");
@@ -96,8 +101,37 @@ public class FXClassInitializer {
                 e.printStackTrace();
             }
         });
+        onEnterPressAction(handler, alert);
+
+
         content.setActions(create, close);
         alert.show();
+
+    }
+
+    private void onEnterPressAction(ObjectCreatedHandler handler, JFXAlert alert) {
+        if (textFields.size()!=0) {
+            for (JFXTextField ts:textFields) {
+                ts.setOnAction(actionEvent -> {
+                    boolean allFill = true;
+                    for (JFXTextField f : textFields) {
+                        if (f.getText().trim().equals("")) {
+                            allFill = false;
+                        }
+                    }
+                    if (allFill) {
+                        alert.close();
+                        Object[] inputs = textFields.stream().map(TextInputControl::getText).toArray();
+                        try {
+                            Object o = klazz.getConstructors()[selectedIndex].newInstance(inputs);
+                            handler.objectCreatedHandler(o);
+                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }
     }
 
 
