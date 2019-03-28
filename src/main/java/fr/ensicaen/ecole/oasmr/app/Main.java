@@ -25,10 +25,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-
         SceneManager sceneManager = SceneManager.getInstance();
-
         try {
             sceneManager.addScene(new LoginController());
             sceneManager.addScene(new MainController());
@@ -38,8 +35,6 @@ public class Main extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     public static void main(String[] args) {

@@ -38,6 +38,10 @@ public class SceneManager {
 
     private SceneManager() {
         primaryStage = new Stage();
+        primaryStage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
         primaryStage.setTitle("OASMR");
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("img/OASMR.png")));
         updater.scheduleAtFixedRate(() -> Platform.runLater(() -> activeView.update()), 5, 5, TimeUnit.SECONDS);
