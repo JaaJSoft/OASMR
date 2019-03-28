@@ -100,9 +100,6 @@ public class NodeTaskManagerController extends View {
             }
         }
         processesList = FXCollections.observableArrayList();
-        loadTable();
-
-        init();
 
         searchBtn.setOnAction(event -> {
             toSearch = searchField.getText();
@@ -117,12 +114,18 @@ public class NodeTaskManagerController extends View {
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
-            //init();
+            loadTable();
+            init();
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> loadTable()));
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.play();
 
         }
+
+    }
+
+    @Override
+    protected void onUpdate() {
 
     }
 

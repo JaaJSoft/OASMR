@@ -99,6 +99,11 @@ public class NodeTerminalController extends View {
     }
 
     @Override
+    protected void onUpdate() {
+
+    }
+
+    @Override
     public void onStop() {
 
     }

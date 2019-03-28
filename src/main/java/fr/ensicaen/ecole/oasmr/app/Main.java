@@ -33,7 +33,6 @@ public class Main extends Application {
             sceneManager.addScene(new LoginController());
             sceneManager.addScene(new MainController());
             sceneManager.addScene(new UserManagementController());
-
             sceneManager.setScenes(LoginController.class, 400, 450);
             sceneManager.show();
         } catch (Exception e) {

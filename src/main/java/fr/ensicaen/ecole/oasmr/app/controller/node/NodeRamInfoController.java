@@ -108,6 +108,11 @@ public class NodeRamInfoController extends View {
     }
 
     @Override
+    protected void onUpdate() {
+
+    }
+
+    @Override
     public void onStop() {
         scheduleTask.stop();
     }

@@ -23,20 +23,23 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.util.HashSet;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class SceneManager {
 
-    //TODO : Virer ce truc immonde :
-    private String path = "/fr/ensicaen/ecole/oasmr/app/";
     private final HashSet<View> views = new HashSet<>();
     private View activeView;
     private final Stage primaryStage;
     private static final SceneManager ourInstance = new SceneManager();
+    ScheduledExecutorService updater = Executors.newSingleThreadScheduledExecutor();
 
     private SceneManager() {
         primaryStage = new Stage();
         primaryStage.setTitle("OASMR");
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("img/OASMR.png")));
+        updater.scheduleAtFixedRate(() -> activeView.update(), 5, 5, TimeUnit.SECONDS);
     }
 
     public static SceneManager getInstance() {

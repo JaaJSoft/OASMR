@@ -100,6 +100,11 @@ public class NodeViewController extends View {
     }
 
     @Override
+    protected void onUpdate() {
+
+    }
+
+    @Override
     public void onStop() {
 
     }

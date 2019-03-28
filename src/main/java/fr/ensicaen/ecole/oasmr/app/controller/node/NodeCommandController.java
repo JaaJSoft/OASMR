@@ -90,6 +90,11 @@ public class NodeCommandController extends View {
 
     }
 
+    @Override
+    protected void onUpdate() {
+
+    }
+
     private JFXButton initButtonFromClass(Class<? extends Command> command) {
         JFXButton jeej = new JFXButton(command.getSimpleName());
         jeej.setStyle("-jfx-button-type: RAISED;-fx-background-color: #FF6026; -fx-text-fill: white;");

@@ -469,6 +469,11 @@ public class UserManagementController extends View{
     }
 
     @Override
+    protected void onUpdate() {
+
+    }
+
+    @Override
     public void onStop() {
 
     }

@@ -69,17 +69,29 @@ public abstract class View {
      * Called at every SceneManager::setScene()
      * Update all sub view before
      */
-    public void onLoad(){
+    public void onLoad() {
         onStart();
         for (View v : subView) {
             v.onLoad();
         }
     }
 
+    public void update() {
+        onUpdate();
+        for (View v : subView) {
+            v.update();
+        }
+    }
+
+    /**
+     * Called every n (5 default) seconds to update the view
+     */
+    protected abstract void onUpdate();
+
     public abstract void onStop();
 
     public Scene getScene() {
-        if(scene == null){
+        if (scene == null) {
             scene = new Scene((Parent) root);
         }
         return scene;
@@ -93,11 +105,11 @@ public abstract class View {
         return fxml;
     }
 
-    public View getParent(){
+    public View getParent() {
         return parent;
     }
 
-    public void addSubView(View v){
+    public void addSubView(View v) {
         subView.add(v);
     }
 

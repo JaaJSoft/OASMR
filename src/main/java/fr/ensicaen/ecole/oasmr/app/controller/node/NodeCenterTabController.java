@@ -80,6 +80,10 @@ public class NodeCenterTabController extends View {
 
     }
 
+    @Override
+    protected void onUpdate() {
+
+    }
 
 
     @Override
