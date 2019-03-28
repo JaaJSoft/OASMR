@@ -17,9 +17,15 @@ package fr.ensicaen.ecole.oasmr.lib.filemanagement;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
+import static java.nio.file.StandardCopyOption.*;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * A command that copy a file.
@@ -48,15 +54,13 @@ public class CommandCopyFile extends Command {
     @Override
     protected Serializable execute(Object... params) throws Exception {
 
-        try (FileReader in = new FileReader(sourceFilePathName); FileWriter out = new FileWriter(destinationFilePathName)) {
-
-            int c;
-            while ((c = in.read()) != -1) {
-                out.write(c);
-            }
+        if(Paths.get(sourceFilePathName).equals(Paths.get(destinationFilePathName))){
+            return false;
         }
 
-        return true;
+        //TODO : CopyDir
+        Path result = Files.copy(Paths.get(sourceFilePathName), Paths.get(destinationFilePathName), StandardCopyOption.REPLACE_EXISTING);
+        return Files.exists(result);
     }
 
     @Override
