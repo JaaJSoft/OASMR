@@ -279,7 +279,18 @@ public class NodeFileExplorerController extends View {
             MenuItem removeMenuItem = new MenuItem("Remove");
             menu.getItems().add(removeMenuItem);
             removeMenuItem.setOnAction(t -> {
-
+                Future<? extends Serializable> isDeleted = requestManager.aSyncSendRequest(new RequestExecuteCommand(
+                        nodesModel.getCurrentNodeData().get(0).getId(),
+                        new CommandRemoveFile(getItem().getPath())
+                ));
+                try {
+                    Boolean isDeletedReponse = (Boolean) isDeleted.get();
+                    if(isDeletedReponse){
+                        getTreeItem().getParent().getChildren().remove(getTreeItem());
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
             });
 
             menu.getItems().add(new SeparatorMenuItem());
