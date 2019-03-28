@@ -23,12 +23,16 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class Server implements Serializable {
     private int port;
     private ServerSocket serverSocket;
     private ServerRunnable runnable;
     private Boolean run;
+    private final ExecutorService executorService;
 
     public Server(int port, ServerRunnable runnable) throws ExceptionPortInvalid {
         if (port < 65536 && port > 0) {
@@ -38,6 +42,7 @@ public class Server implements Serializable {
             throw new ExceptionPortInvalid();
         }
         this.runnable = runnable;
+        executorService = Executors.newCachedThreadPool();
     }
 
     public void start() throws IOException {
@@ -51,8 +56,7 @@ public class Server implements Serializable {
                 r.setClientSocket(client);
                 //GET KEY
                 //r.setKey();
-                Thread t = new Thread(r);
-                t.start();
+                executorService.submit(r);
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
