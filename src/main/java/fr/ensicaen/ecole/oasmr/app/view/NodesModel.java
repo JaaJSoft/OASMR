@@ -18,14 +18,17 @@ package fr.ensicaen.ecole.oasmr.app.view;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
+
+import java.util.Arrays;
 
 public class NodesModel {
 
     private static NodesModel instance = null;
 
-    private ObservableList<NodeData> allNodeData;
+    private ObservableSet<NodeData> allNodeData;
 
-    private ObservableList<NodeData> currentNodeData;
+    private ObservableSet<NodeData> currentNodeData;
 
     public static NodesModel getInstance(){
         if(instance == null){
@@ -35,8 +38,8 @@ public class NodesModel {
     }
 
     private NodesModel() {
-        this.allNodeData = FXCollections.observableArrayList();
-        this.currentNodeData = FXCollections.observableArrayList();
+        this.allNodeData = FXCollections.observableSet();
+        this.currentNodeData = FXCollections.observableSet();
     }
 
     public void addCurrentNodes(NodeData nodeData){
@@ -52,14 +55,14 @@ public class NodesModel {
     public void update(NodeData[] nodeList){
         currentNodeData.clear();
         allNodeData.clear();
-        allNodeData.addAll(nodeList);
+        allNodeData.addAll(Arrays.asList(nodeList));
     }
 
-    public ObservableList<NodeData> getAllNodeData(){
+    public ObservableSet<NodeData> getAllNodeData(){
         return allNodeData;
     }
 
-    public ObservableList<NodeData> getCurrentNodeData(){
+    public ObservableSet<NodeData> getCurrentNodeData(){
         return currentNodeData;
     }
 

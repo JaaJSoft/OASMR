@@ -79,7 +79,7 @@ public class NodeCommandLogController extends View {
             try {
 
                 Future<? extends Serializable> reponseCommandHist = requestManager.aSyncSendRequest(
-                        new RequestExecuteCommand(nodesModel.getCurrentNodeData().get(0).getId(), new CommandGetExecutorCommandHistory())
+                        new RequestExecuteCommand(nodesModel.getCurrentNodeData().iterator().next().getId(), new CommandGetExecutorCommandHistory())
                 );// TODO forall selected nodes
 
                 JFXTreeTableColumn<CommandAdapterTableView, String> commandColumn = new JFXTreeTableColumn<>("Commands");

@@ -132,7 +132,7 @@ public class NodeTaskManagerController extends View {
             HashMap<String, String>[] processes = new HashMap[0];
 
             try {
-                processes = (HashMap<String, String>[]) requestManager.sendRequest(new RequestExecuteCommand(nodesModel.getCurrentNodeData().get(0).getId(), getProcesses));
+                processes = (HashMap<String, String>[]) requestManager.sendRequest(new RequestExecuteCommand(nodesModel.getCurrentNodeData().iterator().next().getId(), getProcesses));
             } catch (Exception e) {
                 e.printStackTrace();
             }

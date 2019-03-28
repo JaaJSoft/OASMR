@@ -27,6 +27,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.collections.ListChangeListener;
+import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
@@ -74,7 +75,7 @@ public class MainController extends View {
             mainPane.getItems().add(defaultView.getRoot());
 
             nodesModel = NodesModel.getInstance();
-            nodesModel.getCurrentNodeData().addListener((ListChangeListener.Change<? extends NodeData> c) -> {
+            nodesModel.getCurrentNodeData().addListener((SetChangeListener.Change<? extends NodeData> c) -> {
                 onStart();
             });
 

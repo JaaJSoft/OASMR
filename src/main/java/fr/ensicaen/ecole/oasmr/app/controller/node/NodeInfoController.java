@@ -78,7 +78,7 @@ public class NodeInfoController extends View {
                 );
             }
         } else if (nodesModel.getSelectedAmount() == 1) {
-            NodeData node = nodesModel.getCurrentNodeData().get(0);
+            NodeData node = nodesModel.getCurrentNodeData().iterator().next();
             nodeInfoVbox.getChildren().clear();
             nodeInfoVbox.getChildren().add(
                     new Label(node.getName())
@@ -89,7 +89,7 @@ public class NodeInfoController extends View {
             try {
                 String model = (String) requestManager.sendRequest(
                         new RequestExecuteCommand(
-                                nodesModel.getCurrentNodeData().get(0).getId(),
+                                nodesModel.getCurrentNodeData().iterator().next().getId(),
                                 new CommandGetModel()
                         ));
                 nodeInfoVbox.getChildren().add(
@@ -97,7 +97,7 @@ public class NodeInfoController extends View {
                 );
                 String system = (String) requestManager.sendRequest(
                         new RequestExecuteCommand(
-                                nodesModel.getCurrentNodeData().get(0).getId(),
+                                nodesModel.getCurrentNodeData().iterator().next().getId(),
                                 new CommandGetSystem()
                         ));
                 nodeInfoVbox.getChildren().add(
@@ -105,7 +105,7 @@ public class NodeInfoController extends View {
                 );
                 String cpu = (String) requestManager.sendRequest(
                         new RequestExecuteCommand(
-                                nodesModel.getCurrentNodeData().get(0).getId(),
+                                nodesModel.getCurrentNodeData().iterator().next().getId(),
                                 new CommandGetProcessor()
                         ));
                 nodeInfoVbox.getChildren().add(

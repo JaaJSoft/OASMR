@@ -99,7 +99,7 @@ public class NodeCpuInfoController extends View {
             try {
                 cpuGraph.setValue((double) requestManager.sendRequest(
                         new RequestExecuteCommand(
-                                nodesModel.getCurrentNodeData().get(0).getId(),
+                                nodesModel.getCurrentNodeData().iterator().next().getId(),
                                 new CommandGetCpuLoad()
                         )) * 100);
             } catch (Exception e1) {

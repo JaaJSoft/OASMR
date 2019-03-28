@@ -94,7 +94,7 @@ public class NodeFileExplorerController extends View {
 
             try {
                 Future<? extends Serializable> reponseRoot = requestManager.aSyncSendRequest(new RequestExecuteCommand(
-                        nodesModel.getCurrentNodeData().get(0).getId(),
+                        nodesModel.getCurrentNodeData().iterator().next().getId(),
                         new CommandListRoots()
                 ));
                 String[] listRoots = (String[]) reponseRoot.get();
@@ -132,7 +132,7 @@ public class NodeFileExplorerController extends View {
     private ObservableList<TreeItem<FileAdapter>> buildChildren(TreeItem<FileAdapter> treeItem) throws ExecutionException, InterruptedException {
         treeItem.getChildren().clear();
         Future<? extends Serializable> reponseList = requestManager.aSyncSendRequest(new RequestExecuteCommand(
-                nodesModel.getCurrentNodeData().get(0).getId(),
+                nodesModel.getCurrentNodeData().iterator().next().getId(),
                 new CommandListFiles(treeItem.getValue().getPath())
         ));
         String[] list = (String[]) reponseList.get();
@@ -140,7 +140,7 @@ public class NodeFileExplorerController extends View {
             ObservableList<TreeItem<FileAdapter>> children = FXCollections.observableArrayList();
             for (String childFile : list) {
                 Future<? extends Serializable> isDirectory = requestManager.aSyncSendRequest(new RequestExecuteCommand(
-                        nodesModel.getCurrentNodeData().get(0).getId(),
+                        nodesModel.getCurrentNodeData().iterator().next().getId(),
                         new CommandIsDirectory(childFile)
                 ));
                 Boolean isDirectoryReponse = (Boolean) isDirectory.get();
@@ -225,7 +225,7 @@ public class NodeFileExplorerController extends View {
                 nameFileFromDialog(getItem().getPath(), false, stage, handler -> {
                     FileAdapter createdFile = (FileAdapter) handler;
                     Future<? extends Serializable> isCreated = requestManager.aSyncSendRequest(new RequestExecuteCommand(
-                            nodesModel.getCurrentNodeData().get(0).getId(),
+                            nodesModel.getCurrentNodeData().iterator().next().getId(),
                             new CommandCreateFile(createdFile.getPath())
                     ));
                     try {
@@ -250,7 +250,7 @@ public class NodeFileExplorerController extends View {
                 nameFileFromDialog(getItem().getPath(), true, stage, handler -> {
                     FileAdapter createdFile = (FileAdapter) handler;
                     Future<? extends Serializable> isCreated = requestManager.aSyncSendRequest(new RequestExecuteCommand(
-                            nodesModel.getCurrentNodeData().get(0).getId(),
+                            nodesModel.getCurrentNodeData().iterator().next().getId(),
                             new CommandMakeDiretory(createdFile.getPath())
                     ));
                     try {
@@ -280,7 +280,7 @@ public class NodeFileExplorerController extends View {
             menu.getItems().add(removeMenuItem);
             removeMenuItem.setOnAction(t -> {
                 Future<? extends Serializable> isDeleted = requestManager.aSyncSendRequest(new RequestExecuteCommand(
-                        nodesModel.getCurrentNodeData().get(0).getId(),
+                        nodesModel.getCurrentNodeData().iterator().next().getId(),
                         new CommandRemoveFile(getItem().getPath())
                 ));
                 try {

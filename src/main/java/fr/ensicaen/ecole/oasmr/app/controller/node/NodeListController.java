@@ -30,6 +30,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.VBox;
@@ -85,7 +86,7 @@ public class NodeListController extends View {
         });
         filter.getChips().addListener((ListChangeListener<? super String>) change -> {
             ObservableList<? extends String> list = change.getList();
-            List<NodeData> filterList;
+            ObservableSet<NodeData> filterList;
             if (list.isEmpty()) {
                 filterList = nodesModel.getAllNodeData();
             } else {
@@ -97,8 +98,8 @@ public class NodeListController extends View {
         });
     }
 
-    private List<NodeData> filterNodeData(List<NodeData> nodeDataList, List<Tag> tags) {
-        return nodeDataList.stream().filter(n -> n.getTags().containsAll(tags)).collect(Collectors.toList());
+    private ObservableSet<NodeData> filterNodeData(ObservableSet<NodeData> nodeDataList, List<Tag> tags) {
+        return (ObservableSet<NodeData>) nodeDataList.stream().filter(n -> n.getTags().containsAll(tags)).collect(Collectors.toSet());
     }
 
     @Override

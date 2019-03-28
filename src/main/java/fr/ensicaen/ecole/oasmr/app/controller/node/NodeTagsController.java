@@ -65,14 +65,14 @@ public class NodeTagsController extends View {
         }
 
         if (nodesModel.getSelectedAmount() == 1) {
-            NodeData n = nodesModel.getCurrentNodeData().get(0);
+            NodeData n = nodesModel.getCurrentNodeData().iterator().next();
             tagsNode.getChildren().clear();
             n.getTags().forEach(e -> tagsNode.getChildren().add(new Label(e.getName())));
 
             JFXButton newTag = new JFXButton("new Tag");
             newTag.setOnAction(actionEvent -> {
                 new FXClassInitializer((Stage) tagsNode.getScene().getWindow(), Tag.class).initFromClass(newObject -> {
-                    requestManager.aSyncSendRequest(new RequestAddTagToNode(nodesModel.getCurrentNodeData().get(0).getId(), (Tag) newObject));
+                    requestManager.aSyncSendRequest(new RequestAddTagToNode(nodesModel.getCurrentNodeData().iterator().next().getId(), (Tag) newObject));
                 });
             });
             tagsNode.getChildren().add(newTag);

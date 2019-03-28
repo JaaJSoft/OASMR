@@ -106,7 +106,7 @@ public class NodeCommandController extends View {
                 String response;
                 try {
                     response = (String) requestManager.sendRequest(
-                            new RequestExecuteCommand(nodesModel.getCurrentNodeData().get(0).getId(), c));
+                            new RequestExecuteCommand(nodesModel.getCurrentNodeData().iterator().next().getId(), c));
                     System.out.println(response);
 
                     JFXDialogLayout layout = new JFXDialogLayout();
