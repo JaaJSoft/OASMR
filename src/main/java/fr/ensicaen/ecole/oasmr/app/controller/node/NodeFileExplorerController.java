@@ -58,7 +58,7 @@ public class NodeFileExplorerController extends View {
     private Config config;
     private NodesModel nodesModel;
     private JFXTreeView<FileAdapter> fileTreeView;
-    private FileAdapter selectedForCopy;
+    private TreeItem<FileAdapter> selectedForCopy;
 
     private final Image folderCloseIcon =
             new Image(Main.class.getResourceAsStream("img/folder_close.png"), 18, 18, false, false);
@@ -320,40 +320,40 @@ public class NodeFileExplorerController extends View {
             MenuItem copyMenuItem = new MenuItem("Copy");
             menu.getItems().add(copyMenuItem);
             copyMenuItem.setOnAction(t -> {
-                selectedForCopy = getItem();
+                selectedForCopy = getTreeItem();
             });
 
             MenuItem cutMenuItem = new MenuItem("Cut");
             menu.getItems().add(cutMenuItem);
             cutMenuItem.setOnAction(t -> {
-                selectedForCopy = getItem();
+                selectedForCopy = getTreeItem();
             });
 
             MenuItem pasteManuItem = new MenuItem("Paste");
             menu.getItems().add(pasteManuItem);
             pasteManuItem.setOnAction(t -> {
-                selectedForCopy = null;
+                if(selectedForCopy != null){
+                    TreeItem<FileAdapter> parentItem = (getItem().isDir() ? getTreeItem() : getTreeItem().getParent());
+                    String newFilePath = parentItem.getValue().getPath() + "/" + selectedForCopy.getValue().getName();
+                    boolean newFileIsDir = selectedForCopy.getValue().isDir();
+                    Future<? extends Serializable> isCopied = requestManager.aSyncSendRequest(new RequestExecuteCommand(
+                            nodesModel.getCurrentNodeData().iterator().next().getId(),
+                            new CommandCopyFile(selectedForCopy.getValue().getPath(), newFilePath)
+                    ));
+                    try {
+                        Boolean isCopiedReponse = (Boolean) isCopied.get();
+                        if(isCopiedReponse){
+                            parentItem.getChildren().add(new TreeItem<>(
+                                    new FileAdapter(newFilePath, newFileIsDir),
+                                    (newFileIsDir ? new ImageView(folderCloseIcon) : new ImageView(fileIcon))
+                            ));
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
             });
 
-        }
-
-        @Override
-        public void startEdit() {
-            super.startEdit();
-
-            if (textField == null) {
-                createTextField();
-            }
-            setText(null);
-            setGraphic(textField);
-            textField.selectAll();
-        }
-
-        @Override
-        public void cancelEdit() {
-            super.cancelEdit();
-            setText(getItem().getName());
-            setGraphic(getTreeItem().getGraphic());
         }
 
         @Override
@@ -378,19 +378,6 @@ public class NodeFileExplorerController extends View {
                     }
                 }
             }
-        }
-
-        private void createTextField() {
-            textField = new TextField(getString());
-            textField.setOnKeyReleased(t -> {
-                if (t.getCode() == KeyCode.ENTER) {
-                    System.out.println(getItem().getPath() + "/" + textField.getText());
-                    commitEdit(new FileAdapter(getItem().getPath() + "/" + textField.getText(), getItem().isDir()));
-                } else if (t.getCode() == KeyCode.ESCAPE) {
-                    cancelEdit();
-                }
-            });
-
         }
 
         private String getString() {
