@@ -35,7 +35,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -59,6 +58,7 @@ public class NodeFileExplorerController extends View {
     private NodesModel nodesModel;
     private JFXTreeView<FileAdapter> fileTreeView;
     private TreeItem<FileAdapter> selectedForCopy;
+    private boolean cutFlag = false;
 
     private final Image folderCloseIcon =
             new Image(Main.class.getResourceAsStream("img/folder_close.png"), 18, 18, false, false);
@@ -91,7 +91,8 @@ public class NodeFileExplorerController extends View {
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Configure view for group
         } else if (nodesModel.getSelectedAmount() == 1) {
-
+            selectedForCopy = null;
+            cutFlag = false;
             try {
                 Future<? extends Serializable> reponseRoot = requestManager.aSyncSendRequest(new RequestExecuteCommand(
                         nodesModel.getCurrentNodeData().iterator().next().getId(),
@@ -213,7 +214,6 @@ public class NodeFileExplorerController extends View {
 
     private final class FileTreeCell extends TreeCell<FileAdapter> {
 
-        private TextField textField;
         private ContextMenu menu = new ContextMenu();
 
         public FileTreeCell() {
@@ -276,18 +276,19 @@ public class NodeFileExplorerController extends View {
             menu.getItems().add(renameMenuItem);
             renameMenuItem.setOnAction(t -> {
                 Stage stage = (Stage) fileExplorerVBox.getScene().getWindow();
-                nameFileFromDialog(getItem().getPath(), false, stage, handler -> {
+                nameFileFromDialog(getTreeItem().getParent().getValue().getPath(), getItem().isDir(), stage, handler -> {
                     FileAdapter createdFile = (FileAdapter) handler;
                     Future<? extends Serializable> isRenamed = requestManager.aSyncSendRequest(new RequestExecuteCommand(
                             nodesModel.getCurrentNodeData().iterator().next().getId(),
                             new CommandRenameFile(getItem().getPath(), createdFile.getName())
                     ));
+                    System.out.println(createdFile.getPath());
                     try {
                         Boolean isRenamedReponse = (Boolean) isRenamed.get();
                         if(isRenamedReponse){
                             TreeItem<FileAdapter> newFile = new TreeItem<>(
                                     createdFile,
-                                    new ImageView(fileIcon)
+                                    (getItem().isDir() ? new ImageView(folderCloseIcon) : new ImageView(fileIcon))
                             );
                             getTreeItem().getParent().getChildren().add(newFile);
                             getTreeItem().getParent().getChildren().remove(getTreeItem());
@@ -321,12 +322,14 @@ public class NodeFileExplorerController extends View {
             menu.getItems().add(copyMenuItem);
             copyMenuItem.setOnAction(t -> {
                 selectedForCopy = getTreeItem();
+                cutFlag = false;
             });
 
             MenuItem cutMenuItem = new MenuItem("Cut");
             menu.getItems().add(cutMenuItem);
             cutMenuItem.setOnAction(t -> {
                 selectedForCopy = getTreeItem();
+                cutFlag = true;
             });
 
             MenuItem pasteManuItem = new MenuItem("Paste");
@@ -336,20 +339,42 @@ public class NodeFileExplorerController extends View {
                     TreeItem<FileAdapter> parentItem = (getItem().isDir() ? getTreeItem() : getTreeItem().getParent());
                     String newFilePath = parentItem.getValue().getPath() + "/" + selectedForCopy.getValue().getName();
                     boolean newFileIsDir = selectedForCopy.getValue().isDir();
-                    Future<? extends Serializable> isCopied = requestManager.aSyncSendRequest(new RequestExecuteCommand(
-                            nodesModel.getCurrentNodeData().iterator().next().getId(),
-                            new CommandCopyFile(selectedForCopy.getValue().getPath(), newFilePath)
-                    ));
-                    try {
-                        Boolean isCopiedReponse = (Boolean) isCopied.get();
-                        if(isCopiedReponse){
-                            parentItem.getChildren().add(new TreeItem<>(
-                                    new FileAdapter(newFilePath, newFileIsDir),
-                                    (newFileIsDir ? new ImageView(folderCloseIcon) : new ImageView(fileIcon))
-                            ));
+                    if(cutFlag){
+                        Future<? extends Serializable> isMoved = requestManager.aSyncSendRequest(new RequestExecuteCommand(
+                                nodesModel.getCurrentNodeData().iterator().next().getId(),
+                                new CommandMoveFile(selectedForCopy.getValue().getPath(), newFilePath)
+                        ));
+                        try {
+                            Boolean isMovedReponse = (Boolean) isMoved.get();
+                            if(isMovedReponse){
+                                parentItem.getChildren().add(new TreeItem<>(
+                                        new FileAdapter(newFilePath, newFileIsDir),
+                                        (newFileIsDir ? new ImageView(folderCloseIcon) : new ImageView(fileIcon))
+                                ));
+                                selectedForCopy.getParent().getChildren().remove(selectedForCopy);
+                                cutFlag = false;
+                                selectedForCopy = null;
+                            }
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
                         }
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
+                    }else{
+                        Future<? extends Serializable> isCopied = requestManager.aSyncSendRequest(new RequestExecuteCommand(
+                                nodesModel.getCurrentNodeData().iterator().next().getId(),
+                                new CommandCopyFile(selectedForCopy.getValue().getPath(), newFilePath)
+                        ));
+                        try {
+                            Boolean isCopiedReponse = (Boolean) isCopied.get();
+                            if(isCopiedReponse){
+                                parentItem.getChildren().add(new TreeItem<>(
+                                        new FileAdapter(newFilePath, newFileIsDir),
+                                        (newFileIsDir ? new ImageView(folderCloseIcon) : new ImageView(fileIcon))
+                                ));
+                                selectedForCopy = null;
+                            }
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });
@@ -364,18 +389,10 @@ public class NodeFileExplorerController extends View {
                 setText(null);
                 setGraphic(null);
             } else {
-                if (isEditing()) {
-                    if (textField != null) {
-                        textField.setText(getString());
-                    }
-                    setText(null);
-                    setGraphic(textField);
-                } else {
-                    setText(getString());
-                    setGraphic(getTreeItem().getGraphic());
-                    if (!getTreeItem().isLeaf()&&getTreeItem().getParent()!= null){
-                        setContextMenu(menu);
-                    }
+                setText(getString());
+                setGraphic(getTreeItem().getGraphic());
+                if (!getTreeItem().isLeaf()&&getTreeItem().getParent()!= null){
+                    setContextMenu(menu);
                 }
             }
         }
