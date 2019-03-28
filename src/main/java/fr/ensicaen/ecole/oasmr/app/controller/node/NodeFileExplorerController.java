@@ -221,8 +221,9 @@ public class NodeFileExplorerController extends View {
             MenuItem addFileMenuItem = new MenuItem("New file");
             menu.getItems().add(addFileMenuItem);
             addFileMenuItem.setOnAction(t -> {
+                TreeItem<FileAdapter> parentItem = (getItem().isDir() ? getTreeItem() : getTreeItem().getParent());
                 Stage stage = (Stage) fileExplorerVBox.getScene().getWindow();
-                nameFileFromDialog(getItem().getPath(), false, stage, handler -> {
+                nameFileFromDialog(parentItem.getValue().getPath(), false, stage, handler -> {
                     FileAdapter createdFile = (FileAdapter) handler;
                     Future<? extends Serializable> isCreated = requestManager.aSyncSendRequest(new RequestExecuteCommand(
                             nodesModel.getCurrentNodeData().iterator().next().getId(),
@@ -235,7 +236,7 @@ public class NodeFileExplorerController extends View {
                                     createdFile,
                                     new ImageView(fileIcon)
                             );
-                            getTreeItem().getChildren().add(newFile);
+                            parentItem.getChildren().add(newFile);
                         }
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
@@ -246,8 +247,9 @@ public class NodeFileExplorerController extends View {
             MenuItem addDirMenuItem = new MenuItem("New directory");
             menu.getItems().add(addDirMenuItem);
             addDirMenuItem.setOnAction(t -> {
+                TreeItem<FileAdapter> parentItem = (getItem().isDir() ? getTreeItem() : getTreeItem().getParent());
                 Stage stage = (Stage) fileExplorerVBox.getScene().getWindow();
-                nameFileFromDialog(getItem().getPath(), true, stage, handler -> {
+                nameFileFromDialog(parentItem.getValue().getPath(), true, stage, handler -> {
                     FileAdapter createdFile = (FileAdapter) handler;
                     Future<? extends Serializable> isCreated = requestManager.aSyncSendRequest(new RequestExecuteCommand(
                             nodesModel.getCurrentNodeData().iterator().next().getId(),
@@ -260,7 +262,7 @@ public class NodeFileExplorerController extends View {
                                     createdFile,
                                     new ImageView(folderCloseIcon)
                             );
-                            getTreeItem().getChildren().add(newFile);
+                            parentItem.getChildren().add(newFile);
                         }
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
@@ -273,7 +275,27 @@ public class NodeFileExplorerController extends View {
             MenuItem renameMenuItem = new MenuItem("Rename");
             menu.getItems().add(renameMenuItem);
             renameMenuItem.setOnAction(t -> {
-
+                Stage stage = (Stage) fileExplorerVBox.getScene().getWindow();
+                nameFileFromDialog(getItem().getPath(), false, stage, handler -> {
+                    FileAdapter createdFile = (FileAdapter) handler;
+                    Future<? extends Serializable> isRenamed = requestManager.aSyncSendRequest(new RequestExecuteCommand(
+                            nodesModel.getCurrentNodeData().iterator().next().getId(),
+                            new CommandRenameFile(getItem().getPath(), createdFile.getName())
+                    ));
+                    try {
+                        Boolean isRenamedReponse = (Boolean) isRenamed.get();
+                        if(isRenamedReponse){
+                            TreeItem<FileAdapter> newFile = new TreeItem<>(
+                                    createdFile,
+                                    new ImageView(fileIcon)
+                            );
+                            getTreeItem().getParent().getChildren().add(newFile);
+                            getTreeItem().getParent().getChildren().remove(getTreeItem());
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                });
             });
 
             MenuItem removeMenuItem = new MenuItem("Remove");
