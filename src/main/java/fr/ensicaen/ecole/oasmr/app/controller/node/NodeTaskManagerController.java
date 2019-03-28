@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class NodeTaskManagerController extends View {
 
@@ -110,6 +111,13 @@ public class NodeTaskManagerController extends View {
         searchField.setOnAction(event -> {
             toSearch = searchField.getText();
             loadTable();
+        });
+
+        searchField.setOnKeyReleased(event -> {
+            if(searchField.getText().trim().equals("")) {
+                toSearch = "";
+                loadTable();
+            }
         });
 
         if (nodesModel.getSelectedAmount() > 1) {

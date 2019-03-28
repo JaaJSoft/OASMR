@@ -118,6 +118,11 @@ public class UserManagementController extends View{
             }
         });
 
+        searchField.setOnKeyReleased(event -> {
+            if(searchField.getText().trim().equals(""))
+                onLoadTest("");
+        });
+
         stopSearchBtn.setOnAction(event -> {
             onLoadTest("");
         });
