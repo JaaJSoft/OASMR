@@ -108,4 +108,9 @@ public final class Config {
     public void setSSHPort(String ssh_port) {
         setAndStoreProperty("ssh_port", ssh_port);
     }
+
+    public void clearProperties(){
+        properties.clear();
+    }
+
 }

@@ -53,10 +53,11 @@ import java.util.concurrent.ExecutionException;
 
 public class NodeTaskManagerController extends View {
 
-    private NodesModel nodesModel;
+    private NodesModel nodesModel = null;
     private RequestManager requestManager = null;
-    private Config config;
-    private Timer t;
+    private Config config = null;
+
+    Timer t;
     private String toSearch;
     private ObservableList<InternalProcess> processesList;
 
@@ -84,18 +85,18 @@ public class NodeTaskManagerController extends View {
 
     @Override
     public void onCreate() {
-        nodesModel = NodesModel.getInstance();
+
     }
 
     //TODO: essayer de garder la selection d'un rafraichissement à l'autre...
 
     @Override
     protected void onStart() {
-        if (requestManager == null) {
+        if (requestManager == null && nodesModel == null) {
             try {
-                nodesModel = NodesModel.getInstance();
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+                nodesModel = NodesModel.getInstance();
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
                 exceptionPortInvalid.printStackTrace();
             }
@@ -236,8 +237,9 @@ public class NodeTaskManagerController extends View {
 
     @Override
     public void onStop() {
-        t.cancel();
-        t.purge();
+        config = null;
+        requestManager = null;
+        nodesModel = null;
     }
 
     private static final class InternalProcess extends RecursiveTreeObject<InternalProcess> {

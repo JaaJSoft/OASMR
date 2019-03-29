@@ -51,18 +51,11 @@ public class NodeListController extends View {
     JFXChipView<String> filter;
 
     @FXML
-    VBox vbox;
-
-    @FXML
-    VBox vboxList;
-
-    @FXML
     JFXListView nodeListView;
 
     private RequestManager requestManager = null;
-
-    private Config config;
-    private NodesModel nodesModel;
+    private Config config = null;
+    private NodesModel nodesModel = null;
 
     public NodeListController(View parent) throws IOException {
         super("NodeList", parent);
@@ -71,7 +64,6 @@ public class NodeListController extends View {
 
     @Override
     public void onCreate() {
-        nodesModel = NodesModel.getInstance();
         refreshBtn.setOnAction(e -> {
             parent.onLoad();
         });
@@ -105,10 +97,11 @@ public class NodeListController extends View {
     @Override
     public void onStart() {
 
-        if (requestManager == null) {
+        if (requestManager == null && nodesModel == null) {
             try {
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+                nodesModel = NodesModel.getInstance();
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
                 exceptionPortInvalid.printStackTrace();
             }
@@ -149,7 +142,9 @@ public class NodeListController extends View {
 
     @Override
     public void onStop() {
-
+        config = null;
+        requestManager = null;
+        nodesModel = null;
     }
 
 }

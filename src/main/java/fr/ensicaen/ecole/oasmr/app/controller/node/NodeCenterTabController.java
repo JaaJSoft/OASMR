@@ -30,10 +30,6 @@ public class NodeCenterTabController extends View {
     @FXML
     JFXTabPane nodeCommandTabPane;
 
-    private RequestManager requestManager = null;
-    private Config config;
-    private NodesModel nodesModel;
-
     private View nodeCommand;
     private View nodeCommandLog;
     private View nodeTaskManager;
@@ -47,7 +43,6 @@ public class NodeCenterTabController extends View {
     @Override
     public void onCreate() {
         try {
-            nodesModel = NodesModel.getInstance();
             nodeCommandTabPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             nodeCommand = new NodeCommandController(this);
             addSubView(nodeCommand);

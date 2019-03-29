@@ -40,8 +40,8 @@ public class NodeInfoController extends View {
     VBox nodeInfoVbox;
 
     private RequestManager requestManager = null;
-    private Config config;
-    private NodesModel nodesModel;
+    private Config config = null;
+    private NodesModel nodesModel = null;
 
     public NodeInfoController(View parent) throws IOException {
         super("NodeInfo", parent);
@@ -50,16 +50,17 @@ public class NodeInfoController extends View {
 
     @Override
     public void onCreate() {
-        nodesModel = NodesModel.getInstance();
+
     }
 
     @Override
     protected void onStart() {
 
-        if(requestManager == null){
+        if(requestManager == null && nodesModel == null){
             try {
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+                nodesModel = NodesModel.getInstance();
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
                 exceptionPortInvalid.printStackTrace();
             }
@@ -124,7 +125,9 @@ public class NodeInfoController extends View {
 
     @Override
     public void onStop() {
-
+        config = null;
+        requestManager = null;
+        nodesModel = null;
     }
 
 }

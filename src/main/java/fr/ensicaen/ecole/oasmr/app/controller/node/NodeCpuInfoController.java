@@ -44,8 +44,8 @@ public class NodeCpuInfoController extends View {
     VBox cpuInfoVBox;
 
     private RequestManager requestManager = null;
-    private Config config;
-    private NodesModel nodesModel;
+    private Config config = null;
+    private NodesModel nodesModel = null;
     private Tile cpuGraph;
 
     public NodeCpuInfoController(View parent) throws IOException {
@@ -55,7 +55,6 @@ public class NodeCpuInfoController extends View {
 
     @Override
     public void onCreate() {
-        nodesModel = NodesModel.getInstance();
         cpuGraph = TileBuilder.create()
                 .skinType(Tile.SkinType.GAUGE_SPARK_LINE)
                 .title("Cpu Usage")
@@ -87,6 +86,7 @@ public class NodeCpuInfoController extends View {
             try {
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+                nodesModel = NodesModel.getInstance();
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
                 exceptionPortInvalid.printStackTrace();
             }
@@ -110,6 +110,8 @@ public class NodeCpuInfoController extends View {
 
     @Override
     public void onStop() {
-
+        config = null;
+        requestManager = null;
+        nodesModel = null;
     }
 }

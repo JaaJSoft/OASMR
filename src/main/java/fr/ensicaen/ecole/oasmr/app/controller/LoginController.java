@@ -95,7 +95,6 @@ public class LoginController extends View {
 
             requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(IPServer.getText()), Integer.parseInt(portNumber.getText()));
 
-
             RequestAuthentication requestAuthentication = new RequestAuthentication(loginUser.getText(), loginPassword.getText());
             try {
                 if ((boolean) requestManager.sendRequest(requestAuthentication)) {

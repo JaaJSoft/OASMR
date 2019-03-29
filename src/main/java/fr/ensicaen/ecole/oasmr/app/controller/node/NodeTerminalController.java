@@ -43,8 +43,9 @@ public class NodeTerminalController extends View {
     JFXTabPane nodeTermTabPane;
 
     private RequestManager requestManager = null;
-    private Config config;
-    private NodesModel nodesModel;
+    private Config config = null;
+    private NodesModel nodesModel = null;
+
     private TerminalBuilder terminalBuilder;
     private final HashMap<Integer, TerminalTab> flyweightTerminal = new HashMap<>();
 
@@ -55,7 +56,6 @@ public class NodeTerminalController extends View {
 
     @Override
     public void onCreate() {
-        nodesModel = NodesModel.getInstance();
         TerminalConfig darkConfig = new TerminalConfig();
         darkConfig.setBackgroundColor(Color.rgb(16, 16, 16));
         darkConfig.setForegroundColor(Color.rgb(240, 240, 240));
@@ -66,10 +66,11 @@ public class NodeTerminalController extends View {
 
     @Override
     protected void onStart() {
-        if (requestManager == null) {
+        if (requestManager == null && nodesModel == null) {
             try {
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+                nodesModel = NodesModel.getInstance();
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
                 exceptionPortInvalid.printStackTrace();
             }
@@ -105,7 +106,9 @@ public class NodeTerminalController extends View {
 
     @Override
     public void onStop() {
-
+        config = null;
+        requestManager = null;
+        nodesModel = null;
     }
 
 }

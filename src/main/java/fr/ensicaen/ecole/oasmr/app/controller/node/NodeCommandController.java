@@ -23,7 +23,6 @@ import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.FXClassInitializer;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.lib.packagemanagment.apt.CommandAptShow;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestGetCommands;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
@@ -46,20 +45,18 @@ import java.util.concurrent.Future;
 public class NodeCommandController extends View {
 
     @FXML
-    private
-    FlowPane commandFlowPane;
+    private FlowPane commandFlowPane;
 
     @FXML
-    private
-    JFXButton searchBtn;
+    private JFXButton searchBtn;
 
     @FXML
-    private
-    JFXTextField searchField;
+    private JFXTextField searchField;
 
     private RequestManager requestManager = null;
-    private Config config;
-    private NodesModel nodesModel;
+    private Config config = null;
+    private NodesModel nodesModel = null;
+
     private Set<Class<? extends Command>> commands;
 
     public NodeCommandController(View parent) throws IOException {
@@ -69,11 +66,10 @@ public class NodeCommandController extends View {
 
     @Override
     public void onCreate() {
-        nodesModel = NodesModel.getInstance();
         searchBtn.setOnAction(event -> {
 
             try {
-                jeeeeeeeeeeej(searchField.getText());
+                searchCommand(searchField.getText());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -84,7 +80,7 @@ public class NodeCommandController extends View {
 
         searchField.setOnAction(event -> {
             try {
-                jeeeeeeeeeeej(searchField.getText());
+                searchCommand(searchField.getText());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -96,7 +92,7 @@ public class NodeCommandController extends View {
         searchField.setOnKeyReleased(event -> {
             if(searchField.getText().trim().equals(""))
             try {
-                jeeeeeeeeeeej("");
+                searchCommand("");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -111,10 +107,11 @@ public class NodeCommandController extends View {
     @Override
     protected void onStart() {
 
-        if (requestManager == null) {
+        if (requestManager == null && nodesModel == null) {
             try {
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+                nodesModel = NodesModel.getInstance();
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
                 exceptionPortInvalid.printStackTrace();
             }
@@ -134,7 +131,7 @@ public class NodeCommandController extends View {
                 e.printStackTrace();
             }
             try {
-                jeeeeeeeeeeej("");
+                searchCommand("");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -144,7 +141,7 @@ public class NodeCommandController extends View {
 
     }
 
-    private void jeeeeeeeeeeej(String search) throws InterruptedException, java.util.concurrent.ExecutionException {
+    private void searchCommand(String search) throws InterruptedException, java.util.concurrent.ExecutionException {
 
         commandFlowPane.getChildren().clear();
         if (search.trim().equals("")) {
@@ -209,7 +206,9 @@ public class NodeCommandController extends View {
 
     @Override
     public void onStop() {
-
+        config = null;
+        requestManager = null;
+        nodesModel = null;
     }
 
 }

@@ -48,8 +48,9 @@ public class NodeCommandLogController extends View {
     VBox commandLogVBox;
 
     private RequestManager requestManager = null;
-    private Config config;
-    private NodesModel nodesModel;
+    private Config config = null;
+    private NodesModel nodesModel = null;
+
     private ObservableList<CommandAdapterTableView> commandsList;
 
     public NodeCommandLogController(View parent) throws IOException {
@@ -67,9 +68,9 @@ public class NodeCommandLogController extends View {
     protected void onStart() {
         if (requestManager == null) {
             try {
-                nodesModel = NodesModel.getInstance();
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+                nodesModel = NodesModel.getInstance();
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
                 exceptionPortInvalid.printStackTrace();
             }
@@ -151,6 +152,8 @@ public class NodeCommandLogController extends View {
 
     @Override
     public void onStop() {
-
+        config = null;
+        requestManager = null;
+        nodesModel = null;
     }
 }

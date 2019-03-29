@@ -20,6 +20,7 @@ import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialogLayout;
 import fr.ensicaen.ecole.oasmr.app.Config;
+import fr.ensicaen.ecole.oasmr.app.Session;
 import fr.ensicaen.ecole.oasmr.app.controller.node.NodeListController;
 import fr.ensicaen.ecole.oasmr.app.controller.node.NodeViewController;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
@@ -73,8 +74,7 @@ public class MainController extends View {
     private View nodeListView;
     private View nodeView;
     private SceneManager sceneManager;
-    private RequestManager requestManager;
-    private Config config;
+    private Config config = null;
     private Node aboutNode = FXMLLoader.load(getClass().getResource("/fr/ensicaen/ecole/oasmr/app/About.fxml"));
 
     public MainController() throws IOException {
@@ -112,7 +112,11 @@ public class MainController extends View {
             });
 
             menuDisconnect.setOnAction(actionEvent -> {
-                //TODO : Disconnect
+                try {
+                    sceneManager.setScenes(LoginController.class, 400, 450);
+                } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
+                    exceptionSceneNotFound.printStackTrace();
+                }
             });
 
             menuAbout.setOnAction(actionEvent -> {
@@ -138,12 +142,9 @@ public class MainController extends View {
     @Override
     public void onStart() {
 
-        try {
-            config = Config.getInstance();
-            requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
-        } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
-            exceptionPortInvalid.printStackTrace();
-        }
+        config = Config.getInstance();
+        System.out.println(config.getIP() + ":" + config.getPort());
+
         if (nodesModel.getSelectedAmount() > 0) {
             mainPane.getItems().set(1, nodeView.getRoot());
             nodeView.onLoad();
@@ -159,6 +160,8 @@ public class MainController extends View {
 
     @Override
     public void onStop() {
-
+        Session.setProperty("user","");
+        config.clearProperties();
+        config = null;
     }
 }

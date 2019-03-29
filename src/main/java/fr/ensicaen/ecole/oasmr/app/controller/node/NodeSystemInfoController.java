@@ -27,7 +27,8 @@ public class NodeSystemInfoController extends View {
     @FXML
     VBox nodeSystemInfoVBox;
 
-    private NodesModel nodesModel;
+    private NodesModel nodesModel = null;
+
     private View nodeRamInfo;
     private View nodeCpuInfo;
     private View nodeFileExplorer;
@@ -40,7 +41,6 @@ public class NodeSystemInfoController extends View {
     @Override
     public void onCreate() {
         try {
-            nodesModel = NodesModel.getInstance();
             nodeRamInfo = new NodeRamInfoController(this);
             addSubView(nodeRamInfo);
             nodeCpuInfo = new NodeCpuInfoController(this);
@@ -54,6 +54,10 @@ public class NodeSystemInfoController extends View {
 
     @Override
     protected void onStart() {
+        if(nodesModel == null){
+            nodesModel = NodesModel.getInstance();
+        }
+
         if(nodesModel.getSelectedAmount() > 1){
             //TODO : generate group view
         }else{
@@ -71,6 +75,6 @@ public class NodeSystemInfoController extends View {
 
     @Override
     public void onStop() {
-
+        nodesModel = null;
     }
 }

@@ -88,7 +88,14 @@ public abstract class View {
      */
     protected abstract void onUpdate();
 
-    public abstract void onStop();
+    public void onFinish() {
+        for (View v : subView) {
+            v.onFinish();
+        }
+        onStop();
+    }
+
+    protected abstract void onStop();
 
     public Scene getScene() {
         if (scene == null) {

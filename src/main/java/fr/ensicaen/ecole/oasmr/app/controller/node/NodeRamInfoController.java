@@ -42,8 +42,9 @@ public class NodeRamInfoController extends View {
     VBox ramVBox;
 
     private RequestManager requestManager = null;
-    private Config config;
-    private NodesModel nodesModel;
+    private Config config = null;
+    private NodesModel nodesModel = null;
+
     private Tile ramGraph;
     private double totalRam = 0;
 
@@ -54,8 +55,6 @@ public class NodeRamInfoController extends View {
 
     @Override
     public void onCreate() {
-        nodesModel = NodesModel.getInstance();
-
         ramGraph = TileBuilder.create()
                 .skinType(Tile.SkinType.CIRCULAR_PROGRESS)
                 .prefSize(150, 150)
@@ -68,10 +67,11 @@ public class NodeRamInfoController extends View {
     @Override
     protected void onStart() {
 
-        if (requestManager == null) {
+        if (requestManager == null && nodesModel == null) {
             try {
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+                nodesModel = NodesModel.getInstance();
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
                 exceptionPortInvalid.printStackTrace();
             }
@@ -107,6 +107,8 @@ public class NodeRamInfoController extends View {
 
     @Override
     public void onStop() {
-
+        config = null;
+        requestManager = null;
+        nodesModel = null;
     }
 }

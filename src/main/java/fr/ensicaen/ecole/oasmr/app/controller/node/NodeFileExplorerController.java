@@ -54,8 +54,9 @@ public class NodeFileExplorerController extends View {
     VBox fileExplorerVBox;
 
     private RequestManager requestManager = null;
-    private Config config;
-    private NodesModel nodesModel;
+    private Config config = null;
+    private NodesModel nodesModel = null;
+
     private JFXTreeView<FileAdapter> fileTreeView;
     private TreeItem<FileAdapter> selectedForCopy;
     private boolean cutFlag = false;
@@ -74,15 +75,16 @@ public class NodeFileExplorerController extends View {
 
     @Override
     public void onCreate() {
-        nodesModel = NodesModel.getInstance();
+
     }
 
     @Override
     protected void onStart() {
-        if (requestManager == null) {
+        if (requestManager == null && nodesModel == null) {
             try {
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+                nodesModel = NodesModel.getInstance();
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
                 exceptionPortInvalid.printStackTrace();
             }
@@ -127,7 +129,9 @@ public class NodeFileExplorerController extends View {
 
     @Override
     public void onStop() {
-
+        config = null;
+        requestManager = null;
+        nodesModel = null;
     }
 
     private ObservableList<TreeItem<FileAdapter>> buildChildren(TreeItem<FileAdapter> treeItem) throws ExecutionException, InterruptedException {

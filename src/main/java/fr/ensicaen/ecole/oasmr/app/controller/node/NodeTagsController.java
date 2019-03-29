@@ -40,8 +40,8 @@ public class NodeTagsController extends View {
     VBox tagsNode;
 
     private RequestManager requestManager = null;
-    private Config config;
-    private NodesModel nodesModel;
+    private Config config = null;
+    private NodesModel nodesModel = null;
 
     public NodeTagsController(View parent) throws IOException {
         super("NodeTags", parent);
@@ -54,11 +54,11 @@ public class NodeTagsController extends View {
 
     @Override
     protected void onStart() {
-        if (requestManager == null) {
+        if (requestManager == null && nodesModel == null) {
             try {
-                nodesModel = NodesModel.getInstance();
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+                nodesModel = NodesModel.getInstance();
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
                 exceptionPortInvalid.printStackTrace();
             }
@@ -87,6 +87,9 @@ public class NodeTagsController extends View {
 
     @Override
     public void onStop() {
-
+        config = null;
+        requestManager = null;
+        nodesModel = null;
     }
+
 }

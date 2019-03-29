@@ -42,8 +42,8 @@ public class NodeViewController extends View {
     SplitPane hSplitPane;
 
     private RequestManager requestManager = null;
-    private Config config;
-    private NodesModel nodesModel;
+    private Config config = null;
+    private NodesModel nodesModel = null;
 
     private View nodeInfoView;
     private View nodeModuleView;
@@ -59,7 +59,6 @@ public class NodeViewController extends View {
     @Override
     public void onCreate() {
         try {
-            nodesModel = NodesModel.getInstance();
             nodeInfoView = new NodeInfoController(this);
             addSubView(nodeInfoView);
             nodeModuleView = new NodeCenterTabController(this);
@@ -83,10 +82,11 @@ public class NodeViewController extends View {
     @Override
     public void onStart() {
 
-        if(requestManager == null){
+        if(requestManager == null && nodesModel == null){
             try {
                 config = Config.getInstance();
                 requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
+                nodesModel = NodesModel.getInstance();
             } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
                 exceptionPortInvalid.printStackTrace();
             }
@@ -106,7 +106,9 @@ public class NodeViewController extends View {
 
     @Override
     public void onStop() {
-
+        config = null;
+        requestManager = null;
+        nodesModel = null;
     }
 
 }
