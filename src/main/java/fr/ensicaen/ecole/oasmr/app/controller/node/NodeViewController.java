@@ -72,8 +72,6 @@ public class NodeViewController extends View {
             mainVBox.getChildren().add(nodeModuleView.getRoot());
             vSplitPane.getItems().add(nodeTermView.getRoot());
             vSplitPane.setDividerPositions(0.75);
-            hSplitPane.getItems().add(nodeSystemInfo.getRoot());
-            hSplitPane.setDividerPositions(0.8);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -92,10 +90,15 @@ public class NodeViewController extends View {
             }
         }
 
+        //TODO : Fix group to node size issues
+        hSplitPane.getItems().clear();
+
         if (nodesModel.getSelectedAmount() > 1) {
-            //TODO : Configure view for group
+            hSplitPane.getItems().add(vSplitPane);
         } else {
-            //TODO : Configure view for node
+            hSplitPane.getItems().add(vSplitPane);
+            hSplitPane.getItems().add(nodeSystemInfo.getRoot());
+            hSplitPane.setDividerPositions(0.8);
         }
     }
 

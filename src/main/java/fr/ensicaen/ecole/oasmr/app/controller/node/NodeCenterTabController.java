@@ -30,10 +30,17 @@ public class NodeCenterTabController extends View {
     @FXML
     JFXTabPane nodeCommandTabPane;
 
+    private NodesModel nodesModel = null;
+
     private View nodeCommand;
     private View nodeCommandLog;
     private View nodeTaskManager;
     private View nodeTags;
+
+    private Tab commands;
+    private Tab logs;
+    private Tab tasks;
+    private Tab tags;
 
     public NodeCenterTabController(View parent) throws IOException {
         super("NodeCenterTab", parent);
@@ -52,19 +59,18 @@ public class NodeCenterTabController extends View {
             addSubView(nodeTaskManager);
             nodeTags = new NodeTagsController(this);
             addSubView(nodeTags);
-            Tab t = new Tab();
-            t.setText("Commands");
-            t.setContent(nodeCommand.getRoot());
-            Tab t2 = new Tab();
-            t2.setText("Commands Logs");
-            t2.setContent(nodeCommandLog.getRoot());
-            Tab t3 = new Tab();
-            t3.setText("Tasks manager");
-            t3.setContent(nodeTaskManager.getRoot());
-            Tab t4 = new Tab();
-            t4.setText("Tags");
-            t4.setContent(nodeTags.getRoot());
-            nodeCommandTabPane.getTabs().addAll(t, t2, t3, t4);
+            commands = new Tab();
+            commands.setText("Commands");
+            commands.setContent(nodeCommand.getRoot());
+            logs = new Tab();
+            logs.setText("Commands Logs");
+            logs.setContent(nodeCommandLog.getRoot());
+            tasks = new Tab();
+            tasks.setText("Tasks manager");
+            tasks.setContent(nodeTaskManager.getRoot());
+            tags = new Tab();
+            tags.setText("Tags");
+            tags.setContent(nodeTags.getRoot());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,6 +79,17 @@ public class NodeCenterTabController extends View {
     @Override
     protected void onStart() {
 
+        if(nodesModel == null){
+            nodesModel = NodesModel.getInstance();
+        }
+
+        nodeCommandTabPane.getTabs().clear();
+
+        if (nodesModel.getSelectedAmount() > 1) {
+            nodeCommandTabPane.getTabs().addAll(commands, logs, tags);
+        }else{
+            nodeCommandTabPane.getTabs().addAll(commands, logs, tasks, tags);
+        }
     }
 
     @Override

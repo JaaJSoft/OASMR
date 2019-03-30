@@ -76,8 +76,9 @@ public class NodeTerminalController extends View {
             }
         }
 
+        nodeTermTabPane.getTabs().clear();
+
         for (NodeData n : nodesModel.getCurrentNodeData()) {
-            nodeTermTabPane.getTabs().clear();
 
             if (flyweightTerminal.containsKey(n.getId())) {
                 nodeTermTabPane.getTabs().add(flyweightTerminal.get(n.getId()));

@@ -23,6 +23,7 @@ import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.FXClassInitializer;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestGetCommands;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
@@ -118,9 +119,7 @@ public class NodeCommandController extends View {
         }
 
 
-        if (nodesModel.getSelectedAmount() > 1) {
-            //TODO : Configure view for group
-        } else if (nodesModel.getSelectedAmount() == 1) {
+        if (nodesModel.getSelectedAmount() > 0) {
             commandFlowPane.getChildren().clear();
             Future<? extends Serializable> reponseCommandList = requestManager.aSyncSendRequest(new RequestGetCommands());
             try {
@@ -175,27 +174,29 @@ public class NodeCommandController extends View {
                 Command c = (Command) newObject;
                 String response;
                 try {
-                    response = (String) requestManager.sendRequest(
-                            new RequestExecuteCommand(nodesModel.getCurrentNodeData().iterator().next().getId(), c));
-                    System.out.println(response);
+                    for(NodeData n : nodesModel.getCurrentNodeData()){
+                        response = (String) requestManager.sendRequest(
+                                new RequestExecuteCommand(n.getId(), c));
+                        System.out.println(response);
 
-                    JFXDialogLayout layout = new JFXDialogLayout();
-                    layout.setHeading(new Label("Response"));
-                    ScrollPane scrollPane = new ScrollPane();
-                    scrollPane.setContent(new Label(response));
-                    layout.setBody(scrollPane);
+                        JFXDialogLayout layout = new JFXDialogLayout();
+                        layout.setHeading(new Label("Response"));
+                        ScrollPane scrollPane = new ScrollPane();
+                        scrollPane.setContent(new Label(response));
+                        layout.setBody(scrollPane);
 
-                    JFXAlert alert = new JFXAlert<>(stage);
-                    alert.setOverlayClose(true);
+                        JFXAlert alert = new JFXAlert<>(stage);
+                        alert.setOverlayClose(true);
 
-                    alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
-                    alert.setContent(layout);
-                    alert.initModality(Modality.NONE);
+                        alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
+                        alert.setContent(layout);
+                        alert.initModality(Modality.NONE);
 
-                    JFXButton button = new JFXButton("close");
-                    button.setOnAction(event -> alert.close());
-                    layout.setActions(button);
-                    alert.show();
+                        JFXButton button = new JFXButton("close");
+                        button.setOnAction(event -> alert.close());
+                        layout.setActions(button);
+                        alert.show();
+                    }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

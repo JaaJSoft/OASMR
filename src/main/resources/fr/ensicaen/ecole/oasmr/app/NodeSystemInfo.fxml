@@ -18,6 +18,6 @@
   -->
 
 
-<VBox fx:id="nodeSystemInfoVBox" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="nodeSystemInfoVBox" alignment="TOP_CENTER" maxWidth="500.0" minWidth="200.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
 
 </VBox>
