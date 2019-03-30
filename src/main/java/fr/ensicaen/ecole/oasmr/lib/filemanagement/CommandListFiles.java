@@ -61,12 +61,14 @@ public class CommandListFiles extends Command {
         File file = new File(directoryPathName);
         File[] listFile;
         List<String> listPath = new ArrayList<>();
-        if (filter == null)
-            listFile = file.listFiles();
-        else
-            listFile = file.listFiles(filter);
-        for (File f : listFile) {
-            listPath.add(f.getAbsolutePath());
+        if(file.canRead()){
+            if (filter == null)
+                listFile = file.listFiles();
+            else
+                listFile = file.listFiles(filter);
+            for (File f : listFile) {
+                listPath.add(f.getAbsolutePath());
+            }
         }
         listPath.sort(String::compareTo);
         return listPath.toArray(new String[listPath.size()]);

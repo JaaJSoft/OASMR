@@ -26,7 +26,6 @@ public class CommandListFilesTest extends AbstractFileTest {
     @Test
     public void execute() throws Exception {
         CommandListFiles commandListFiles = new CommandListFiles(directoryName1);
-
         String[] res = (String[])commandListFiles.executeCommand();
         Arrays.sort(res);
         Arrays.sort(this.listFilesDir1);
