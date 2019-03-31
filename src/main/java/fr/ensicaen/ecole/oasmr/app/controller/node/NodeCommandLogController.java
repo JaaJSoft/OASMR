@@ -25,6 +25,7 @@ import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.command.CommandGetExecutorCommandHistory;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestExecuteCommand;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
@@ -75,6 +76,17 @@ public class NodeCommandLogController extends View {
                 exceptionPortInvalid.printStackTrace();
             }
         }
+
+        JFXTreeTableColumn<CommandAdapterTableView, String> nodeColumn = new JFXTreeTableColumn<>("Node");
+        nodeColumn.setPrefWidth(300);
+        nodeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
+            if (nodeColumn.validateValue(param)) {
+                return param.getValue().getValue().nodeName();
+            } else {
+                return nodeColumn.getComputedValue(param);
+            }
+        });
+
         JFXTreeTableColumn<CommandAdapterTableView, String> commandColumn = new JFXTreeTableColumn<>("Commands");
         commandColumn.setPrefWidth(300);
         commandColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CommandAdapterTableView, String> param) -> {
@@ -107,23 +119,25 @@ public class NodeCommandLogController extends View {
 
         commandLogVBox.getChildren().clear();
 
-        if (nodesModel.getSelectedAmount() == 1) {
+        if (nodesModel.getSelectedAmount() > 0) {
             try {
+                for(NodeData n : nodesModel.getCurrentNodeData()){
+                    Future<? extends Serializable> reponseCommandHist = requestManager.aSyncSendRequest(
+                            new RequestExecuteCommand(n.getId(), new CommandGetExecutorCommandHistory())
+                    );
 
-                Future<? extends Serializable> reponseCommandHist = requestManager.aSyncSendRequest(
-                        new RequestExecuteCommand(nodesModel.getCurrentNodeData().iterator().next().getId(), new CommandGetExecutorCommandHistory())
-                );// TODO forall selected nodes
-
-                Command[] commands = (Command[]) reponseCommandHist.get();
-                for (Command command : commands) {
-                    commandsList.add(new CommandAdapterTableView(command));
+                    Command[] commands = (Command[]) reponseCommandHist.get();
+                    for (Command command : commands) {
+                        commandsList.add(new CommandAdapterTableView(command, n));
+                    }
                 }
                 final TreeItem<CommandAdapterTableView> root = new RecursiveTreeItem<>(commandsList, RecursiveTreeObject::getChildren);
-
                 JFXTreeTableView<CommandAdapterTableView> commandHistTableView = new JFXTreeTableView<>(root);
+                if(nodesModel.getSelectedAmount() > 1){
+                    commandHistTableView.getColumns().add(nodeColumn);
+                }
                 commandHistTableView.getColumns().addAll(commandColumn, stateColumn, responseColumn);
                 commandHistTableView.setShowRoot(false);
-
                 commandLogVBox.getChildren().add(commandHistTableView);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
@@ -136,14 +150,17 @@ public class NodeCommandLogController extends View {
     protected void onUpdate() {
         if (nodesModel.getSelectedAmount() == 1) {
             try {
-                Future<? extends Serializable> reponseCommandHist = requestManager.aSyncSendRequest(
-                        new RequestExecuteCommand(nodesModel.getCurrentNodeData().iterator().next().getId(), new CommandGetExecutorCommandHistory())
-                );
-                commandsList.removeAll(commandsList);
-                Command[] commands = (Command[]) reponseCommandHist.get();
-                for (Command command : commands) {
-                    commandsList.add(new CommandAdapterTableView(command));
+                for(NodeData n : nodesModel.getCurrentNodeData()){
+                    Future<? extends Serializable> reponseCommandHist = requestManager.aSyncSendRequest(
+                            new RequestExecuteCommand(n.getId(), new CommandGetExecutorCommandHistory())
+                    );
+                    commandsList.removeAll(commandsList);
+                    Command[] commands = (Command[]) reponseCommandHist.get();
+                    for (Command command : commands) {
+                        commandsList.add(new CommandAdapterTableView(command, n));
+                    }
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

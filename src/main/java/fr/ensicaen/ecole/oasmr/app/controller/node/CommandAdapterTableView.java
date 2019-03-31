@@ -2,14 +2,21 @@ package fr.ensicaen.ecole.oasmr.app.controller.node;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 final class CommandAdapterTableView extends RecursiveTreeObject<CommandAdapterTableView> {
     private final Command command;
+    private final NodeData node;
 
-    public CommandAdapterTableView(Command command) {
+    public CommandAdapterTableView(Command command, NodeData node) {
         this.command = command;
+        this.node = node;
+    }
+
+    public StringProperty nodeName(){
+        return new SimpleStringProperty(node.getName());
     }
 
     public StringProperty commandName() {

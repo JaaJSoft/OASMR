@@ -95,10 +95,12 @@ public class NodeViewController extends View {
 
         if (nodesModel.getSelectedAmount() > 1) {
             hSplitPane.getItems().add(vSplitPane);
-        } else {
+        } else if(nodesModel.getSelectedAmount() == 1){
             hSplitPane.getItems().add(vSplitPane);
             hSplitPane.getItems().add(nodeSystemInfo.getRoot());
             hSplitPane.setDividerPositions(0.8);
+        }else{
+            System.out.println("AAAAAAAAAAAA");
         }
     }
 

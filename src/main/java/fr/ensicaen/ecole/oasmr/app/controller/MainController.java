@@ -143,7 +143,6 @@ public class MainController extends View {
     public void onStart() {
 
         config = Config.getInstance();
-        System.out.println(config.getIP() + ":" + config.getPort());
 
         if (nodesModel.getSelectedAmount() > 0) {
             mainPane.getItems().set(1, nodeView.getRoot());

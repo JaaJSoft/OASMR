@@ -66,26 +66,25 @@ public class NodeInfoController extends View {
             }
         }
 
+        nodeInfoVbox.getChildren().clear();
 
         if (nodesModel.getSelectedAmount() > 1) {
             //TODO : Differences between tag and multiselection
-            nodeInfoVbox.getChildren().clear();
             nodeInfoVbox.getChildren().add(
                     new Label("Group of nodes")
             );
             for(NodeData n : nodesModel.getCurrentNodeData()){
                 nodeInfoVbox.getChildren().add(
-                        new Label(n.getName())
+                        new Label(n.getName() + "(" + n.getNodeAddress() + ":" + n.getPort() + ")")
                 );
             }
         } else if (nodesModel.getSelectedAmount() == 1) {
             NodeData node = nodesModel.getCurrentNodeData().iterator().next();
-            nodeInfoVbox.getChildren().clear();
             nodeInfoVbox.getChildren().add(
                     new Label(node.getName())
             );
             nodeInfoVbox.getChildren().add(
-                    new Label("IP : " + node.getNodeAddress())
+                    new Label("IP : " + node.getNodeAddress() + ":" + node.getPort())
             );
             try {
                 String model = (String) requestManager.sendRequest(

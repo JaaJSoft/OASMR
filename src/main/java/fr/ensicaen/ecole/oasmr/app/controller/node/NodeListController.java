@@ -69,12 +69,15 @@ public class NodeListController extends View {
         });
         nodeListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         nodeListView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        nodeListView.setOnMouseClicked(event -> {
-            ObservableList<NodeData> l = nodeListView.getSelectionModel().getSelectedItems();
-            nodesModel.getCurrentNodeData().clear();
-            for (NodeData node : l) {
-                nodesModel.addCurrentNodes(node);
+        nodeListView.getSelectionModel().getSelectedItems().addListener((ListChangeListener) change -> {
+            change.next();
+            for(Object n : change.getRemoved()){
+                nodesModel.removeCurrentNodes((NodeData) n);
             }
+            for(Object n : change.getAddedSubList()){
+                nodesModel.addCurrentNodes((NodeData) n);
+            }
+            System.out.println("SELECTED : " + nodesModel.getSelectedAmount());
         });
         filter.getChips().addListener((ListChangeListener<? super String>) change -> {
             ObservableList<? extends String> list = change.getList();
