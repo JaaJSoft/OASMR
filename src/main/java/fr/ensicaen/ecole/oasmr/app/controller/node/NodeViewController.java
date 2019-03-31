@@ -22,6 +22,7 @@ import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.VBox;
@@ -95,12 +96,10 @@ public class NodeViewController extends View {
 
         if (nodesModel.getSelectedAmount() > 1) {
             hSplitPane.getItems().add(vSplitPane);
-        } else if(nodesModel.getSelectedAmount() == 1){
+        } else{
             hSplitPane.getItems().add(vSplitPane);
             hSplitPane.getItems().add(nodeSystemInfo.getRoot());
             hSplitPane.setDividerPositions(0.8);
-        }else{
-            System.out.println("AAAAAAAAAAAA");
         }
     }
 

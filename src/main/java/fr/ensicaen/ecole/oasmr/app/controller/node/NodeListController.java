@@ -77,7 +77,6 @@ public class NodeListController extends View {
             for(Object n : change.getAddedSubList()){
                 nodesModel.addCurrentNodes((NodeData) n);
             }
-            System.out.println("SELECTED : " + nodesModel.getSelectedAmount());
         });
         filter.getChips().addListener((ListChangeListener<? super String>) change -> {
             ObservableList<? extends String> list = change.getList();
