@@ -7,10 +7,10 @@ import static fr.ensicaen.ecole.oasmr.lib.crypto.Diffie_Hellman.generateParamete
 public class DH_Test {
     public static void main(String[] args) throws Exception {
 
-        DHParameterSpec dhSpec = generateParameters();
+        DHParameterSpec DHSpec = generateParameters();
 
-        System.out.println("p:" + dhSpec.getP());
-        System.out.println("g:" + dhSpec.getG());
-        System.out.println("l:" + dhSpec.getL());
+        System.out.println("p:" + DHSpec.getP());
+        System.out.println("g:" + DHSpec.getG());
+        System.out.println("l:" + DHSpec.getL());
     }
 }
