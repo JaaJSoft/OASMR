@@ -153,8 +153,6 @@ public class MainController extends View {
 
     @Override
     public void onStop() {
-        Session.setProperty("user","");
-        config.clearProperties();
-        config = null;
+
     }
 }

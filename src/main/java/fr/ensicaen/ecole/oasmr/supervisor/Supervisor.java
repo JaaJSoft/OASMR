@@ -53,13 +53,13 @@ public class Supervisor extends CommandExecutor {
         ThreadServerRequestHandler.start();
         System.out.println("Done !");
         System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandFinder loading... ");
-        //finder.start();//TODO FIX
+        finder.start();//TODO FIX
         System.out.println("Done !");
         finder.scan();
         userList.loadUsers();
 
         ThreadServerRequestHandler.join();
-        //finder.join();
+        finder.join();
     }
 
     public void stop() throws ExceptionServerRunnableNotEnded {

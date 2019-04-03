@@ -49,6 +49,7 @@ public class CommandFinder extends Thread {
                     StandardWatchEventKinds.ENTRY_MODIFY);
             WatchKey key;
             while ((key = watchService.take()) != null) {
+                key.pollEvents();
                 scan();
                 key.reset();
             }
@@ -61,7 +62,7 @@ public class CommandFinder extends Thread {
         commands.clear();
         requests.clear();
         scanDirectory(new File(directory));
-        System.out.println(commands);
+        //System.out.println(commands);
     }
 
     private void scanDirectory(File f) {
