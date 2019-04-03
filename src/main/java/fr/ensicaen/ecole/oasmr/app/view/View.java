@@ -108,6 +108,10 @@ public abstract class View {
         return root;
     }
 
+    public void setRoot(Node root){
+        this.root = root;
+    }
+
     public String getFxml() {
         return fxml;
     }

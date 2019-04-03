@@ -44,7 +44,6 @@ public class Client implements Serializable {
     public void connect() throws ExceptionConnectionFailure {
         try {
             socket = new Socket(ip, port);
-            //GET KEY
         } catch (IOException e) {
             throw new ExceptionConnectionFailure();
         }

@@ -91,13 +91,13 @@ public class NodeViewController extends View {
             }
         }
 
-        //TODO : Fix group to node size issues
-        hSplitPane.getItems().clear();
+        if(hSplitPane.getItems().size() == 2){
+            nodeSystemInfo.setRoot(hSplitPane.getItems().remove(1));
+        }
 
         if (nodesModel.getSelectedAmount() > 1) {
-            hSplitPane.getItems().add(vSplitPane);
-        } else{
-            hSplitPane.getItems().add(vSplitPane);
+
+        } else {
             hSplitPane.getItems().add(nodeSystemInfo.getRoot());
             hSplitPane.setDividerPositions(0.8);
         }
