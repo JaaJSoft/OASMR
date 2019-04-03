@@ -69,10 +69,10 @@ public abstract class View {
      * Called at every SceneManager::setScene()
      * Update all sub view before
      */
-    public void onLoad() {
+    public void start() {
         onStart();
         for (View v : subView) {
-            v.onLoad();
+            v.start();
         }
     }
 
@@ -88,9 +88,9 @@ public abstract class View {
      */
     protected abstract void onUpdate();
 
-    public void onFinish() {
+    public void stop() {
         for (View v : subView) {
-            v.onFinish();
+            v.stop();
         }
         onStop();
     }

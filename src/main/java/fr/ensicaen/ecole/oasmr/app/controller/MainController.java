@@ -27,11 +27,7 @@ import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
-import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
-import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
-import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
-import javafx.collections.ListChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,8 +40,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 
 public class MainController extends View {
@@ -146,7 +140,7 @@ public class MainController extends View {
 
         if (nodesModel.getSelectedAmount() > 0) {
             mainPane.getItems().set(1, nodeView.getRoot());
-            nodeView.onLoad();
+            nodeView.start();
         } else {
             mainPane.getItems().set(1, defaultView.getRoot());
         }

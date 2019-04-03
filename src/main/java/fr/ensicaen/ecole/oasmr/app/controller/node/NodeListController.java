@@ -33,7 +33,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -65,7 +64,7 @@ public class NodeListController extends View {
     @Override
     public void onCreate() {
         refreshBtn.setOnAction(e -> {
-            parent.onLoad();
+            parent.start();
         });
         nodeListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         nodeListView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
