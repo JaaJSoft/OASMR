@@ -459,18 +459,18 @@ public class UserManagementController extends View{
     @Override
     public void onCreate() {
         sceneManager = SceneManager.getInstance();
-        try {
+        
+    }
+
+    @Override
+    public void onStart() {
+    	try {
             Config config = Config.getInstance();
             requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(config.getIP()), config.getPort());
         } catch (ExceptionPortInvalid | UnknownHostException exceptionPortInvalid) {
             exceptionPortInvalid.printStackTrace();
         }
-    }
-
-    @Override
-    public void onStart() {
         onLoadTest("");
-
     }
 
     @Override
