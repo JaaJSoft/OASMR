@@ -16,6 +16,7 @@
 package fr.ensicaen.ecole.oasmr.app.controller.node;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXChipView;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
@@ -26,6 +27,9 @@ import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestAddTagToNode;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -34,10 +38,18 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class NodeTagsController extends View {
+
     @FXML
+    private
     VBox tagsNode;
+
+    @FXML
+    private
+    JFXChipView<String> tags;
 
     private RequestManager requestManager = null;
     private Config config = null;
@@ -67,12 +79,31 @@ public class NodeTagsController extends View {
         if (nodesModel.getSelectedAmount() == 1) {
             NodeData n = nodesModel.getCurrentNodeData().iterator().next();
             tagsNode.getChildren().clear();
-            n.getTags().forEach(e -> tagsNode.getChildren().add(new Label(e.getName())));
+            //n.getTags().forEach(e -> tagsNode.getChildren().add(new Label(e.getName())));
+
+            for (Tag t: n.getTags()) {
+                Label tagLabel = new Label(t.getName());
+                tagLabel.setStyle("-fx-background-color: #d2d3d7; -fx-text-fill: #000000;");
+                tagsNode.getChildren().add(tagLabel);
+            }
 
             JFXButton newTag = new JFXButton("new Tag");
+            newTag.setStyle("-jfx-button-type: RAISED;-fx-background-color: #FF6026; -fx-text-fill: white;");
+
+            tags.getChips().addListener((ListChangeListener<? super String>) change -> {
+                ObservableList<? extends String> list = change.getList();
+                ObservableSet<NodeData> filterList;
+                if (list.isEmpty()) {
+                    filterList = nodesModel.getAllNodeData();
+                } else {
+                    List<Tag> tags = list.stream().map(Tag::new).collect(Collectors.toList());
+                    //filterList = filterNodeData(nodesModel.getAllNodeData(), tags);
+                }
+            });
             newTag.setOnAction(actionEvent -> {
                 new FXClassInitializer((Stage) tagsNode.getScene().getWindow(), Tag.class).initFromClass(newObject -> {
                     requestManager.aSyncSendRequest(new RequestAddTagToNode(nodesModel.getCurrentNodeData().iterator().next().getId(), (Tag) newObject));
+                    onStart();
                 });
             });
             tagsNode.getChildren().add(newTag);

@@ -68,14 +68,10 @@ public class UserManagementController extends View{
     @FXML
     Label errorMsg;
 
-    @FXML
-    JFXButton searchBtn;
 
     @FXML
     JFXTextField searchField;
 
-    @FXML
-    JFXButton stopSearchBtn;
 
 
     public UserManagementController() throws IOException {
@@ -102,13 +98,6 @@ public class UserManagementController extends View{
             e.printStackTrace();
         }
 
-        searchBtn.setOnAction(event -> {
-            if (!searchField.getText().trim().equals("")) {
-                onLoadTest(searchField.getText());
-            } else {
-                onLoadTest("");
-            }
-        });
 
         searchField.setOnAction(event -> {
             if (!searchField.getText().trim().equals("")) {
@@ -119,13 +108,10 @@ public class UserManagementController extends View{
         });
 
         searchField.setOnKeyReleased(event -> {
-            if(searchField.getText().trim().equals(""))
-                onLoadTest("");
+            //if(searchField.getText().trim().equals(""))
+                onLoadTest(searchField.getText());
         });
 
-        stopSearchBtn.setOnAction(event -> {
-            onLoadTest("");
-        });
 
         if(isCurrentAdmin) {
 
@@ -281,15 +267,12 @@ public class UserManagementController extends View{
             addUser.setDisable(true);
             adminBtn.setDisable(true);
             searchField.setDisable(true);
-            searchBtn.setDisable(true);
-            stopSearchBtn.setDisable(true);
 
             deleteUser.setVisible(false);
             addUser.setVisible(false);
             adminBtn.setVisible(false);
             searchField.setVisible(false);
-            searchBtn.setVisible(false);
-            stopSearchBtn.setVisible(false);
+
 
             final Label message = new Label("");
 

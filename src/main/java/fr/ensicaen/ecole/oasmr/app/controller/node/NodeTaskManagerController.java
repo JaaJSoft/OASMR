@@ -73,9 +73,6 @@ public class NodeTaskManagerController extends View {
     private
     VBox tableBox;
 
-    @FXML
-    private
-    JFXButton searchBtn;
 
 
     NodeTaskManagerController(View parent) throws IOException {
@@ -104,21 +101,11 @@ public class NodeTaskManagerController extends View {
         processesList = FXCollections.observableArrayList();
 
 
-        searchBtn.setOnAction(event -> {
-            toSearch = searchField.getText();
-            loadTable();
-        });
-
-        searchField.setOnAction(event -> {
-            toSearch = searchField.getText();
-            loadTable();
-        });
 
         searchField.setOnKeyReleased(event -> {
-            if(searchField.getText().trim().equals("")) {
-                toSearch = "";
+                toSearch = searchField.getText();
                 loadTable();
-            }
+
         });
 
         if (nodesModel.getSelectedAmount() > 1) {

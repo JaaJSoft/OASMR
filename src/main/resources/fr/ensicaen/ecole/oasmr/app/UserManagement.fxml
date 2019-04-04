@@ -19,10 +19,7 @@
         </padding>
         <Label fx:id="errorMsg"/>
         <HBox alignment="TOP_RIGHT">
-            <JFXTextField fx:id="searchField"/>
-            <JFXButton fx:id="searchBtn">Search</JFXButton>
-            <JFXButton fx:id="stopSearchBtn">Search STOP</JFXButton>
-
+            <JFXTextField fx:id="searchField" promptText="Search"/>
         </HBox>
         <HBox alignment="CENTER">
 

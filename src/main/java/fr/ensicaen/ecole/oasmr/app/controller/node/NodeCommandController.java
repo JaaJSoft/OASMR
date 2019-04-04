@@ -49,9 +49,6 @@ public class NodeCommandController extends View {
     private FlowPane commandFlowPane;
 
     @FXML
-    private JFXButton searchBtn;
-
-    @FXML
     private JFXTextField searchField;
 
     private RequestManager requestManager = null;
@@ -67,33 +64,11 @@ public class NodeCommandController extends View {
 
     @Override
     public void onCreate() {
-        searchBtn.setOnAction(event -> {
 
-            try {
-                searchCommand(searchField.getText());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-
-        });
-
-        searchField.setOnAction(event -> {
-            try {
-                searchCommand(searchField.getText());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-
-        });
 
         searchField.setOnKeyReleased(event -> {
-            if(searchField.getText().trim().equals(""))
             try {
-                searchCommand("");
+                searchCommand(searchField.getText());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
