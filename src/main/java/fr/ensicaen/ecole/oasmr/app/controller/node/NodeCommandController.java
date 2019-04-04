@@ -148,33 +148,34 @@ public class NodeCommandController extends View {
             new FXClassInitializer(stage, command).initFromClass(newObject -> {
                 Command c = (Command) newObject;
                 String response;
-                try {
-                    for(NodeData n : nodesModel.getCurrentNodeData()){
+                for (NodeData n : nodesModel.getCurrentNodeData()) {
+                    try {
                         response = (String) requestManager.sendRequest(
                                 new RequestExecuteCommand(n.getId(), c));
                         System.out.println(response);
-
-                        JFXDialogLayout layout = new JFXDialogLayout();
-                        layout.setHeading(new Label("Response"));
-                        ScrollPane scrollPane = new ScrollPane();
-                        scrollPane.setContent(new Label(response));
-                        layout.setBody(scrollPane);
-
-                        JFXAlert alert = new JFXAlert<>(stage);
-                        alert.setOverlayClose(true);
-
-                        alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
-                        alert.setContent(layout);
-                        alert.initModality(Modality.NONE);
-
-                        JFXButton button = new JFXButton("close");
-                        button.setOnAction(event -> alert.close());
-                        layout.setActions(button);
-                        alert.show();
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                        response = e1.toString();
                     }
-                } catch (Exception e1) {
-                    e1.printStackTrace();
+                    JFXDialogLayout layout = new JFXDialogLayout();
+                    layout.setHeading(new Label("Response"));
+                    ScrollPane scrollPane = new ScrollPane();
+                    scrollPane.setContent(new Label(response));
+                    layout.setBody(scrollPane);
+
+                    JFXAlert alert = new JFXAlert<>(stage);
+                    alert.setOverlayClose(true);
+
+                    alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
+                    alert.setContent(layout);
+                    alert.initModality(Modality.NONE);
+
+                    JFXButton button = new JFXButton("close");
+                    button.setOnAction(event -> alert.close());
+                    layout.setActions(button);
+                    alert.show();
                 }
+
             });
         });
         return jeej;
