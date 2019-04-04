@@ -10,24 +10,22 @@ import java.util.Base64;
 
 public class AES {
     private static SecretKeySpec secretKey;
-    private static byte[] key;
 
-    private static void setKey(String myKey)
+    private static void setKey(byte[] key)
     {
         MessageDigest sha = null;
         try {
-            key = myKey.getBytes(StandardCharsets.UTF_8);
             sha = MessageDigest.getInstance("SHA-256");
-            key = sha.digest(key);
-            key = Arrays.copyOf(key, 16);
-            secretKey = new SecretKeySpec(key, "AES");
+            byte[] keyHash = sha.digest(key);
+            keyHash = Arrays.copyOf(keyHash, 16);
+            secretKey = new SecretKeySpec(keyHash, "AES");
         }
         catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
 
-    public static String encrypt(String strToEncrypt, String secret)
+    public static String encrypt(String strToEncrypt, byte[] secret)
     {
         try {
             setKey(secret);
@@ -41,7 +39,7 @@ public class AES {
         return null;
     }
 
-    public static String decrypt(String strToDecrypt, String secret)
+    public static String decrypt(String strToDecrypt, byte[] secret)
     {
         try {
             setKey(secret);
