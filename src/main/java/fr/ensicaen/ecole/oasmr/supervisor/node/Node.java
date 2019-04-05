@@ -109,6 +109,16 @@ public abstract class Node extends CommandExecutor implements Comparable, Serial
         syncData();
     }
 
+    public void removeTag(Tag s){
+        data.removeTag(s);
+        syncData();
+    }
+
+    public void removeTags(Set<Tag> s){
+        data.removeTags(s);
+        syncData();
+    }
+
     public NodeData getData() {
         return data;
     }

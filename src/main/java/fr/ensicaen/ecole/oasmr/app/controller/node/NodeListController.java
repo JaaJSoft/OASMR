@@ -28,6 +28,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestGetAllTags
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestGetNodes;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
@@ -92,7 +93,7 @@ public class NodeListController extends View {
     }
 
     private ObservableSet<NodeData> filterNodeData(ObservableSet<NodeData> nodeDataList, List<Tag> tags) {
-        return (ObservableSet<NodeData>) nodeDataList.stream().filter(n -> n.getTags().containsAll(tags)).collect(Collectors.toSet());
+        return FXCollections.observableSet(nodeDataList.stream().filter(n -> n.getTags().containsAll(tags)).collect(Collectors.toSet()));
     }
 
     @Override

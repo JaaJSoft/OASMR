@@ -25,6 +25,8 @@ import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestAddTagToNode;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestGetAllTags;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestRemoveTagToNode;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.collections.ListChangeListener;
@@ -36,9 +38,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public class NodeTagsController extends View {
@@ -78,35 +84,33 @@ public class NodeTagsController extends View {
 
         if (nodesModel.getSelectedAmount() == 1) {
             NodeData n = nodesModel.getCurrentNodeData().iterator().next();
-            tagsNode.getChildren().clear();
-            //n.getTags().forEach(e -> tagsNode.getChildren().add(new Label(e.getName())));
-
-            for (Tag t: n.getTags()) {
-                Label tagLabel = new Label(t.getName());
-                tagLabel.setStyle("-fx-background-color: #d2d3d7; -fx-text-fill: #000000;");
-                tagsNode.getChildren().add(tagLabel);
+            tags.getChips().clear();
+            try {
+                for (Tag t: n.getTags()) {
+                    tags.getChips().add(t.getName());
+                }
+                updateTags();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            JFXButton newTag = new JFXButton("new Tag");
-            newTag.setStyle("-jfx-button-type: RAISED;-fx-background-color: #FF6026; -fx-text-fill: white;");
-
             tags.getChips().addListener((ListChangeListener<? super String>) change -> {
-                ObservableList<? extends String> list = change.getList();
-                ObservableSet<NodeData> filterList;
-                if (list.isEmpty()) {
-                    filterList = nodesModel.getAllNodeData();
-                } else {
-                    List<Tag> tags = list.stream().map(Tag::new).collect(Collectors.toList());
-                    //filterList = filterNodeData(nodesModel.getAllNodeData(), tags);
+                change.next();
+                for(String tag : change.getAddedSubList()){
+                    if(Collections.frequency(change.getList(), tag) == 2){
+                        tags.getChips().remove(tags.getChips().size()-1);
+                    }else{
+                        Future<? extends Serializable> response = requestManager.aSyncSendRequest(
+                                new RequestAddTagToNode(n.getId(), new Tag(tag))
+                        );
+                    }
+
+                }
+                for(String tag : change.getRemoved()){
+                    Future<? extends Serializable> response = requestManager.aSyncSendRequest(
+                            new RequestRemoveTagToNode(n.getId(), new Tag(tag))
+                    );
                 }
             });
-            newTag.setOnAction(actionEvent -> {
-                new FXClassInitializer((Stage) tagsNode.getScene().getWindow(), Tag.class).initFromClass(newObject -> {
-                    requestManager.aSyncSendRequest(new RequestAddTagToNode(nodesModel.getCurrentNodeData().iterator().next().getId(), (Tag) newObject));
-                    onStart();
-                });
-            });
-            tagsNode.getChildren().add(newTag);
         }
 
     }
@@ -114,6 +118,13 @@ public class NodeTagsController extends View {
     @Override
     protected void onUpdate() {
 
+    }
+
+    private void updateTags() throws Exception {
+        tags.getSuggestions().clear();
+        Tag[] tagList = (Tag[]) requestManager.sendRequest(new RequestGetAllTags());
+        List<Tag> tagArrayList = Arrays.asList(tagList);
+        tags.getSuggestions().addAll(tagArrayList.stream().map(Tag::getName).collect(Collectors.toList()));
     }
 
     @Override
