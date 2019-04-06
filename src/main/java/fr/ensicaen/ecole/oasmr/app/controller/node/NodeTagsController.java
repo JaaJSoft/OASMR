@@ -86,7 +86,7 @@ public class NodeTagsController extends View {
             NodeData n = nodesModel.getCurrentNodeData().iterator().next();
             tags.getChips().clear();
             try {
-                for (Tag t: n.getTags()) {
+                for (Tag t : n.getTags()) {
                     tags.getChips().add(t.getName());
                 }
                 updateTags();
@@ -95,17 +95,19 @@ public class NodeTagsController extends View {
             }
             tags.getChips().addListener((ListChangeListener<? super String>) change -> {
                 change.next();
-                for(String tag : change.getAddedSubList()){
-                    if(Collections.frequency(change.getList(), tag) == 2){
-                        tags.getChips().remove(tags.getChips().size()-1);
-                    }else{
+                for (String tag : change.getAddedSubList()) {
+                    if (Collections.frequency(change.getList(), tag) == 2) {
+                        tags.getChips().remove(tags.getChips().size() - 1);
+                    } else {
+                        Tag t = new Tag(tag);
                         Future<? extends Serializable> response = requestManager.aSyncSendRequest(
-                                new RequestAddTagToNode(n.getId(), new Tag(tag))
+                                new RequestAddTagToNode(n.getId(), t)
                         );
+                        n.addTag(t);
                     }
 
                 }
-                for(String tag : change.getRemoved()){
+                for (String tag : change.getRemoved()) {
                     Future<? extends Serializable> response = requestManager.aSyncSendRequest(
                             new RequestRemoveTagToNode(n.getId(), new Tag(tag))
                     );
