@@ -1,6 +1,7 @@
 package fr.ensicaen.ecole.oasmr.lib.crypto;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr.lib.crypto.exceptions.InvalidSignatureException;
 import sun.security.provider.DSAPrivateKey;
 import sun.security.provider.DSAPublicKey;
 
@@ -39,9 +40,20 @@ public final class NodeSecurity extends Diffie_Hellman {
         return signedKeyInit.verify(supervisorPublicKey, dsa);
     }
 
-    public byte[] keyExchange(DHParameterSpec DHSpec) throws Exception {
+    public byte[] keyExchange(SignedObject signedKeyInit) throws Exception {
+        if (verifySignature(signedKeyInit)) {
+            KeyInit keyInit = (KeyInit) signedKeyInit.getObject();
+            byte[] publicKey = getPublicKey(keyInit.getDHSpec()).getEncoded();
+            setAESKey(keyInit.getDHPublicKey());
+            return publicKey;
+        } else {
+            throw new InvalidSignatureException();
+        }
+    }
+
+    public PublicKey getPublicKey(DHParameterSpec DHSpec) throws Exception {
         keyPair = Diffie_Hellman.createKeys(DHSpec);
-        return keyPair.getPublic().getEncoded();
+        return keyPair.getPublic();
     }
 
     public void setAESKey(PublicKey publicKey) throws Exception {
