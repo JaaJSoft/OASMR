@@ -2,20 +2,28 @@ package fr.ensicaen.ecole.oasmr.lib.crypto;
 
 import java.security.*;
 
+import javax.crypto.KeyAgreement;
 import javax.crypto.spec.DHParameterSpec;
 
-public class Diffie_Hellman {
+class Diffie_Hellman {
 
-    public static KeyPair createKeys(DHParameterSpec dhSpec) throws Exception {
+    protected static KeyPair createKeys(DHParameterSpec dhSpec) throws Exception {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("DiffieHellman");
         keyPairGenerator.initialize(dhSpec);
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
         return keyPair;
     }
 
-    //public static byte[] keyAgreement(PublicKey publicKey, PrivateKey privateKey) { }
+    protected static byte[] newKeyAgreement(PublicKey publicKey, PrivateKey privateKey) throws Exception {
+        MessageDigest sha;
+        sha = MessageDigest.getInstance("SHA-256");
+        KeyAgreement keyAgreement = KeyAgreement.getInstance("DiffieHellman");
+        keyAgreement.init(privateKey);
+        keyAgreement.doPhase(publicKey, true);
+        return sha.digest(keyAgreement.generateSecret());
+    }
 
-    public static DHParameterSpec generateParameters() throws Exception {
+    protected static DHParameterSpec generateParameters() throws Exception {
         AlgorithmParameterGenerator paramGenerator = AlgorithmParameterGenerator.getInstance("DiffieHellman");
         paramGenerator.init(1024);
 

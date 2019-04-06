@@ -48,6 +48,7 @@ public class Server implements Serializable {
                 Socket client = serverSocket.accept();
                 ServerRunnable r;
                 r = (ServerRunnable) runnable.clone();
+
                 r.setClientSocket(client);
                 //GET KEY
                 //r.setKey();
