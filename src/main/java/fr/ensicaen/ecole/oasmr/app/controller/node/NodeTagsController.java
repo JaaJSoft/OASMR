@@ -108,9 +108,11 @@ public class NodeTagsController extends View {
 
                 }
                 for (String tag : change.getRemoved()) {
+                    Tag t = new Tag(tag);
                     Future<? extends Serializable> response = requestManager.aSyncSendRequest(
-                            new RequestRemoveTagToNode(n.getId(), new Tag(tag))
+                            new RequestRemoveTagToNode(n.getId(), t)
                     );
+                    n.removeTag(t);
                 }
             });
         }
