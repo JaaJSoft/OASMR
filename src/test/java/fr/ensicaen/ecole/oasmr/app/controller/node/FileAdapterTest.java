@@ -15,38 +15,26 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller.node;
 
-import java.io.File;
+import org.junit.Before;
+import org.junit.Test;
 
-public class FileAdapter {
+import static org.junit.Assert.*;
 
-    private String path = "";
-    private String name = "";
-    private boolean isDir = false;
+public class FileAdapterTest {
+    FileAdapter fileAdapter = new FileAdapter("/jeej/AH.java", false);
+    FileAdapter fileAdapter2 = new FileAdapter("/jeej/AH", true);
+    FileAdapter fileAdapter3 = new FileAdapter("/jeej/AH/", true);
 
-    public FileAdapter() {
+
+    @Test
+    public void getNameFile() {
+        assertEquals("AH.java", fileAdapter.getName());
     }
 
-    public FileAdapter(String path, boolean isDir) {
-        this.path = path;
-        String[] filename = path.split(File.separator);
-        this.name = filename[filename.length - 1];
-        this.isDir = isDir;
-    }
+    @Test
+    public void getNameDir() {
+        assertEquals("AH", fileAdapter2.getName());
+        assertEquals("AH", fileAdapter3.getName());
 
-    public boolean isDir() {
-        return isDir;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 }

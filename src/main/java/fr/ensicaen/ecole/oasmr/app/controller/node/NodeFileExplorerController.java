@@ -240,18 +240,7 @@ public class NodeFileExplorerController extends View {
                             nodesModel.getCurrentNodeData().iterator().next().getId(),
                             new CommandCreateFile(createdFile.getPath())
                     ));
-                    try {
-                        Boolean isCreatedReponse = (Boolean) isCreated.get();
-                        if (isCreatedReponse) {
-                            TreeItem<FileAdapter> newFile = new TreeItem<>(
-                                    createdFile,
-                                    new ImageView(fileIcon)
-                            );
-                            parentItem.getChildren().add(newFile);
-                        }
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                    }
+                    createCell(parentItem, createdFile, isCreated, fileIcon);
                 });
             });
 
@@ -266,18 +255,7 @@ public class NodeFileExplorerController extends View {
                             nodesModel.getCurrentNodeData().iterator().next().getId(),
                             new CommandMakeDiretory(createdFile.getPath())
                     ));
-                    try {
-                        Boolean isCreatedReponse = (Boolean) isCreated.get();
-                        if (isCreatedReponse) {
-                            TreeItem<FileAdapter> newFile = new TreeItem<>(
-                                    createdFile,
-                                    new ImageView(folderCloseIcon)
-                            );
-                            parentItem.getChildren().add(newFile);
-                        }
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                    }
+                    createCell(parentItem, createdFile, isCreated, folderCloseIcon);
                 });
             });
 
@@ -390,6 +368,21 @@ public class NodeFileExplorerController extends View {
                 }
             });
 
+        }
+
+        private void createCell(TreeItem<FileAdapter> parentItem, FileAdapter createdFile, Future<? extends Serializable> isCreated, Image folderCloseIcon) {
+            try {
+                Boolean isCreatedReponse = (Boolean) isCreated.get();
+                if (isCreatedReponse) {
+                    TreeItem<FileAdapter> newFile = new TreeItem<>(
+                            createdFile,
+                            new ImageView(folderCloseIcon)
+                    );
+                    parentItem.getChildren().add(newFile);
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
