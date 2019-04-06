@@ -22,10 +22,10 @@ public class DH_Test extends Diffie_Hellman
 
         System.out.println(new String(keyA).equals(new String(keyB)));
 
-        String message = "OASMR";
-        System.out.println(message);
-        String m = AES.encrypt(message, keyA);
-        System.out.println(AES.decrypt(m, keyB));
+        byte[] message = "OASMR".getBytes();
+        System.out.println(new String(message));
+        byte[] encryptedMessage = AES.encrypt(message, keyA);
+        System.out.println(new String(AES.decrypt(encryptedMessage, keyB)));
     }
 }
 

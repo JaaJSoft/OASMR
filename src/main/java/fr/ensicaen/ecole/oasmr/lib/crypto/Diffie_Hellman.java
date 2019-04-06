@@ -5,7 +5,7 @@ import java.security.*;
 import javax.crypto.KeyAgreement;
 import javax.crypto.spec.DHParameterSpec;
 
-class Diffie_Hellman {
+public class Diffie_Hellman {
 
     protected static KeyPair createKeys(DHParameterSpec dhSpec) throws Exception {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("DiffieHellman");
@@ -15,15 +15,13 @@ class Diffie_Hellman {
     }
 
     protected static byte[] newKeyAgreement(PublicKey publicKey, PrivateKey privateKey) throws Exception {
-        MessageDigest sha;
-        sha = MessageDigest.getInstance("SHA-256");
         KeyAgreement keyAgreement = KeyAgreement.getInstance("DiffieHellman");
         keyAgreement.init(privateKey);
         keyAgreement.doPhase(publicKey, true);
-        return sha.digest(keyAgreement.generateSecret());
+        return keyAgreement.generateSecret();
     }
 
-    protected static DHParameterSpec generateParameters() throws Exception {
+    public static DHParameterSpec generateParameters() throws Exception {
         AlgorithmParameterGenerator paramGenerator = AlgorithmParameterGenerator.getInstance("DiffieHellman");
         paramGenerator.init(1024);
 
