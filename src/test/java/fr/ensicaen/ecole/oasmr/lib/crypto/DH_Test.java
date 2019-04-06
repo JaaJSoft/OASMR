@@ -4,7 +4,8 @@ import javax.crypto.spec.DHParameterSpec;
 
 import java.security.KeyPair;
 
-public class DH_Test extends Diffie_Hellman {
+public class DH_Test extends Diffie_Hellman
+{
     public static void main(String[] args) throws Exception {
 
         DHParameterSpec DHSpec = Diffie_Hellman.generateParameters();

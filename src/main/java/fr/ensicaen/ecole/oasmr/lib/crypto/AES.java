@@ -1,5 +1,7 @@
 package fr.ensicaen.ecole.oasmr.lib.crypto;
 
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -38,6 +40,21 @@ public class AES {
         }
         return null;
     }
+
+    public static String encrypt(Command command, byte[] secret)
+    {
+        try {
+            setKey(secret);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            return Base64.getEncoder().encodeToString(cipher.doFinal(command.toString().getBytes()));
+        }
+        catch (Exception e) {
+            System.out.println("Error while encrypting: " + e.toString());
+        }
+        return null;
+    }
+
 
     public static String decrypt(String strToDecrypt, byte[] secret)
     {
