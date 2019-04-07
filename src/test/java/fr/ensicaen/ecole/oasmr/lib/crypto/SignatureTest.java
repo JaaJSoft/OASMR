@@ -15,14 +15,17 @@
 
 package fr.ensicaen.ecole.oasmr.lib.crypto;
 
+import org.junit.Test;
+
 import java.security.SignedObject;
+import static org.junit.Assert.*;
 
 public class SignatureTest {
-
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void execute() throws Exception {
         SupervisorSecurity supervisorSecurity = new SupervisorSecurity();
         NodeSecurity nodeSecurity = new NodeSecurity();
         SignedObject signedObject = supervisorSecurity.keyExchange();
-        System.out.println(nodeSecurity.verifySignature(signedObject));
+        assertTrue(nodeSecurity.verifySignature(signedObject));
     }
 }

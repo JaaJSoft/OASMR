@@ -24,13 +24,11 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.math.BigInteger;
 import java.security.*;
-import java.security.spec.DSAParameterSpec;
 import java.security.spec.DSAPublicKeySpec;
 
 public final class NodeSecurity extends Diffie_Hellman {
     private KeyPair keyPair;
     private DSAPublicKey supervisorPublicKey;
-    private DSAParameterSpec DSASpec;
     private byte[] AESKey;
 
     public NodeSecurity() throws Exception {
@@ -44,7 +42,6 @@ public final class NodeSecurity extends Diffie_Hellman {
                                                     (BigInteger) ois.readObject(), (BigInteger) ois.readObject());
         KeyFactory keyFactory = KeyFactory.getInstance("DSA");
         supervisorPublicKey = (DSAPublicKey) keyFactory.generatePublic(ks);
-        DSASpec = new DSAParameterSpec(ks.getP(), ks.getQ(), ks.getG());
     }
 
     public boolean verifySignature(SignedObject signedKeyInit) throws Exception {
