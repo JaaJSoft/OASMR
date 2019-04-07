@@ -135,6 +135,14 @@ public class NodeData implements Comparable, Serializable {
         tags.addAll(s);
     }
 
+    public void removeTag(Tag s) {
+        tags.remove(s);
+    }
+
+    public void removeTags(Set<Tag> s) {
+        tags.removeAll(s);
+    }
+
     public String getSshLogin() {
         return sshLogin;
     }
@@ -146,4 +154,5 @@ public class NodeData implements Comparable, Serializable {
     public Integer getHeartbeatPeriod() {
         return heartbeatPeriod;
     }
+
 }

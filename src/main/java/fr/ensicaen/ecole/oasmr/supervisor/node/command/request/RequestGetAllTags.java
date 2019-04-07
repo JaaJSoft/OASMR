@@ -27,7 +27,11 @@ public class RequestGetAllTags extends Request {
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
         Set<Node> nodes = supervisor.getNodeFlyweightFactory().getNodes();
-        return nodes.parallelStream().flatMap(e -> e.getTags().stream()).distinct().toArray(Tag[]::new);
+
+        return nodes.parallelStream()
+                .flatMap(e -> e.getTags().stream())
+                .distinct()
+                .toArray(Tag[]::new);
     }
 
     @Override

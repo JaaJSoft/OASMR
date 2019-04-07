@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
 <?import com.jfoenix.controls.JFXChipView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
 
 <!--
   ~  Copyright (c) 2019. CCC-Development-Team
@@ -19,10 +19,10 @@
   ~  limitations under the License.
   -->
 
-<VBox fx:id="tagsNode" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" spacing="5">
+<VBox fx:id="tagsNode" spacing="5" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <JFXChipView fx:id="tags">
     <VBox.margin>
-        <Insets left="5.0" right="5.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </VBox.margin>
     </JFXChipView>
 </VBox>
