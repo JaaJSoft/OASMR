@@ -27,8 +27,8 @@ public class KeyInit implements Serializable {
     private BigInteger g;
     private int l;
 
-    public KeyInit(DHParameterSpec DHSpec, PublicKey DHPublicKey) {
-        this.DHPublicKey = DHPublicKey;
+    public KeyInit(DHParameterSpec DHSpec, PublicKey publicKey) {
+        DHPublicKey = publicKey;
         p = DHSpec.getP();
         g = DHSpec.getG();
         l = DHSpec.getL();

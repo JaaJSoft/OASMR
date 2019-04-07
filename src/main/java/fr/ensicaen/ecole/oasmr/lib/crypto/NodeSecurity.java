@@ -55,8 +55,9 @@ public final class NodeSecurity extends Diffie_Hellman {
     public KeyInit keyExchange(SignedObject signedKeyInit) throws Exception {
         if (verifySignature(signedKeyInit)) {
             KeyInit keyInit = (KeyInit) signedKeyInit.getObject();
+            PublicKey publicKey = getPublicKey(keyInit.getDHSpec());
             setAESKey(keyInit.getDHPublicKey());
-            return new KeyInit(getPublicKey(keyInit.getDHSpec()));
+            return new KeyInit(publicKey);
         } else {
             throw new InvalidSignatureException();
         }
@@ -69,6 +70,14 @@ public final class NodeSecurity extends Diffie_Hellman {
 
     public void setAESKey(PublicKey publicKey) throws Exception {
         AESKey = Diffie_Hellman.newKeyAgreement(publicKey, keyPair.getPrivate());
+    }
+
+    public byte[] encrypt(byte[] message) {
+        return AES.encrypt(message, AESKey);
+    }
+
+    public byte[] decrypt(byte[] message) {
+        return AES.decrypt(message, AESKey);
     }
 
     public SealedObject encrypt(Command command) {

@@ -17,29 +17,29 @@ package fr.ensicaen.ecole.oasmr.lib.crypto;
 
 import javax.crypto.spec.DHParameterSpec;
 import java.security.KeyPair;
+import java.security.SignedObject;
 
 public class DH_Test extends Diffie_Hellman
 {
     public static void main(String[] args) throws Exception {
 
-        DHParameterSpec DHSpec = Diffie_Hellman.generateParameters();
+        DHParameterSpec DHSpec = Diffie_Hellman.generateParameters(512);
 
         System.out.println("p:" + DHSpec.getP());
         System.out.println("g:" + DHSpec.getG());
         System.out.println("l:" + DHSpec.getL());
 
-        KeyPair keyPairA = Diffie_Hellman.createKeys(DHSpec);
-        KeyPair keyPairB = Diffie_Hellman.createKeys(DHSpec);
+        SupervisorSecurity supervisorSecurity = new SupervisorSecurity(DHSpec);
+        SignedObject signedObject = supervisorSecurity.keyExchange();
 
-        byte[] keyA = Diffie_Hellman.newKeyAgreement(keyPairA.getPublic(), keyPairB.getPrivate());
-        byte[] keyB = Diffie_Hellman.newKeyAgreement(keyPairB.getPublic(), keyPairA.getPrivate());
+        NodeSecurity nodeSecurity = new NodeSecurity();
+        KeyInit keyInit = nodeSecurity.keyExchange(signedObject);
 
-        System.out.println(new String(keyA).equals(new String(keyB)));
+        supervisorSecurity.setAESKey(keyInit);
 
         byte[] message = "OASMR".getBytes();
         System.out.println(new String(message));
-        byte[] encryptedMessage = AES.encrypt(message, keyA);
-        System.out.println(new String(AES.decrypt(encryptedMessage, keyB)));
+        byte[] encryptedMessage = supervisorSecurity.encrypt(message);
+        System.out.println(new String(nodeSecurity.decrypt(encryptedMessage)));
     }
 }
-

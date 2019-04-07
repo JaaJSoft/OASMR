@@ -37,11 +37,15 @@ public class Diffie_Hellman {
 
     public static DHParameterSpec generateParameters() throws Exception {
         AlgorithmParameterGenerator paramGenerator = AlgorithmParameterGenerator.getInstance("DiffieHellman");
-        paramGenerator.init(1024);
-
+        paramGenerator.init(1024, new SecureRandom());
         AlgorithmParameters params = paramGenerator.generateParameters();
-        DHParameterSpec DHSpec = params.getParameterSpec(DHParameterSpec.class);
+        return params.getParameterSpec(DHParameterSpec.class);
+    }
 
-        return DHSpec;
+    public static DHParameterSpec generateParameters(int size) throws Exception {
+        AlgorithmParameterGenerator paramGenerator = AlgorithmParameterGenerator.getInstance("DiffieHellman");
+        paramGenerator.init(size, new SecureRandom());
+        AlgorithmParameters params = paramGenerator.generateParameters();
+        return params.getParameterSpec(DHParameterSpec.class);
     }
 }

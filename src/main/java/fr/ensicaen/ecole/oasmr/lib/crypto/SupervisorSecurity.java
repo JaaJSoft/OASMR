@@ -71,6 +71,14 @@ public final class SupervisorSecurity extends Diffie_Hellman {
         AESKey = Diffie_Hellman.newKeyAgreement(keyInit.getDHPublicKey(), keyPair.getPrivate());
     }
 
+    public byte[] encrypt(byte[] message) {
+        return AES.encrypt(message, AESKey);
+    }
+
+    public byte[] decrypt(byte[] message) {
+        return AES.decrypt(message, AESKey);
+    }
+
     public SealedObject encrypt(Command command) {
         return AES.encrypt(command, AESKey);
     }
