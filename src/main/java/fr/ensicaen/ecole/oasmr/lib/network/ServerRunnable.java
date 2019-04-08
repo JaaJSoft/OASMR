@@ -15,20 +15,19 @@
 
 package fr.ensicaen.ecole.oasmr.lib.network;
 
+import fr.ensicaen.ecole.oasmr.lib.crypto.SupervisorSecurity;
+
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.Socket;
 
 public abstract class ServerRunnable implements Runnable, Cloneable {
 
     protected Socket clientSocket;
-
-    protected String key;
+    private SupervisorSecurity security;
 
     public void setClientSocket(Socket clientSocket) {
         this.clientSocket = clientSocket;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public Socket getClientSocket() {
@@ -40,4 +39,15 @@ public abstract class ServerRunnable implements Runnable, Cloneable {
         return super.clone();
     }
 
+    public void sendMessage(Serializable s) throws IOException {
+        util.sendSerializable(clientSocket, security.encrypt( util.serialize(s)));
+    }
+
+    public Serializable receiveMessage() throws IOException, ClassNotFoundException {
+        return (Serializable) util.deserialize(security.decrypt((byte[]) util.receiveSerializable(clientSocket)));
+    }
+
+    public void setSecurity(SupervisorSecurity s) {
+        this.security = s;
+    }
 }

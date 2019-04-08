@@ -50,7 +50,7 @@ public class ServerRunnableCommandExecutor extends ServerRunnable {
     public void run() {
         System.out.print("[" + dateUtil.getFormattedDate() + "]-> New command from " + clientSocket.getInetAddress() + " : ");
         try {
-            Command command = (Command) util.receiveSerializable(clientSocket);
+            Command command = (Command) receiveMessage();
             System.out.println(command);
             Serializable response;
             if (!authorizedCommands.contains(command) && !authorizedCommands.isEmpty()) {
@@ -58,12 +58,12 @@ public class ServerRunnableCommandExecutor extends ServerRunnable {
             } else {
                 response = executor.executeCommand(command);
             }
-            util.sendSerializable(clientSocket, response);
+            sendMessage(response);
             clientSocket.close();
         } catch (Exception e) {
             e.printStackTrace();
             try {
-                util.sendSerializable(clientSocket, e);
+                sendMessage(e);
                 clientSocket.close();
             } catch (IOException e1) {
                 e1.printStackTrace();

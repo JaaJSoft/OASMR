@@ -16,6 +16,8 @@
 package fr.ensicaen.ecole.oasmr.lib.network;
 
 
+import fr.ensicaen.ecole.oasmr.lib.crypto.KeyInit;
+import fr.ensicaen.ecole.oasmr.lib.crypto.NodeSecurity;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionCannotDisconnect;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionConnectionFailure;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
@@ -24,13 +26,14 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.security.SignedObject;
 import java.util.Objects;
 
 public class Client implements Serializable {
     private final InetAddress ip;
     private final int port;
     private Socket socket;
-    private String key;
+    private NodeSecurity security;
 
     public Client(InetAddress ip, int port) throws ExceptionPortInvalid {
         this.ip = ip;
@@ -39,13 +42,25 @@ public class Client implements Serializable {
         } else {
             throw new ExceptionPortInvalid();
         }
+        try {
+            security = new NodeSecurity();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void connect() throws ExceptionConnectionFailure {
         try {
             socket = new Socket(ip, port);
+            SignedObject signedObject = (SignedObject) util.receiveSerializable(socket);
+            KeyInit keyInit = security.keyExchange(signedObject);
+            util.sendSerializable(socket, keyInit);
         } catch (IOException e) {
             throw new ExceptionConnectionFailure();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -57,9 +72,6 @@ public class Client implements Serializable {
         }
     }
 
-    public String getKey() {
-        return key;
-    }
 
     public Socket getSocket() {
         return socket;
@@ -84,5 +96,13 @@ public class Client implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(ip, port);
+    }
+
+    public void sendMessage(Serializable s) throws IOException {
+        util.sendSerializable(socket, security.encrypt((util.serialize(s))));
+    }
+
+    public Serializable receiveMessage() throws IOException, ClassNotFoundException {
+        return (Serializable) util.deserialize(security.decrypt((byte[]) util.receiveSerializable(socket)));
     }
 }

@@ -51,8 +51,8 @@ public class RequestManager {
             Client client = new Client(address, port);
             client.connect();
             System.out.println("[" + dateUtil.getFormattedDate() + "]-> Command " + r + " on " + client.getSocket().getInetAddress() + ":" + client.getSocket().getPort());
-            util.sendSerializable(client.getSocket(), r);
-            Serializable response = util.receiveSerializable(client.getSocket());
+            client.sendMessage(r);
+            Serializable response = client.receiveMessage();
             if (response == null) {
                 throw new ExceptionRequestResponseNull();
             }

@@ -16,13 +16,18 @@
 package fr.ensicaen.ecole.oasmr.lib.network;
 
 
+import fr.ensicaen.ecole.oasmr.lib.crypto.Diffie_Hellman;
+import fr.ensicaen.ecole.oasmr.lib.crypto.KeyInit;
+import fr.ensicaen.ecole.oasmr.lib.crypto.SupervisorSecurity;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionServerRunnableNotEnded;
 
+import javax.crypto.spec.DHParameterSpec;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.SignedObject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -34,6 +39,8 @@ public class Server implements Serializable {
     private Boolean run;
     private final ExecutorService executorService;
 
+    private DHParameterSpec dhParameterSpec;
+
     public Server(int port, ServerRunnable runnable) throws ExceptionPortInvalid {
         if (port < 65536 && port > 0) {
             this.port = port;
@@ -43,6 +50,11 @@ public class Server implements Serializable {
         }
         this.runnable = runnable;
         executorService = Executors.newCachedThreadPool();
+        try {
+            dhParameterSpec = Diffie_Hellman.generateParameters(512);
+        } catch (Exception e) {
+            e.printStackTrace();//TODO DO SOMETHING
+        }
     }
 
     public void start() throws IOException {
@@ -53,12 +65,17 @@ public class Server implements Serializable {
                 Socket client = serverSocket.accept();
                 ServerRunnable r;
                 r = (ServerRunnable) runnable.clone();
-
+                SupervisorSecurity security = new SupervisorSecurity(dhParameterSpec);
+                SignedObject signedObject = security.keyExchange();
+                util.sendSerializable(client, signedObject);
+                KeyInit keyInit = (KeyInit) util.receiveSerializable(client);
+                security.setAESKey(keyInit);
+                r.setSecurity(security);
                 r.setClientSocket(client);
-                //GET KEY
-                //r.setKey();
                 executorService.submit(r);
             } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -83,4 +100,6 @@ public class Server implements Serializable {
     public int getPort() {
         return port;
     }
+
+
 }

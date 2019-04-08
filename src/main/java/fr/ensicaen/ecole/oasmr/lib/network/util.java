@@ -15,10 +15,7 @@
 
 package fr.ensicaen.ecole.oasmr.lib.network;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.Socket;
 
 public class util {
@@ -33,6 +30,17 @@ public class util {
         return (Serializable) input.readObject();
     }
 
+    public static byte[] serialize(Object obj) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(obj);
+        return out.toByteArray();
+    }
+
+    public static Object deserialize(byte[] data) throws IOException, ClassNotFoundException {
+        ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(data));
+        return is.readObject();
+    }
 
 
 }

@@ -32,8 +32,8 @@ public class NodeProxy extends Node {
     protected Serializable execute(Command c) throws Exception {
         Client client = new Client(this.getNodeAddress(), this.getPort());
         client.connect();
-        util.sendSerializable(client.getSocket(), c);
-        Serializable s = util.receiveSerializable(client.getSocket());
+        client.sendMessage(c);
+        Serializable s = client.receiveMessage();
         client.disconnect();
         return s;
     }
