@@ -15,17 +15,15 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.node.command.event;
 
-import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.supervisor.Supervisor;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.Event;
 
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class EventHeartBeat extends Event {
-    private int id;
+    private final int id;
 
     public EventHeartBeat(int id) {
         this.id = id;
@@ -34,7 +32,7 @@ public class EventHeartBeat extends Event {
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
         Node n = supervisor.getNodeFlyweightFactory().getNode(id);
-        n.setLastHeartBeat(LocalDate.now());
+        n.setLastHeartBeat(LocalDateTime.now());
         return n.getId();
     }
 

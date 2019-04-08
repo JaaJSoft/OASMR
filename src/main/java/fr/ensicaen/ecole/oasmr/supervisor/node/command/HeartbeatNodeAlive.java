@@ -15,7 +15,6 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.node.command;
 
-import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Node;
 import fr.ensicaen.ecole.oasmr.supervisor.node.command.event.EventHeartBeat;
@@ -24,7 +23,7 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory
 
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class HeartbeatNodeAlive extends CommandNode {
     private final InetAddress supervisorAddress;
@@ -40,7 +39,7 @@ public class HeartbeatNodeAlive extends CommandNode {
         try {
             RequestManager r = RequestManagerFlyweightFactory.getInstance().getRequestManager(supervisorAddress, port);
             r.sendRequest(new EventHeartBeat(node.getId()));
-            node.setLastHeartBeat(LocalDate.now());
+            node.setLastHeartBeat(LocalDateTime.now());
         } catch (ExceptionPortInvalid e) {
             e.printStackTrace();
         }

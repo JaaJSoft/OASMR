@@ -15,16 +15,20 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
+import com.google.gson.Gson;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionUserUnknown;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.exception.ExceptionLoginAlreadyExisting;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+
 public class UserList {
-    private List<User> userList;
+    private HashSet<User> userList;
 
     public UserList(){
-        userList = new ArrayList<>();
+        userList = new HashSet<>();
     }
 
     public void addUser(User newUser) throws ExceptionLoginAlreadyExisting {
@@ -34,24 +38,43 @@ public class UserList {
             }
         }
         userList.add(newUser);
+        try {
+            saveUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void modifyUser(User oldUser, User newUser) throws ExceptionLoginAlreadyExisting, ExceptionUserUnknown {
+    public void modifyUserLogin(String login, String newLogin) throws ExceptionLoginAlreadyExisting, ExceptionUserUnknown {
         for (User user : userList) {
-            if (user.getLogin().equals(newUser.getLogin())){
-                throw new ExceptionLoginAlreadyExisting(newUser.getLogin()+ ": login already used");
+            if (user.getLogin().equals(newLogin)){
+                throw new ExceptionLoginAlreadyExisting(newLogin + ": login already used");
             }
         }
-        if (!authenticate(oldUser.getLogin(),oldUser.getPassword())){
-            throw new ExceptionUserUnknown(oldUser.getLogin()+ ": incorrect user (login or password)");
+        getUser(login).setLogin(newLogin);
+        try {
+            saveUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        userList.remove(oldUser);
-        userList.add(newUser);
+    }
+
+    public void modifyUserPassword(String login, String password, String newPassword) throws ExceptionUserUnknown {
+        User oldUser = new User(login, password);
+        if (!authenticate(oldUser.getLogin(),oldUser.getPassword())){
+            throw new ExceptionUserUnknown(oldUser.getLogin()+ ": incorrect password)");
+        }
+        getUser(login).setPassword(newPassword);
+        try {
+            saveUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteUser(User user2delete) throws ExceptionUserUnknown {
         if (!authenticate(user2delete.getLogin(),user2delete.getPassword())){
-            throw new ExceptionUserUnknown(user2delete.getLogin()+ ": incorrect user (login or password)");
+            throw new ExceptionUserUnknown(user2delete.getLogin() + ": incorrect user (login or password)");
         }
         for (Iterator<User> it = userList.iterator(); it.hasNext();){
             User u = it.next();
@@ -60,15 +83,16 @@ public class UserList {
                 break;
             }
         }
+        try {
+            saveUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean authenticate(String login, String passwordHashed){
         for (User user : userList) {
             if (user.getLogin().equals(login)) {
-                System.out.println("Login" + user.getLogin());
-                System.out.println("Password Hashed" + user.getPassword());
-                System.out.println("Try authenticate with hashed:" + passwordHashed);
-                System.out.println("Authentication Result:" + user.getPassword().equals(passwordHashed));
                 if (user.getPassword().equals(passwordHashed)){
                     user.authenticate();
                     return true;
@@ -77,6 +101,15 @@ public class UserList {
             }
         }
         return false;
+    }
+
+    public User getUser(String login) throws ExceptionUserUnknown {
+        for (User user : userList) {
+            if (user.getLogin().equals(login)){
+                return user;
+            }
+        }
+        throw new ExceptionUserUnknown(login + "not found");
     }
 
     public boolean isAuthenticate(String login){
@@ -88,9 +121,27 @@ public class UserList {
         return false;
     }
 
-    void display(){
+    public List<String> getLoginList(){
+        List<String> loginList = new ArrayList<>();
         for (User user : userList) {
-            System.out.println(user.getLogin());
+            loginList.add(user.getLogin());
         }
+        return loginList;
+    }
+
+    public void saveUsers() throws IOException {
+        Gson gson = new Gson();
+        String users2Json = gson.toJson(userList.toArray(new User[0]));
+        FileWriter file = new FileWriter("users.json");
+        file.write(users2Json);
+        file.close();
+    }
+
+    public void loadUsers() throws IOException {
+        Gson gson = new Gson();
+        byte[] encoded = Files.readAllBytes(Paths.get("users.json"));
+        String users2Json = new String(encoded, "UTF-8");
+        User[] users = gson.fromJson(users2Json, User[].class);
+        userList.addAll(Arrays.asList(users));
     }
 }

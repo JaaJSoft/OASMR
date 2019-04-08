@@ -15,28 +15,32 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor;
 
+import fr.ensicaen.ecole.oasmr.lib.command.Command;
+import fr.ensicaen.ecole.oasmr.lib.command.CommandExecutor;
+import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandExecutor;
 import fr.ensicaen.ecole.oasmr.lib.dateUtil;
 import fr.ensicaen.ecole.oasmr.lib.network.Server;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
-import fr.ensicaen.ecole.oasmr.lib.command.ServerRunnableCommandHandler;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionServerRunnableNotEnded;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.UserList;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeFlyweightFactory;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
-public class Supervisor {
-    private NodeFlyweightFactory nodeFlyweightFactory = new NodeFlyweightFactory();
+public class Supervisor extends CommandExecutor {
+    private final NodeFlyweightFactory nodeFlyweightFactory = new NodeFlyweightFactory();
     private Server serverRequestHandler;
-    private UserList userList = new UserList();
+    private final UserList userList = new UserList();
 
-    private CommandFinder finder = new CommandFinder("commands");
+    private final CommandFinder finder = new CommandFinder("commands");
 
     public Supervisor(int portRequests) throws IOException, ExceptionPortInvalid {
-        serverRequestHandler = new Server(portRequests, new ServerRunnableCommandHandler(this));
+        serverRequestHandler = new Server(portRequests, new ServerRunnableCommandExecutor(this));
     }
 
-    public void start() throws InterruptedException {
+    public void start() throws InterruptedException, IOException {
         Thread ThreadServerRequestHandler = new Thread(() -> {
             try {
                 serverRequestHandler.start();
@@ -45,12 +49,15 @@ public class Supervisor {
             }
         });
 
-        System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandHandler (" + serverRequestHandler.getPort() + ") loading... ");
+        System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandExecutorServer (" + serverRequestHandler.getPort() + ") loading... ");
         ThreadServerRequestHandler.start();
         System.out.println("Done !");
         System.out.print("[" + dateUtil.getFormattedDate() + "]-> CommandFinder loading... ");
-        finder.start();
+        finder.start();//TODO FIX
         System.out.println("Done !");
+        finder.scan();
+        userList.loadUsers();
+
         ThreadServerRequestHandler.join();
         finder.join();
     }
@@ -70,5 +77,10 @@ public class Supervisor {
 
     public CommandFinder getCommandFinder() {
         return finder;
+    }
+
+    @Override
+    protected Serializable execute(Command c) throws Exception {
+        return c.executeCommand(this);
     }
 }

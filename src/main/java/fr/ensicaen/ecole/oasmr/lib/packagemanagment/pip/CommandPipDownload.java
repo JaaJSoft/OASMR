@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2019. CCC-Development-Team
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +17,7 @@
 package fr.ensicaen.ecole.oasmr.lib.packagemanagment.pip;
 
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
-import fr.ensicaen.ecole.oasmr.lib.packagemanagment.pip.exceptions.PipException;
+
 import java.io.IOException;
 import java.io.Serializable;
 

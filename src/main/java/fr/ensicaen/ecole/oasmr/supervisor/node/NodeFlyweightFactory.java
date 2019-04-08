@@ -38,7 +38,7 @@ public class NodeFlyweightFactory {
                 return n;
             }
         }
-        NodeProxy newNode = new NodeProxy(new NodeData(++nbNode, address + ":" + port, 5, address, port));
+        NodeProxy newNode = new NodeProxy(new NodeData(++nbNode, address + ":" + port, 10, address, port));
         nodes.add(newNode);
         return newNode;
     }

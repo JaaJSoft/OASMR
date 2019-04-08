@@ -27,6 +27,10 @@ public class CommandEchoString extends Command {
         this.message = message;
     }
 
+    public CommandEchoString(String message, String message2) {
+        this.message = message;
+    }
+
     @Override
     public Serializable execute(Object... params) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("echo", message);
@@ -34,12 +38,10 @@ public class CommandEchoString extends Command {
             Process p = processBuilder.start();
             p.waitFor();
             int ret = p.exitValue();
-            switch (ret) {
-                case 0:
-                    return ProcessBuilderUtil.getOutput(p);
-                default:
-                    throw new ExceptionJeejException(ProcessBuilderUtil.getOutputError(p));
+            if (ret == 0) {
+                return ProcessBuilderUtil.getOutput(p);
             }
+            throw new ExceptionJeejException(ProcessBuilderUtil.getOutputError(p));
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return e;

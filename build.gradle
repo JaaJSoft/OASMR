@@ -3,9 +3,9 @@
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *        http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,40 +40,45 @@ repositories {
 }
 
 dependencies {
-    compile 'com.kodedu.terminalfx:terminalfx:1.0.8'
-    compile 'info.picocli:picocli:3.8.2'
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
-    compile 'com.jfoenix:jfoenix:8.0.8'
-    compile 'org.controlsfx:controlsfx:8.40.14'
-    compile 'org.testfx:testfx-junit:4.0.15-alpha'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile 'com.jfoenix:jfoenix:8.0.8'
-    compile 'org.controlsfx:controlsfx:8.40.14'
-    compile 'org.testfx:testfx-junit:4.0.15-alpha'
-    compile group: 'com.github.oshi', name: 'oshi-core', version: '3.13.0'
+    implementation 'com.kodedu.terminalfx:terminalfx:1.0.8'
+    implementation 'info.picocli:picocli:3.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.jfoenix:jfoenix:8.0.8'
+    implementation 'org.controlsfx:controlsfx:8.40.14'
+    implementation 'org.testfx:testfx-junit:4.0.15-alpha'
+    implementation 'com.jfoenix:jfoenix:8.0.8'
+    implementation 'org.controlsfx:controlsfx:8.40.14'
+    implementation 'org.testfx:testfx-junit:4.0.15-alpha'
+    implementation group: 'com.github.oshi', name: 'oshi-core', version: '3.13.0'
+    implementation group: 'eu.hansolo', name: 'tilesfx', version: '1.6.5'
+    implementation group: 'net.java.dev.jna', name: 'jna', version: '4.5.0'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+compileJava {
+    options.compilerArgs += ["-parameters"]
 }
 
 task cli(type: JavaExec, dependsOn: classes) {
     main = 'fr.ensicaen.ecole.oasmr.cli.MainCli'
-    classpath 'build/classes/java/main'
+    classpath = sourceSets.main.runtimeClasspath
 }
 
 task supervisor(type: JavaExec, dependsOn: classes) {
     main = 'fr.ensicaen.ecole.oasmr.supervisor.SupervisorMain'
-    classpath 'build/classes/java/main'
+    classpath = sourceSets.main.runtimeClasspath
 }
 
 task node(type: JavaExec, dependsOn: classes) {
     main = 'fr.ensicaen.ecole.oasmr.supervisor.node.NodeService'
-    classpath 'build/classes/java/main'
+    classpath = sourceSets.main.runtimeClasspath
 }
 
 task app(type: JavaExec, dependsOn: classes) {
     main = 'fr.ensicaen.ecole.oasmr.app.Main'
-    classpath 'build/classes/java/main'
+    classpath = sourceSets.main.runtimeClasspath
 }
 
-task testArg(type: JavaExec) {
-    main = 'fr.ensicaen.ecole.oasmr.supervisor.Test'
-    classpath 'build/classes/java/main'
+task temp(type: JavaExec, dependsOn: classes) {
+    main = 'fr.ensicaen.ecole.oasmr.lib.TestTemp'
+    classpath = sourceSets.main.runtimeClasspath
 }

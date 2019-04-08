@@ -17,15 +17,34 @@ package fr.ensicaen.ecole.oasmr.supervisor.auth;
 
 import fr.ensicaen.ecole.oasmr.lib.crypto.HashUtil;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String login;
     private String password;
     private boolean authenticated;
+    private boolean isAdmin;
 
     public User(String login, String password){
         this.login = login;
         this.password = HashUtil.get_SHA_SecurePassword(password, "SHA-256");
         this.authenticated = false;
+        this.isAdmin = false;
+    }
+
+    public User(User u){
+        this.login=u.login;
+        this.password=u.password;
+        this.authenticated=u.authenticated;
+        this.isAdmin=u.isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
     }
 
     public String getLogin() {
@@ -34,6 +53,14 @@ public class User {
 
     public String getPassword(){
         return password;
+    }
+
+    public void setLogin(String login){
+        this.login=login;
+    }
+
+    public void setPassword(String password){
+        this.password = HashUtil.get_SHA_SecurePassword(password, "SHA-256");
     }
 
     public boolean getAuthentication(){ return authenticated; }

@@ -1,38 +1,57 @@
+/*
+ *  Copyright (c) 2019. CCC-Development-Team
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package fr.ensicaen.ecole.oasmr.app.view;
 
 import fr.ensicaen.ecole.oasmr.app.Main;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneAlrdeadyExists;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class SceneManager {
 
-    //TODO : Virer ce truc immonde :
-    private String path = "/fr/ensicaen/ecole/oasmr/app/";
-    private HashSet<View> views = new HashSet<>();
+    private final HashSet<View> views = new HashSet<>();
     private View activeView;
-    private Stage primaryStage;
-    private static SceneManager ourInstance = new SceneManager();
+    private final Stage primaryStage;
+    private static final SceneManager ourInstance = new SceneManager();
+    ScheduledExecutorService updater = Executors.newSingleThreadScheduledExecutor();
 
     private SceneManager() {
         primaryStage = new Stage();
+        primaryStage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
         primaryStage.setTitle("OASMR");
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("img/OASMR.png")));
+        updater.scheduleAtFixedRate(() -> Platform.runLater(() -> activeView.update()), 5, 5, TimeUnit.SECONDS);
     }
 
     public static SceneManager getInstance() {
         return ourInstance;
     }
 
-    public void addScene(View view) throws IOException, ExceptionSceneAlrdeadyExists {
+    public void addScene(View view) throws ExceptionSceneAlrdeadyExists {
         if (views.add(view)) {
             view.onCreate();
         } else {
@@ -60,15 +79,16 @@ public class SceneManager {
 
     }
 
-    public void setScenes(Class<? extends View> klazz) throws ExceptionSceneNotFound {
+    public void setScenes(Class<? extends View> klazz, int width, int height) throws ExceptionSceneNotFound {
         if (activeView != null)
-            activeView.onStop();
+            activeView.stop();
         View v = getView(klazz);
-        v.onStart();
+        primaryStage.setWidth(width);
+        primaryStage.setHeight(height);
+        v.start();
         activeView = v;
         primaryStage.setScene(v.getScene());
     }
-
 
     public void show() {
         primaryStage.show();

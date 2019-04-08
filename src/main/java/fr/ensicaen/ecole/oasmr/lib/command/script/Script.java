@@ -18,7 +18,7 @@ package fr.ensicaen.ecole.oasmr.lib.command.script;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 
 public abstract class Script extends Command {
-    private String filename;
+    private final String filename;
 
     public Script(String filename) {
         this.filename = filename;

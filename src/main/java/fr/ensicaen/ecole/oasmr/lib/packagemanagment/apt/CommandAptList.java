@@ -45,14 +45,12 @@ public class CommandAptList extends Command {
             Process p2 = processBuilderTxtReading.start();
             p2.waitFor();
             int ret = p2.exitValue();
-            switch (ret) {
-                case 0:
-                    String output = ProcessBuilderUtil.getOutput(p2);
-                    System.out.println(output);
-                    return output;
-                default:
-                    throw new ExceptionAptFailGettingList(ProcessBuilderUtil.getOutputError(p));
+            if (ret == 0) {
+                String output = ProcessBuilderUtil.getOutput(p2);
+                System.out.println(output);
+                return output;
             }
+            throw new ExceptionAptFailGettingList(ProcessBuilderUtil.getOutputError(p));
         } catch(IOException | InterruptedException e){
                 e.printStackTrace();
                 return e;

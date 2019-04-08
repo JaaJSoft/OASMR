@@ -18,6 +18,7 @@ package fr.ensicaen.ecole.oasmr.supervisor.node;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.lib.network.Client;
 import fr.ensicaen.ecole.oasmr.lib.network.util;
+import fr.ensicaen.ecole.oasmr.supervisor.node.command.CommandNodeUpdateData;
 
 import java.io.Serializable;
 
@@ -35,5 +36,14 @@ public class NodeProxy extends Node {
         Serializable s = util.receiveSerializable(client.getSocket());
         client.disconnect();
         return s;
+    }
+
+    @Override
+    public void syncData() {
+        try {
+            executeCommand(new CommandNodeUpdateData(data));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

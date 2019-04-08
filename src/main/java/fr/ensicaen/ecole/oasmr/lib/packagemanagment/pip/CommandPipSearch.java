@@ -15,9 +15,7 @@
 
 package fr.ensicaen.ecole.oasmr.lib.packagemanagment.pip;
 
-import fr.ensicaen.ecole.oasmr.lib.ProcessBuilderUtil;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
-import fr.ensicaen.ecole.oasmr.lib.packagemanagment.pip.exceptions.PipException;
 
 import java.io.IOException;
 import java.io.Serializable;

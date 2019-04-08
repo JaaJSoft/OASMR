@@ -15,16 +15,37 @@
 
 package fr.ensicaen.ecole.oasmr.lib.command;
 
+import fr.ensicaen.ecole.oasmr.lib.command.state.*;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public abstract class Command implements Serializable {
-    private CommandState state = CommandState.WAITING;
+    private CommandState state = new CommandStateWaiting();
+    private LocalDateTime beginDateTime;
+    private LocalDateTime endDateTime;
 
     public Serializable executeCommand(Object... params) throws Exception {
-        state = CommandState.RUNNING;
-        Serializable response = execute(params);
-        state = CommandState.DONE;
-        return response;
+        beginDateTime = LocalDateTime.now();
+        state = new CommandStateRunning();
+        try {
+            Serializable response = execute(params);
+            state = new CommandStateDone(response);
+            endDateTime = LocalDateTime.now();
+            return response;
+        } catch (Exception t) {
+            state = new CommandStateError(t);
+            endDateTime = LocalDateTime.now();
+            throw t;
+        }
+    }
+
+    public LocalDateTime getBeginDateTime() {
+        return beginDateTime;
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
     }
 
     protected abstract Serializable execute(Object... params) throws Exception;

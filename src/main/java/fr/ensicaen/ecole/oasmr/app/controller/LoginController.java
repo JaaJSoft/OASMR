@@ -1,34 +1,47 @@
+/*
+ *  Copyright (c) 2019. CCC-Development-Team
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package fr.ensicaen.ecole.oasmr.app.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import fr.ensicaen.ecole.oasmr.app.Config;
+import fr.ensicaen.ecole.oasmr.app.Session;
 import fr.ensicaen.ecole.oasmr.app.view.SceneManager;
 import fr.ensicaen.ecole.oasmr.app.view.View;
 import fr.ensicaen.ecole.oasmr.app.view.exception.ExceptionSceneNotFound;
-import fr.ensicaen.ecole.oasmr.lib.PropertiesFactory;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAddUser;
 import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestAuthentication;
+import fr.ensicaen.ecole.oasmr.supervisor.auth.request.RequestSetAdmin;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Properties;
-import java.util.ResourceBundle;
 
-public class LoginController extends View implements Initializable {
+public class LoginController extends View {
 
     private SceneManager sceneManager;
     private RequestManager requestManager;
+
     @FXML
     Text loginError;
 
@@ -47,21 +60,8 @@ public class LoginController extends View implements Initializable {
     @FXML
     JFXTextField portNumber;
 
-    public LoginController(int width, int height) throws IOException {
-        super("Login", width, height);
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        loginConnect.setDefaultButton(true);
-        loginConnect.setOnAction(actionEvent -> {
-            try {
-                connect(actionEvent);
-            } catch (UnknownHostException | ExceptionPortInvalid e) {
-                e.printStackTrace(); //TODO print an error on screen
-            }
-        });
-        sceneManager = SceneManager.getInstance();
+    public LoginController() throws IOException {
+        super("Login");
     }
 
     private boolean checkInput() { //TODO CHECK PORT NOT VALID
@@ -70,6 +70,9 @@ public class LoginController extends View implements Initializable {
             return false;
         } else if (portNumber.getText() == null || portNumber.getText().trim().isEmpty()) {
             loginError.setText("No port");
+            return false;
+        }else if (Integer.parseInt(portNumber.getText())<0 || Integer.parseInt(portNumber.getText())>65536){
+            loginError.setText("Unvalid port");
             return false;
         } else if (loginUser.getText() == null || loginUser.getText().trim().isEmpty()) {
             loginError.setText("No username");
@@ -83,7 +86,7 @@ public class LoginController extends View implements Initializable {
     }
 
     //TODO use Validator
-    public void connect(ActionEvent actionEvent) throws UnknownHostException, ExceptionPortInvalid {
+    private void connect(ActionEvent actionEvent) throws UnknownHostException, ExceptionPortInvalid {
         if (checkInput()) {
             loginError.setText("");
             Config config = Config.getInstance();
@@ -92,19 +95,12 @@ public class LoginController extends View implements Initializable {
 
             requestManager = RequestManagerFlyweightFactory.getInstance().getRequestManager(InetAddress.getByName(IPServer.getText()), Integer.parseInt(portNumber.getText()));
 
-            RequestAddUser r = new RequestAddUser("admin", "jeej");
-            try {
-                requestManager.sendRequest(r);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
             RequestAuthentication requestAuthentication = new RequestAuthentication(loginUser.getText(), loginPassword.getText());
             try {
                 if ((boolean) requestManager.sendRequest(requestAuthentication)) {
                     try {
-
-                        sceneManager.setScenes(MainController.class);
+                        Session.setProperty("user", loginUser.getText());
+                        sceneManager.setScenes(MainController.class, 1500, 800);
                     } catch (ExceptionSceneNotFound exceptionSceneNotFound) {
                         exceptionSceneNotFound.printStackTrace();
                     }
@@ -121,7 +117,15 @@ public class LoginController extends View implements Initializable {
 
     @Override
     public void onCreate() {
-
+        loginConnect.setDefaultButton(true);
+        loginConnect.setOnAction(actionEvent -> {
+            try {
+                connect(actionEvent);
+            } catch (UnknownHostException | ExceptionPortInvalid e) {
+                e.printStackTrace(); //TODO print an error on screen
+            }
+        });
+        sceneManager = SceneManager.getInstance();
     }
 
     @Override
@@ -129,6 +133,11 @@ public class LoginController extends View implements Initializable {
         Config c = Config.getInstance();
         IPServer.setText(c.getIP());
         portNumber.setText(String.valueOf(c.getPort()));
+    }
+
+    @Override
+    protected void onUpdate() {
+
     }
 
     @Override

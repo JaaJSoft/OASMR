@@ -15,20 +15,21 @@
 
 package fr.ensicaen.ecole.oasmr.supervisor;
 
+import fr.ensicaen.ecole.oasmr.lib.ComparatorClass;
 import fr.ensicaen.ecole.oasmr.lib.command.Command;
 import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
 public class CommandFinder extends Thread {
 
-    private final Set<Class<? extends Command>> commands = new HashSet<>();
-    private final Set<Class<? extends Request>> requests = new HashSet<>();
+    private final Set<Class<? extends Command>> commands = new TreeSet<>(new ComparatorClass());
+    private final Set<Class<? extends Request>> requests = new TreeSet<>(new ComparatorClass());
     private final String directory;
     private final WatchService watchService;
 
@@ -48,10 +49,8 @@ public class CommandFinder extends Thread {
                     StandardWatchEventKinds.ENTRY_MODIFY);
             WatchKey key;
             while ((key = watchService.take()) != null) {
-                //for (WatchEvent<?> event : key.pollEvents()) {
-                //event.context();
+                key.pollEvents();
                 scan();
-                //}
                 key.reset();
             }
         } catch (IOException | InterruptedException e) {
@@ -60,12 +59,13 @@ public class CommandFinder extends Thread {
     }
 
     public void scan() {
-        scanDirectory(new File(directory));
-    }
-
-    void scanDirectory(File f) {
         commands.clear();
         requests.clear();
+        scanDirectory(new File(directory));
+        //System.out.println(commands);
+    }
+
+    private void scanDirectory(File f) {
         File[] files = f.listFiles();
         if (files != null) {
             for (File subFile : files) {
@@ -87,7 +87,6 @@ public class CommandFinder extends Thread {
                 jarfile = jarInputStream.getNextJarEntry();
                 if (jarfile != null) {
                     if (jarfile.getName().endsWith(".class")) {
-
                         String classname = jarfile.getName().replace('/', '.').substring(0, jarfile.getName().length() - 6);
                         try {
                             Class c = Class.forName(classname);
@@ -96,7 +95,8 @@ public class CommandFinder extends Thread {
                             } else if (Command.class.isAssignableFrom(c)) {
                                 commands.add(c);
                             }
-                        } catch (Throwable e) {
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
                             System.out.println("WARNING: failed to instantiate " + classname + " from " + jarfile.getName());
                         }
                     }
@@ -106,8 +106,7 @@ public class CommandFinder extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*System.out.println(commands);
-        System.out.println(requests);*/
+
     }
 
     public Set<Class<? extends Command>> getCommands() {

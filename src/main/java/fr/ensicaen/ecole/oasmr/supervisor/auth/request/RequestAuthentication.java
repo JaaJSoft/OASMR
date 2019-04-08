@@ -22,8 +22,8 @@ import fr.ensicaen.ecole.oasmr.supervisor.request.Request;
 import java.io.Serializable;
 
 public class RequestAuthentication extends Request {
-    private String login;
-    private String password;
+    private final String login;
+    private final String password;
 
     public RequestAuthentication(String login, String password){
         User tmp = new User(login, password);
@@ -33,8 +33,7 @@ public class RequestAuthentication extends Request {
 
     @Override
     public Serializable execute(Supervisor supervisor) throws Exception {
-        boolean isCorrectlyAuthenticated = supervisor.getUserList().authenticate(login, password);//We can use this value for accessing or not at the software
-        return isCorrectlyAuthenticated;
+        return supervisor.getUserList().authenticate(login, password);
     }
 
     @Override
