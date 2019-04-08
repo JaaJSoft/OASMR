@@ -29,7 +29,11 @@ public class FileAdapter {
     public FileAdapter(String path, boolean isDir) {
         this.path = path;
         String[] filename = path.split(File.separator);
-        this.name = filename[filename.length - 1];
+        if (filename.length > 0) {
+            this.name = filename[filename.length - 1];
+        } else {
+            this.name = path;
+        }
         this.isDir = isDir;
     }
 
