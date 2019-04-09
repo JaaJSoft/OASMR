@@ -54,7 +54,6 @@ public class NodeTagsController extends View {
     private RequestManager requestManager = null;
     private Config config = null;
     private NodesModel nodesModel = null;
-    private Boolean reloading = false;
     private ListChangeListener<? super String> l;
 
     public NodeTagsController(View parent) throws IOException {
@@ -82,7 +81,6 @@ public class NodeTagsController extends View {
             if (l != null) {
                 tags.getChips().removeListener(l);
             }
-            reloading = true;
             NodeData n = nodesModel.getCurrentNodeData().iterator().next();
             tags.getChips().clear();
             try {
@@ -93,31 +91,27 @@ public class NodeTagsController extends View {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            reloading = false;
             l = change -> {
                 change.next();
-                if (!reloading) {
-                    for (String tag : change.getAddedSubList()) {
-                        if (Collections.frequency(change.getList(), tag) == 2) {
-                            tags.getChips().remove(tags.getChips().size() - 1);
-                        } else {
-                            Tag t = new Tag(tag);
-                            Future<? extends Serializable> response = requestManager.aSyncSendRequest(
-                                    new RequestAddTagToNode(n.getId(), t)
-                            );
-                            n.addTag(t);
-                        }
-
-                    }
-                    for (String tag : change.getRemoved()) {
+                for (String tag : change.getAddedSubList()) {
+                    if (Collections.frequency(change.getList(), tag) == 2) {
+                        tags.getChips().remove(tags.getChips().size() - 1);
+                    } else {
                         Tag t = new Tag(tag);
                         Future<? extends Serializable> response = requestManager.aSyncSendRequest(
-                                new RequestRemoveTagToNode(n.getId(), t)
+                                new RequestAddTagToNode(n.getId(), t)
                         );
-                        n.removeTag(t);
+                        n.addTag(t);
                     }
-                }
 
+                }
+                for (String tag : change.getRemoved()) {
+                    Tag t = new Tag(tag);
+                    Future<? extends Serializable> response = requestManager.aSyncSendRequest(
+                            new RequestRemoveTagToNode(n.getId(), t)
+                    );
+                    n.removeTag(t);
+                }
             };
             tags.getChips().addListener(l);
         }
