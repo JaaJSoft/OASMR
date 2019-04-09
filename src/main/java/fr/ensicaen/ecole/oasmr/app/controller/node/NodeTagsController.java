@@ -15,12 +15,10 @@
 
 package fr.ensicaen.ecole.oasmr.app.controller.node;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXChipView;
 import fr.ensicaen.ecole.oasmr.app.Config;
 import fr.ensicaen.ecole.oasmr.app.view.NodesModel;
 import fr.ensicaen.ecole.oasmr.app.view.View;
-import fr.ensicaen.ecole.oasmr.lib.FXClassInitializer;
 import fr.ensicaen.ecole.oasmr.lib.network.exception.ExceptionPortInvalid;
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import fr.ensicaen.ecole.oasmr.supervisor.node.Tag;
@@ -30,12 +28,8 @@ import fr.ensicaen.ecole.oasmr.supervisor.node.command.request.RequestRemoveTagT
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManager;
 import fr.ensicaen.ecole.oasmr.supervisor.request.RequestManagerFlyweightFactory;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -60,6 +54,8 @@ public class NodeTagsController extends View {
     private RequestManager requestManager = null;
     private Config config = null;
     private NodesModel nodesModel = null;
+    private Boolean reloading = false;
+    private ListChangeListener<? super String> l;
 
     public NodeTagsController(View parent) throws IOException {
         super("NodeTags", parent);
@@ -83,6 +79,10 @@ public class NodeTagsController extends View {
         }
 
         if (nodesModel.getSelectedAmount() == 1) {
+            if (l != null) {
+                tags.getChips().removeListener(l);
+            }
+            reloading = true;
             NodeData n = nodesModel.getCurrentNodeData().iterator().next();
             tags.getChips().clear();
             try {
@@ -93,28 +93,33 @@ public class NodeTagsController extends View {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            tags.getChips().addListener((ListChangeListener<? super String>) change -> {
+            reloading = false;
+            l = change -> {
                 change.next();
-                for (String tag : change.getAddedSubList()) {
-                    if (Collections.frequency(change.getList(), tag) == 2) {
-                        tags.getChips().remove(tags.getChips().size() - 1);
-                    } else {
+                if (!reloading) {
+                    for (String tag : change.getAddedSubList()) {
+                        if (Collections.frequency(change.getList(), tag) == 2) {
+                            tags.getChips().remove(tags.getChips().size() - 1);
+                        } else {
+                            Tag t = new Tag(tag);
+                            Future<? extends Serializable> response = requestManager.aSyncSendRequest(
+                                    new RequestAddTagToNode(n.getId(), t)
+                            );
+                            n.addTag(t);
+                        }
+
+                    }
+                    for (String tag : change.getRemoved()) {
                         Tag t = new Tag(tag);
                         Future<? extends Serializable> response = requestManager.aSyncSendRequest(
-                                new RequestAddTagToNode(n.getId(), t)
+                                new RequestRemoveTagToNode(n.getId(), t)
                         );
-                        n.addTag(t);
+                        n.removeTag(t);
                     }
+                }
 
-                }
-                for (String tag : change.getRemoved()) {
-                    Tag t = new Tag(tag);
-                    Future<? extends Serializable> response = requestManager.aSyncSendRequest(
-                            new RequestRemoveTagToNode(n.getId(), t)
-                    );
-                    n.removeTag(t);
-                }
-            });
+            };
+            tags.getChips().addListener(l);
         }
 
     }

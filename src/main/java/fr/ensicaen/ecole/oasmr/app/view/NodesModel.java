@@ -17,7 +17,6 @@ package fr.ensicaen.ecole.oasmr.app.view;
 
 import fr.ensicaen.ecole.oasmr.supervisor.node.NodeData;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 
 import java.util.Arrays;
@@ -53,7 +52,6 @@ public class NodesModel {
     }
 
     public void update(NodeData[] nodeList) {
-        allNodeData.clear();
         allNodeData.addAll(Arrays.asList(nodeList));
     }
 
