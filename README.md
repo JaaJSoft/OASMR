@@ -1,5 +1,6 @@
 <h1><img src="OASMR.png" width="100"> <a style="text-align: center"> OASMR</a> </h1> 
 
+[![Hits-of-Code](https://hitsofcode.com/github/CCC-development-team/OASMR)](https://hitsofcode.com/view/github/CCC-development-team/OASMR)
 
 ### Supervisor
 
