@@ -7,7 +7,7 @@
 ```bash
 ./gradlew supervisor [--args="<Port(default:40404)>"]
 ```
-(In windows launch gradlew.bat instead)
+(On Windows launch gradlew.bat instead)
 ### Node
 ```bash
 ./gradlew node [--args="<supervisor address> <supervisor port> <node port>"]
